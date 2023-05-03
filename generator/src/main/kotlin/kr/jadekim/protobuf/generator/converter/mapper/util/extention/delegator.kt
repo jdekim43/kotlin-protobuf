@@ -22,3 +22,6 @@ val Descriptors.GenericDescriptor.delegatorTypeName: ClassName
 
         return ClassName(file.options.javaPackage, simpleNames)
     }
+
+val Descriptors.ServiceDescriptor.delegatorTypeName: ClassName
+    get() = ClassName(file.options.javaPackage, name + "Grpc")

@@ -72,5 +72,8 @@ val Descriptors.GenericDescriptor.outputTypeName: ClassName
 val Descriptors.OneofDescriptor.outputTypeName: ClassName
     get() = (this as Descriptors.GenericDescriptor).outputTypeName.peerClass(name.toPascalCase())
 
+val Descriptors.ServiceDescriptor.outputTypeName: ClassName
+    get() = (this as Descriptors.GenericDescriptor).outputTypeName.peerClass(name.toPascalCase() + "Service")
+
 val KClass<*>.typeName: ClassName
     get() = asTypeName()

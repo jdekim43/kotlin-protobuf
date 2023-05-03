@@ -9,14 +9,14 @@ import kr.jadekim.protobuf.generator.type.MessageTypeGenerator
 import kr.jadekim.protobuf.generator.util.extention.outputFileName
 import kr.jadekim.protobuf.generator.util.extention.outputPackage
 
-class KotlinFileGenerator(
+class TypeFileGenerator(
     val enumTypeGenerator: EnumTypeGenerator,
     val messageTypeGenerator: MessageTypeGenerator,
 ) : FileGenerator {
 
     override fun generate(descriptor: Descriptors.FileDescriptor): FileSpec {
         val spec = FileSpec.builder(descriptor.outputPackage, descriptor.outputFileName)
-        spec.addFileComment("Built for %L", descriptor.name)
+        spec.addFileComment("Transform from %L", descriptor.name)
 
         spec.addAnnotation(
             AnnotationSpec.builder(ProtobufSyntax::class)

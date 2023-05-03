@@ -10,6 +10,9 @@ val Descriptors.GenericDescriptor.outputPackage: String
 val Descriptors.FileDescriptor.outputFileName: String
     get() = "$fileName.kt"
 
+val Descriptors.FileDescriptor.outputGrpcFileName: String
+    get() = "$fileName.grpc.kt"
+
 val Descriptors.GenericDescriptor.outputSimpleName: String
     get() = simpleName
 

@@ -6,6 +6,11 @@ package protobuf.example;
 
 option java_package = "kr.jadekim.protobuf.example";
 
+service ExampleService {
+  rpc TestRpc (Empty) returns(ExampleMessage);
+  rpc Test2Rpc (ExampleMessage) returns(ExampleMessage);
+}
+
 enum ExampleEnum {
   UNKNOWN = 0;
   ABSENT = 1;

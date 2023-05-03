@@ -42,8 +42,9 @@ dependencies {
 
     api("net.pearx.kasechange:kasechange:$kasechangeVersion")
 
-//    implementation("io.grpc:grpc-stub:$grpcVersion")
-//    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+    implementation("io.grpc:grpc-protobuf:$grpcVersion")
+    implementation("io.grpc:grpc-stub:$grpcVersion")
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
 }
 
 tasks.clean {
