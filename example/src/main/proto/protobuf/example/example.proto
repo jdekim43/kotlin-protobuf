@@ -18,6 +18,11 @@ enum ExampleEnum {
   NIL = 3;
 }
 
+message SimpleMessage {
+  string test = 1;
+  optional uint32 test2 = 2;
+}
+
 message ExampleMessage {
   double test_double = 1;
   float test_float = 2;

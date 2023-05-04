@@ -2,6 +2,7 @@ import com.google.protobuf.gradle.id
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization") version "1.8.20"
     id("com.google.protobuf") version "0.9.2"
 }
 
@@ -12,6 +13,7 @@ dependencies {
     val kotlinxSerializationVersion: String by project
 
     implementation(project(":"))
+    implementation(project(":kotlin-protobuf-kotlinx"))
 
     implementation("com.google.protobuf:protobuf-java:$protobufVersion")
     implementation("io.grpc:grpc-protobuf:$grpcVersion")
@@ -38,7 +40,7 @@ protobuf {
 
     plugins {
         id("kotlin-protobuf-kotlinx") {
-            val targetProject = project(":generator:kotlinx")
+            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx")
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-all.jar"
         }
 
@@ -51,16 +53,16 @@ protobuf {
             artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk8@jar"
         }
         id("kotlin-protobuf-grpc") {
-            val targetProject = project(":generator:grpc")
+            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-grpc")
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-all.jar"
         }
     }
 
     generateProtoTasks {
         all().forEach {
-            it.dependsOn(":generator:clean")
-            it.dependsOn(":generator:grpc:shadowJar")
-            it.dependsOn(":generator:kotlinx:shadowJar")
+            it.dependsOn(":kotlin-protobuf-generator:clean")
+            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-grpc:shadowJar")
+            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx:shadowJar")
 
             it.plugins {
                 id("kotlin-protobuf-kotlinx")
@@ -71,4 +73,19 @@ protobuf {
             }
         }
     }
+}
+
+gradle.taskGraph.whenReady {
+    allTasks.filter { it.name.contains("proto", true) }
+        .forEach { it.outputs.upToDateWhen { false } }
+}
+
+tasks.withType<Copy> {
+    filesMatching("**/*.proto") {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+}
+
+tasks.withType<AbstractPublishToMaven> {
+    enabled = false
 }

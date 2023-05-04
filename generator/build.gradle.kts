@@ -26,7 +26,7 @@ subprojects {
     }
 
     dependencies {
-        implementation(project(":generator"))
+        implementation(project(":kotlin-protobuf-generator"))
     }
 }
 
