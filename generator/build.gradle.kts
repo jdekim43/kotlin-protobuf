@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
+    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
 
 allprojects {
@@ -27,6 +27,12 @@ subprojects {
 
     dependencies {
         implementation(project(":kotlin-protobuf-generator"))
+    }
+
+    publishing {
+        publications.withType<MavenPublication> {
+            artifact(tasks.getByPath(":shadowJar"))
+        }
     }
 }
 
