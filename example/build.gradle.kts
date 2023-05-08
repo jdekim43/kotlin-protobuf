@@ -41,20 +41,16 @@ protobuf {
     plugins {
         id("kotlin-protobuf-kotlinx") {
             val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx")
-            path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-all.jar"
+            path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
 
         id("grpc") {
             val grpcVersion: String by project
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
-        id("grpc-kotlin") {
-            val grpcKotlinVersion: String by project
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk8@jar"
-        }
         id("kotlin-protobuf-grpc") {
             val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-grpc")
-            path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-all.jar"
+            path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
     }
 
@@ -68,7 +64,6 @@ protobuf {
                 id("kotlin-protobuf-kotlinx")
 
                 id("grpc")
-                id("grpc-kotlin")
                 id("kotlin-protobuf-grpc")
             }
         }

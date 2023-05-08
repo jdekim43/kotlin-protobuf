@@ -29,9 +29,19 @@ subprojects {
         implementation(project(":kotlin-protobuf-generator"))
     }
 
+    tasks.getByName<Jar>("shadowJar") {
+        archiveClassifier.set("jdk8")
+    }
+
     publishing {
-        publications.withType<MavenPublication> {
-            artifact(tasks.getByPath(":shadowJar"))
+        publications {
+            create<MavenPublication>("artifacts") {
+                groupId = project.group.toString()
+                artifactId = project.name
+                version = project.version.toString()
+
+                artifact(tasks.getByName("shadowJar"))
+            }
         }
     }
 }

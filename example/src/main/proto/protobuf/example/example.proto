@@ -23,6 +23,10 @@ message SimpleMessage {
   optional uint32 test2 = 2;
 }
 
+message RecursiveMapMessage {
+  map<string, RecursiveMapMessage> test_map = 1;
+}
+
 message ExampleMessage {
   double test_double = 1;
   float test_float = 2;

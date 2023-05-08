@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+service TestService {
+  rpc TestTEST(Test) returns (Test);
+}
+
+message Test {
+  string test1k1 = 1;
+}
