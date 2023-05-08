@@ -4,6 +4,7 @@ import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.FileSpec
 import kr.jadekim.protobuf.annotation.ProtobufSyntax
+import kr.jadekim.protobuf.generator.addTo
 import kr.jadekim.protobuf.generator.type.ServiceTypeGenerator
 import kr.jadekim.protobuf.generator.util.extention.outputGrpcFileName
 import kr.jadekim.protobuf.generator.util.extention.outputPackage
@@ -24,7 +25,7 @@ class GrpcFileGenerator(
 
         for (serviceDescriptor in descriptor.services) {
             val (serviceSpec, imports) = serviceTypeGenerator.generate(serviceDescriptor)
-            imports.forEach(spec::addImport)
+            imports.addTo(spec)
             spec.addType(serviceSpec)
         }
 

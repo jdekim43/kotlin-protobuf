@@ -1,6 +1,7 @@
 package kr.jadekim.protobuf.generator.util.extention
 
 import com.google.protobuf.Descriptors
+import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import net.pearx.kasechange.toCamelCase
 import net.pearx.kasechange.toPascalCase
 
@@ -23,10 +24,10 @@ val Descriptors.GenericDescriptor.outputNames: List<String>
     get() = names
 
 val Descriptors.FieldDescriptor.outputVariableNameString: String
-    get() = name.toCamelCase()
+    get() = name.toCamelCase(ProtobufWordSplitter)
 
 val Descriptors.OneofDescriptor.outputVariableNameString: String
-    get() = name.toCamelCase()
+    get() = name.toCamelCase(ProtobufWordSplitter)
 
 val Descriptors.FieldDescriptor.outputOneOfItemTypeNameString: String
-    get() = name.toPascalCase()
+    get() = name.toPascalCase(ProtobufWordSplitter)

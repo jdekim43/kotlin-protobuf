@@ -6,19 +6,23 @@ import com.google.protobuf.Parser
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
+import kr.jadekim.protobuf.generator.ImportName
+import kr.jadekim.protobuf.generator.converter.mapper.util.extention.delegatorNameEscaped
 import kr.jadekim.protobuf.generator.converter.mapper.util.extention.delegatorTypeName
 import kr.jadekim.protobuf.generator.converter.mapper.util.extention.mapperTypeName
+import kr.jadekim.protobuf.generator.converter.mapper.util.extention.nameSuffix
+import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.*
 import net.pearx.kasechange.toPascalCase
 
 class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
 
-    override fun generate(descriptor: Descriptors.Descriptor): Pair<TypeSpec, Set<Import>> {
+    override fun generate(descriptor: Descriptors.Descriptor): Pair<TypeSpec, Set<ImportName>> {
         val outputTypeName = descriptor.outputTypeName
         val delegatorTypeName = descriptor.delegatorTypeName
         val name = descriptor.mapperTypeName
         val spec = TypeSpec.objectBuilder(name)
-        val imports = mutableSetOf<Import>()
+        val imports = mutableSetOf<ImportName>()
 
         val parentType = ProtobufTypeMapper::class.typeName.parameterizedBy(outputTypeName, delegatorTypeName)
         spec.addSuperinterface(parentType)
@@ -49,8 +53,8 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
 
     private fun Descriptors.FieldDescriptor.getCodeForToKotlin(
         typeName: TypeName = outputTypeName,
-        variableName: String = "obj.%L",
-        variableNameArguments: Array<Any> = arrayOf(outputVariableNameString),
+        variableName: String = "obj.%N",
+        variableNameArguments: Array<Any> = arrayOf(outputVariableNameString.delegatorNameEscaped),
         isRepeated: Boolean = this.isRepeated,
     ): Pair<String, Array<Any>> = when (typeName.copy(nullable = false)) { //Make non-null for compare only type
         BYTE_ARRAY -> "$variableName.toByteArray()" to variableNameArguments
@@ -61,9 +65,12 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
         )
 
         else -> {
-            if (type == Descriptors.FieldDescriptor.Type.ENUM) {
-                "%T.values()[${variableName}.ordinal]" to arrayOf(typeName, *variableNameArguments)
-            } else if (isMapField) {
+            if (type == Descriptors.FieldDescriptor.Type.ENUM && !isRepeated) {
+                "%T.forNumber(${variableName}.number)" to arrayOf(
+                    typeName.copy(nullable = false),
+                    *variableNameArguments
+                )
+            } else if (isMapField && isRepeated) {
                 val (keyCode, keyArguments) = getCodeForToKotlin(
                     (typeName as ParameterizedTypeName).typeArguments[0],
                     "it.key",
@@ -76,7 +83,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                     emptyArray(),
                     false,
                 )
-                "${variableName}Map.map { $keyCode to $valueCode }.toMap()" to arrayOf(
+                "${variableName.nameSuffix("Map")}.map { $keyCode to $valueCode }.toMap()" to arrayOf(
                     *variableNameArguments,
                     *keyArguments,
                     *valueArguments,
@@ -88,10 +95,10 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                     emptyArray(),
                     false,
                 )
-                "${variableName}List.map { $code }" to arrayOf(*variableNameArguments, *arguments)
+                "${variableName.nameSuffix("List")}.map { $code }" to arrayOf(*variableNameArguments, *arguments)
             } else {
                 "%T.convert($variableName)" to arrayOf(
-                    messageType.mapperTypeName,
+                    (typeName as? ClassName)?.mapperTypeName ?: messageType.mapperTypeName,
                     *variableNameArguments,
                 )
             }
@@ -109,8 +116,8 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
             arguments.add(fieldTypeName)
             arguments.addAll(fieldArguments)
         }
-        code.append(").getValue(obj.%LCase.number)()")
-        arguments.add(outputVariableNameString)
+        code.append(").getValue(obj.%N.number)()")
+        arguments.add(outputVariableNameString + "Case")
 
         return code.toString() to arguments.toTypedArray()
     }
@@ -128,11 +135,11 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
 
         for (field in realFields) {
             val (code, arguments) = field.getCodeForToKotlin()
-            toKotlinTypeFunction.addCode("\t%L = $code,\n", *arrayOf(field.outputVariableNameString, *arguments))
+            toKotlinTypeFunction.addCode("\t%N = $code,\n", *arrayOf(field.outputVariableNameString, *arguments))
         }
         for (oneOfs in realOneofs) {
             val (code, arguments) = oneOfs.getCodeForToKotlin()
-            toKotlinTypeFunction.addCode("\t%L = $code,\n", *arrayOf(oneOfs.outputVariableNameString, *arguments))
+            toKotlinTypeFunction.addCode("\t%N = $code,\n", *arrayOf(oneOfs.outputVariableNameString, *arguments))
         }
 
         toKotlinTypeFunction.addCode(")")
@@ -141,7 +148,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
 
     private fun Descriptors.FieldDescriptor.getCodeForToProtobuf(
         typeName: TypeName = outputTypeName,
-        variableName: String = "obj.%L",
+        variableName: String = "obj.%N",
         variableNameArguments: Array<Any> = arrayOf(outputVariableNameString),
         isRepeated: Boolean = this.isRepeated,
     ): Pair<String, Array<Any>> = when (typeName.copy(nullable = false)) {
@@ -153,9 +160,12 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
         )
 
         else -> {
-            if (type == Descriptors.FieldDescriptor.Type.ENUM) {
-                "${variableName}.ordinal" to variableNameArguments
-            } else if (isMapField) {
+            if (type == Descriptors.FieldDescriptor.Type.ENUM && !isRepeated) {
+                "%T.forNumber(${variableName}.number)" to arrayOf(
+                    enumType.delegatorTypeName.copy(nullable = false),
+                    *variableNameArguments,
+                )
+            } else if (isMapField && isRepeated) {
                 val (keyCode, keyArguments) = getCodeForToProtobuf(
                     (typeName as ParameterizedTypeName).typeArguments[0],
                     "it.key",
@@ -182,7 +192,10 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                 )
                 "$variableName.map { $code }" to arrayOf(*variableNameArguments, *arguments)
             } else {
-                "%T.convert($variableName)" to arrayOf(messageType.mapperTypeName, *variableNameArguments)
+                "%T.convert($variableName)" to arrayOf(
+                    (typeName as? ClassName)?.mapperTypeName ?: messageType.mapperTypeName,
+                    *variableNameArguments,
+                )
             }
         }
     }
@@ -199,10 +212,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
             .addStatement("val builder = %T.newBuilder()", protobufTypeName)
 
         for (field in realFields) {
-            val (code, arguments) = field.getCodeForToProtobuf()
-            val function = if (field.type == Descriptors.FieldDescriptor.Type.ENUM) {
-                "set%LValue"
-            } else if (field.isMapField) {
+            val function = if (field.isMapField) {
                 "putAll%L"
             } else if (field.isRepeated) {
                 "addAll%L"
@@ -211,30 +221,35 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
             }
 
             if (field.hasOptionalKeyword()) {
-                toKotlinTypeFunction.addStatement("val value${field.index} = $code", *arguments)
+                val (code, arguments) = field.getCodeForToProtobuf(
+                    variableName = "value${field.index}",
+                    variableNameArguments = emptyArray(),
+                )
+                toKotlinTypeFunction.addStatement("val value${field.index} = obj.%N", field.outputVariableNameString)
                 toKotlinTypeFunction.beginControlFlow("if (value${field.index} != null)")
-                toKotlinTypeFunction.addStatement("builder.$function(value${field.index})", field.name.toPascalCase())
+                toKotlinTypeFunction.addStatement("builder.$function($code)", field.name.toPascalCase(ProtobufWordSplitter).delegatorNameEscaped, *arguments)
                 toKotlinTypeFunction.endControlFlow()
             } else {
+                val (code, arguments) = field.getCodeForToProtobuf()
                 toKotlinTypeFunction.addStatement(
                     "builder.$function($code)",
-                    *arrayOf(field.name.toPascalCase(), *arguments)
+                    *arrayOf(field.name.toPascalCase(ProtobufWordSplitter).delegatorNameEscaped, *arguments)
                 )
             }
         }
         for (oneOf in realOneofs) {
             val oneOfTypeName = oneOf.outputTypeName
-            toKotlinTypeFunction.beginControlFlow("when (obj.%L)", oneOf.outputVariableNameString)
+            toKotlinTypeFunction.beginControlFlow("when (obj.%N)", oneOf.outputVariableNameString)
 
             for (field in oneOf.fields) {
                 val (fieldCode, fieldVariable) = field.getCodeForToProtobuf(
-                    variableName = "obj.%L.value",
-                    variableNameArguments = arrayOf(oneOf.outputVariableNameString),
+                    variableName = "obj.%N.value",
+                    variableNameArguments = arrayOf(oneOf.outputVariableNameString.delegatorNameEscaped),
                 )
                 toKotlinTypeFunction.addStatement(
                     "is %T -> builder.set%L($fieldCode)",
                     oneOfTypeName.nestedClass(field.outputOneOfItemTypeNameString),
-                    field.name.toPascalCase(),
+                    field.name.toPascalCase(ProtobufWordSplitter).delegatorNameEscaped,
                     *fieldVariable,
                 )
             }
@@ -246,7 +261,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
         spec.addFunction(toKotlinTypeFunction.build())
     }
 
-    private fun Descriptors.Descriptor.readChildren(spec: TypeSpec.Builder, imports: MutableSet<Import>) {
+    private fun Descriptors.Descriptor.readChildren(spec: TypeSpec.Builder, imports: MutableSet<ImportName>) {
         for (nestedType in nestedTypes.filterNot { it.options.mapEntry }) {
             val (childType, childImports) = generate(nestedType)
             imports.addAll(childImports)

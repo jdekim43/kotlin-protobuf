@@ -8,11 +8,13 @@ import io.grpc.kotlin.AbstractCoroutineServerImpl
 import io.grpc.kotlin.AbstractCoroutineStub
 import io.grpc.kotlin.ClientCalls
 import io.grpc.kotlin.ServerCalls
+import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.mapper.util.extention.delegatorTypeName
 import kr.jadekim.protobuf.generator.converter.mapper.util.extention.mapperTypeName
 import kr.jadekim.protobuf.generator.type.TypeGenerator
 import kr.jadekim.protobuf.generator.type.TypeGeneratorPlugins
 import kr.jadekim.protobuf.generator.type.applyTo
+import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
 import net.pearx.kasechange.toCamelCase
@@ -25,12 +27,12 @@ class ServiceMapperGenerator(
 ) : TypeGenerator<Descriptors.ServiceDescriptor> {
 
     private val Descriptors.MethodDescriptor.descriptorVariableName: String
-        get() = name.toCamelCase() + "Descriptor"
+        get() = name.toCamelCase(ProtobufWordSplitter) + "Descriptor"
 
-    override fun generate(descriptor: Descriptors.ServiceDescriptor): Pair<TypeSpec, Set<Import>> {
+    override fun generate(descriptor: Descriptors.ServiceDescriptor): Pair<TypeSpec, Set<ImportName>> {
         val name = descriptor.outputTypeName
         val spec = TypeSpec.objectBuilder(name)
-        val imports = mutableSetOf<Import>()
+        val imports = mutableSetOf<ImportName>()
 
         descriptor.writeGlobalVariablesTo(spec)
         descriptor.writeServerTo(spec)
@@ -60,7 +62,11 @@ class ServiceMapperGenerator(
                     ),
                     KModifier.PRIVATE,
                 )
-                    .initializer("%T.get%LMethod()!!", delegatorTypeName, method.name.toPascalCase())
+                    .initializer(
+                        "%T.get%LMethod()!!",
+                        delegatorTypeName,
+                        method.name.toPascalCase(ProtobufWordSplitter)
+                    )
                     .build(),
             )
         }
@@ -88,7 +94,7 @@ class ServiceMapperGenerator(
             .addCode("return %T.builder(descriptor)\n", ServerServiceDefinition::class)
 
         for (method in methods) {
-            val functionName = method.name.toCamelCase()
+            val functionName = method.name.toCamelCase(ProtobufWordSplitter)
             serverSpec.addFunction(
                 FunSpec.builder(functionName)
                     .addModifiers(KModifier.OPEN, KModifier.SUSPEND)
@@ -106,9 +112,9 @@ class ServiceMapperGenerator(
             bindServiceFunction.addCode("\t\t.addMethod(\n")
                 .addCode("\t\t\t%T.unaryServerMethodDefinition(\n", ServerCalls::class)
                 .addCode("\t\t\t\tcontext = this.context,\n")
-                .addCode("\t\t\t\tdescriptor = %L,\n", method.descriptorVariableName)
+                .addCode("\t\t\t\tdescriptor = %N,\n", method.descriptorVariableName)
                 .addCode(
-                    "\t\t\t\timplementation = { %T.convert(%L(%T.convert(it))) },\n",
+                    "\t\t\t\timplementation = { %T.convert(%N(%T.convert(it))) },\n",
                     method.outputType.mapperTypeName,
                     functionName,
                     method.inputType.mapperTypeName,
@@ -151,7 +157,7 @@ class ServiceMapperGenerator(
             )
 
         for (method in methods) {
-            val functionName = method.name.toCamelCase()
+            val functionName = method.name.toCamelCase(ProtobufWordSplitter)
 
             clientSpec.addFunction(
                 FunSpec.builder(functionName)
@@ -165,7 +171,7 @@ class ServiceMapperGenerator(
                     .returns(method.outputType.outputTypeName)
                     .addCode("return %T.convert(\n", method.outputType.mapperTypeName)
                     .addCode("\t\t%T.unaryRpc(\n", ClientCalls::class)
-                    .addCode("\t\t\tchannel, %L,\n", method.descriptorVariableName)
+                    .addCode("\t\t\tchannel, %N,\n", method.descriptorVariableName)
                     .addCode("\t\t\t%T.convert(request),\n", method.inputType.mapperTypeName)
                     .addCode("\t\t\tcallOptions, metadata,\n")
                     .addCode("\t\t),\n\t)\n")

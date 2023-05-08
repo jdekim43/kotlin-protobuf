@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.mapper.util.extention.mapperTypeName
 import kr.jadekim.protobuf.generator.type.TypeGenerator
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
@@ -19,7 +20,7 @@ import kr.jadekim.protobuf.kotlinx.ProtobufMapperEncoder
 
 object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
 
-    override fun applyTo(spec: TypeSpec.Builder, imports: MutableSet<Import>, descriptor: Descriptors.Descriptor) {
+    override fun applyTo(spec: TypeSpec.Builder, imports: MutableSet<ImportName>, descriptor: Descriptors.Descriptor) {
         spec.addAnnotation(
             AnnotationSpec.builder(Serializable::class)
                 .addMember("with = %T::class", descriptor.outputTypeName.nestedClass("KotlinxSerializer"))

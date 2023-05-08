@@ -2,6 +2,8 @@ package kr.jadekim.protobuf.generator.file
 
 import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.MemberName
+import kr.jadekim.protobuf.generator.addTo
 import kr.jadekim.protobuf.generator.converter.mapper.MessageMapperGenerator
 import kr.jadekim.protobuf.generator.converter.mapper.util.extention.outputConverterFileName
 import kr.jadekim.protobuf.generator.util.extention.outputPackage
@@ -16,7 +18,7 @@ class ConverterFileGenerator(
 
         for (messageDescriptor in descriptor.messageTypes) {
             val (mapperSpec, imports) = messageMapperGenerator.generate(messageDescriptor)
-            imports.forEach(spec::addImport)
+            imports.addTo(spec)
             spec.addType(mapperSpec)
         }
 

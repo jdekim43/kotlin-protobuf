@@ -2,6 +2,7 @@ package kr.jadekim.protobuf.generator.type
 
 import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.*
+import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.util.extention.*
 
 class MessageTypeGenerator(
@@ -11,10 +12,10 @@ class MessageTypeGenerator(
     val oneOfItemPlugins: TypeGeneratorPlugins<Descriptors.FieldDescriptor> = emptyList(),
 ) : TypeGenerator<Descriptors.Descriptor> {
 
-    override fun generate(descriptor: Descriptors.Descriptor): Pair<TypeSpec, Set<Import>> {
+    override fun generate(descriptor: Descriptors.Descriptor): Pair<TypeSpec, Set<ImportName>> {
         val name = descriptor.outputTypeName
         val spec = TypeSpec.classBuilder(name)
-        val imports = mutableSetOf<Import>()
+        val imports = mutableSetOf<ImportName>()
 
         if (descriptor.fields.isNotEmpty()) {
             spec.addModifiers(KModifier.DATA)
@@ -33,7 +34,7 @@ class MessageTypeGenerator(
         return spec.build() to imports.toSet()
     }
 
-    private fun Descriptors.Descriptor.readChildren(spec: TypeSpec.Builder, imports: MutableSet<Import>) {
+    private fun Descriptors.Descriptor.readChildren(spec: TypeSpec.Builder, imports: MutableSet<ImportName>) {
         for (nestedType in enumTypes) {
             val (childType, childImports) = enumTypeGenerator.generate(nestedType)
             imports.addAll(childImports)
@@ -50,7 +51,7 @@ class MessageTypeGenerator(
     private fun Descriptors.Descriptor.readFields(
         spec: TypeSpec.Builder,
         constructor: FunSpec.Builder,
-        imports: MutableSet<Import>
+        imports: MutableSet<ImportName>
     ) {
         realFields.forEach { it.addTo(spec, constructor) }
     }
@@ -58,7 +59,7 @@ class MessageTypeGenerator(
     private fun Descriptors.Descriptor.readOneOf(
         spec: TypeSpec.Builder,
         constructor: FunSpec.Builder,
-        imports: MutableSet<Import>
+        imports: MutableSet<ImportName>
     ) {
         realOneofs.forEach {
             val typeName = it.addTo(spec, imports)
@@ -77,6 +78,7 @@ class MessageTypeGenerator(
         val typeName = outputTypeName
         val fieldName = overrideName ?: outputVariableNameString
         val parameter = ParameterSpec.builder(fieldName, typeName)
+        val property = PropertySpec.builder(fieldName, typeName).initializer(fieldName)
 
         if (isOptional) {
             parameter.defaultValue("null")
@@ -85,14 +87,14 @@ class MessageTypeGenerator(
         parameter.addNumberAnnotation(number)
 
         if (options.deprecated) {
-            parameter.addAnnotation(Deprecated::class)
+            property.addDeprecatedAnnotation("")
         }
 
         constructor.addParameter(parameter.build())
-        spec.addProperty(PropertySpec.builder(fieldName, typeName).initializer(fieldName).build())
+        spec.addProperty(property.build())
     }
 
-    private fun Descriptors.OneofDescriptor.addTo(spec: TypeSpec.Builder, imports: MutableSet<Import>): TypeName {
+    private fun Descriptors.OneofDescriptor.addTo(spec: TypeSpec.Builder, imports: MutableSet<ImportName>): TypeName {
         val oneOfTypeName = outputTypeName
         val oneOfSpec = TypeSpec.interfaceBuilder(oneOfTypeName)
 

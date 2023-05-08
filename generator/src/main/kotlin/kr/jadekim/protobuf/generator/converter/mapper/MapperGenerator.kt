@@ -1,10 +1,10 @@
 package kr.jadekim.protobuf.generator.converter.mapper
 
 import com.google.protobuf.Descriptors
-import com.squareup.kotlinpoet.Import
 import com.squareup.kotlinpoet.TypeSpec
+import kr.jadekim.protobuf.generator.ImportName
 
 interface MapperGenerator<T : Descriptors.GenericDescriptor> {
 
-    fun generate(descriptor: T): Pair<TypeSpec, Set<Import>>
+    fun generate(descriptor: T): Pair<TypeSpec, Set<ImportName>>
 }

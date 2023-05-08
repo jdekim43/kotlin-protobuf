@@ -4,6 +4,7 @@ import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.FileSpec
 import kr.jadekim.protobuf.annotation.ProtobufSyntax
+import kr.jadekim.protobuf.generator.addTo
 import kr.jadekim.protobuf.generator.type.EnumTypeGenerator
 import kr.jadekim.protobuf.generator.type.MessageTypeGenerator
 import kr.jadekim.protobuf.generator.util.extention.outputFileName
@@ -26,13 +27,13 @@ class TypeFileGenerator(
 
         for (enumDescriptor in descriptor.enumTypes) {
             val (enumSpec, imports) = enumTypeGenerator.generate(enumDescriptor)
-            imports.forEach(spec::addImport)
+            imports.addTo(spec)
             spec.addType(enumSpec)
         }
 
         for (messageDescriptor in descriptor.messageTypes) {
             val (messageSpec, imports) = messageTypeGenerator.generate(messageDescriptor)
-            imports.forEach(spec::addImport)
+            imports.addTo(spec)
             spec.addType(messageSpec)
         }
 

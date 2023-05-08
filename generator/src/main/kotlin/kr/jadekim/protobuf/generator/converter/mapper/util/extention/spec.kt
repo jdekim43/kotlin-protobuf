@@ -5,5 +5,8 @@ import com.squareup.kotlinpoet.ClassName
 import kr.jadekim.protobuf.generator.util.extention.outputPackage
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 
+val ClassName.mapperTypeName: ClassName
+    get() = ClassName(packageName, simpleNames.map { it + "Mapper" })
+
 val Descriptors.Descriptor.mapperTypeName: ClassName
-    get() = ClassName(outputPackage, outputTypeName.simpleNames.map { it + "Mapper" })
+    get() = outputTypeName.mapperTypeName
