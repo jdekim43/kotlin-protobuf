@@ -1,12 +1,12 @@
 package kr.jadekim.protobuf.generator.file
 
 import com.google.protobuf.Descriptors
-import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.FileSpec
-import kr.jadekim.protobuf.annotation.ProtobufSyntax
 import kr.jadekim.protobuf.generator.addTo
 import kr.jadekim.protobuf.generator.type.EnumTypeGenerator
 import kr.jadekim.protobuf.generator.type.MessageTypeGenerator
+import kr.jadekim.protobuf.generator.util.extention.addGeneratorVersionAnnotation
+import kr.jadekim.protobuf.generator.util.extention.addSyntaxAnnotation
 import kr.jadekim.protobuf.generator.util.extention.outputFileName
 import kr.jadekim.protobuf.generator.util.extention.outputPackage
 
@@ -19,11 +19,8 @@ class TypeFileGenerator(
         val spec = FileSpec.builder(descriptor.outputPackage, descriptor.outputFileName)
         spec.addFileComment("Transform from %L", descriptor.name)
 
-        spec.addAnnotation(
-            AnnotationSpec.builder(ProtobufSyntax::class)
-                .addMember("syntax = %S", descriptor.syntax.name)
-                .build()
-        )
+        spec.addSyntaxAnnotation(descriptor)
+        spec.addGeneratorVersionAnnotation()
 
         for (enumDescriptor in descriptor.enumTypes) {
             val (enumSpec, imports) = enumTypeGenerator.generate(enumDescriptor)

@@ -4,6 +4,7 @@ import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
+import kr.jadekim.protobuf.generator.util.extention.addGeneratorVersionAnnotation
 import java.util.*
 
 @Deprecated("", level = DeprecationLevel.ERROR)
@@ -18,6 +19,8 @@ class TypeRegistryGenerator(
 
     fun generate(): FileSpec {
         val spec = FileSpec.builder(packageName, fileName)
+
+        spec.addGeneratorVersionAnnotation()
 
         val enumRegistryBlock = CodeBlock.builder()
         enumRegistryBlock.add("mapOf<%T, %T>(", String::class, Descriptors.EnumDescriptor::class)

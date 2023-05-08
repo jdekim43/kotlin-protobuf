@@ -4,7 +4,10 @@ import com.google.protobuf.Descriptors
 import com.google.protobuf.compiler.PluginProtos
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import kr.jadekim.protobuf.annotation.GeneratorVersion
 import kr.jadekim.protobuf.annotation.ProtobufIndex
+import kr.jadekim.protobuf.annotation.ProtobufSyntax
+import kr.jadekim.protobuf.generator.BUILD_VERSION
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import net.pearx.kasechange.toPascalCase
 import kotlin.reflect.KClass
@@ -41,6 +44,22 @@ fun PropertySpec.Builder.addDeprecatedAnnotation(
             .addMember("message = %S", message)
             .addMember("replaceWith = %T(%S)", ReplaceWith::class, replaceWith)
             .addMember("level = %T.%N", DeprecationLevel::class, level.name)
+            .build()
+    )
+}
+
+fun FileSpec.Builder.addSyntaxAnnotation(descriptor: Descriptors.FileDescriptor) {
+    addAnnotation(
+        AnnotationSpec.builder(ProtobufSyntax::class)
+            .addMember("syntax = %S", descriptor.syntax.name)
+            .build()
+    )
+}
+
+fun FileSpec.Builder.addGeneratorVersionAnnotation() {
+    addAnnotation(
+        AnnotationSpec.builder(GeneratorVersion::class)
+            .addMember("version = %S", BUILD_VERSION)
             .build()
     )
 }

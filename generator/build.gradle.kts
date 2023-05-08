@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
+
 plugins {
     kotlin("jvm")
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
@@ -63,6 +65,32 @@ dependencies {
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
 }
 
+val generatedDirectory = File(buildDir, "/generated/source/main/kotlin")
+
+sourceSets {
+    main {
+        java {
+            srcDir(generatedDirectory)
+        }
+    }
+}
+
 tasks.clean {
     subprojects.forEach { finalizedBy(it.tasks.clean) }
+}
+
+val writeBuildConstants = tasks.register("writeBuildConstants") {
+    doLast {
+        val output = File(generatedDirectory, "/kr/jadekim/protobuf/generator/build.constants.kt")
+        output.ensureParentDirsCreated()
+        output.writeText("""
+            package kr.jadekim.protobuf.generator
+            
+            const val BUILD_VERSION: String = "$version"
+        """.trimIndent())
+    }
+}
+
+tasks.getByName("build") {
+    dependsOn(writeBuildConstants)
 }

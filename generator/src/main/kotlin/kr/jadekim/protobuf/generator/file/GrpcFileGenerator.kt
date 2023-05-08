@@ -1,11 +1,11 @@
 package kr.jadekim.protobuf.generator.file
 
 import com.google.protobuf.Descriptors
-import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.FileSpec
-import kr.jadekim.protobuf.annotation.ProtobufSyntax
 import kr.jadekim.protobuf.generator.addTo
 import kr.jadekim.protobuf.generator.type.ServiceTypeGenerator
+import kr.jadekim.protobuf.generator.util.extention.addGeneratorVersionAnnotation
+import kr.jadekim.protobuf.generator.util.extention.addSyntaxAnnotation
 import kr.jadekim.protobuf.generator.util.extention.outputGrpcFileName
 import kr.jadekim.protobuf.generator.util.extention.outputPackage
 
@@ -17,11 +17,8 @@ class GrpcFileGenerator(
         val spec = FileSpec.builder(descriptor.outputPackage, descriptor.outputGrpcFileName)
         spec.addFileComment("Transform from %L", descriptor.name)
 
-        spec.addAnnotation(
-            AnnotationSpec.builder(ProtobufSyntax::class)
-                .addMember("syntax = %S", descriptor.syntax.name)
-                .build()
-        )
+        spec.addSyntaxAnnotation(descriptor)
+        spec.addGeneratorVersionAnnotation()
 
         for (serviceDescriptor in descriptor.services) {
             val (serviceSpec, imports) = serviceTypeGenerator.generate(serviceDescriptor)

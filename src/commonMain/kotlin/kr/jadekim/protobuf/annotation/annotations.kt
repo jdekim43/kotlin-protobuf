@@ -7,3 +7,7 @@ annotation class ProtobufSyntax(val syntax: String)
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ProtobufIndex(val index: Int)
+
+@Target(AnnotationTarget.FILE)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class GeneratorVersion(val version: String)
