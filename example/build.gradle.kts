@@ -3,7 +3,7 @@ import com.google.protobuf.gradle.id
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization") version "1.8.20"
-    id("com.google.protobuf") version "0.9.2"
+    id("com.google.protobuf") version "0.9.3"
 }
 
 dependencies {
