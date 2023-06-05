@@ -10,13 +10,13 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kr.jadekim.protobuf.generator.ImportName
-import kr.jadekim.protobuf.generator.converter.mapper.util.extention.mapperTypeName
+import kr.jadekim.protobuf.generator.converter.util.extention.converterTypeName
 import kr.jadekim.protobuf.generator.type.TypeGenerator
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
 import kr.jadekim.protobuf.generator.util.extention.typeUrl
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
 import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperEncoder
 
 object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
 
@@ -37,7 +37,7 @@ object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
 
     private fun Descriptors.Descriptor.writeSerializerTo(spec: TypeSpec.Builder) {
         val outputTypeName = outputTypeName
-        val mapperTypeName = mapperTypeName
+        val converterTypeName = converterTypeName
 
         TypeSpec.objectBuilder("KotlinxSerializer")
             .addSuperinterface(KSerializer::class.typeName.parameterizedBy(outputTypeName))
@@ -58,8 +58,8 @@ object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
                     .addModifiers(KModifier.OVERRIDE)
                     .addParameter("encoder", Encoder::class)
                     .addParameter("value", outputTypeName)
-                    .beginControlFlow("if (encoder is %T)", ProtobufMapperEncoder::class)
-                    .addStatement("encoder.encodeValue(%T.serialize(value))", mapperTypeName)
+                    .beginControlFlow("if (encoder is %T)", ProtobufConverterEncoder::class)
+                    .addStatement("encoder.encodeValue(%T.serialize(value))", converterTypeName)
                     .addStatement("return")
                     .endControlFlow()
                     .addStatement("delegator.serialize(encoder, value)")
@@ -71,7 +71,7 @@ object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
                     .addParameter("decoder", Decoder::class)
                     .returns(outputTypeName)
                     .beginControlFlow("if (decoder is %T)", ProtobufMapperDecoder::class)
-                    .addStatement("return %T.deserialize(decoder.decodeByteArray())", mapperTypeName)
+                    .addStatement("return %T.deserialize(decoder.decodeByteArray())", converterTypeName)
                     .endControlFlow()
                     .addStatement("return delegator.deserialize(decoder)")
                     .build()

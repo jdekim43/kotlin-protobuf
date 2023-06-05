@@ -3,4 +3,5 @@ application {
 }
 
 dependencies {
+    implementation(project(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-jvm"))
 }

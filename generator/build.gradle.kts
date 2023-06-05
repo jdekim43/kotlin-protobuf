@@ -22,13 +22,15 @@ allprojects {
 }
 
 subprojects {
+    dependencies {
+        implementation(project(":kotlin-protobuf-generator"))
+    }
+}
+
+configure(subprojects.filterNot { it.name == "kotlin-protobuf-generator-converter" }) {
     apply {
         plugin("org.gradle.application")
         plugin("com.github.johnrengelman.shadow")
-    }
-
-    dependencies {
-        implementation(project(":kotlin-protobuf-generator"))
     }
 
     tasks.getByName<Jar>("shadowJar") {
@@ -91,6 +93,6 @@ val writeBuildConstants = tasks.register("writeBuildConstants") {
     }
 }
 
-tasks.getByName("build") {
+tasks.getByName("compileKotlin") {
     dependsOn(writeBuildConstants)
 }

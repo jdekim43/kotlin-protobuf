@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package protobuf.example;
+
+option java_package = "kr.jadekim.protobuf.example";
+
+service ExampleService {
+  rpc TestRpc (Empty) returns(ExampleMessage);
+  rpc Test2Rpc (ExampleMessage) returns(ExampleMessage);
+}
+
+enum ExampleEnum {
+  UNKNOWN = 0;
+  ABSENT = 1;
+  COMMIT = 2;
+  NIL = 3;
+}
+
+message SimpleMessage {
+  string test = 1;
+  optional uint32 test2 = 2;
+}
+
+message RecursiveMapMessage {
+  map<string, RecursiveMapMessage> test_map = 1;
+}
+
+message ExampleMessage {
+  double test_double = 1;
+  float test_float = 2;
+  int32 test_int32 = 3;
+  int64 test_int64 = 4;
+  uint32 test_uint32 = 5;
+  uint64 test_uint64 = 6;
+  sint32 test_sint32 = 7;
+  sint64 test_sint64 = 8;
+  fixed32 test_fixed32 = 9;
+  fixed64 test_fixed64 = 10;
+  sfixed32 test_sfixed32 = 11;
+  sfixed64 test_sfixed64 = 12;
+  bool test_bool = 13;
+  string test_string = 14;
+  bytes test_bytes = 15;
+
+  optional string test_optional_string = 16;
+  optional uint32 test_optional_uint32 = 17;
+
+  map<string, bytes> test_map_string_bytes = 18;
+  map<fixed64, uint64> test_map_fixed64_uint64 = 19;
+
+  repeated int64 test_repeated_int64 = 20;
+  repeated uint32 test_repeated_uint32 = 21;
+  repeated string test_repeated_string = 22;
+  repeated bytes test_repeated_bytes = 23;
+
+  oneof one {
+    string test_oneof_one_string = 24;
+    int32  test_oneof_one_int32 = 25;
+  }
+
+  oneof two {
+    string test_oneof_two_string = 26;
+    uint32 test_oneof_tow_optional = 27;
+  }
+
+  google.protobuf.Any unknown = 28;
+
+  message Nested {
+    string nested_value = 1;
+
+    message Nested2 {
+      string nested2_value = 1;
+    }
+  }
+
+  enum NestedEnum {
+    A = 0;
+    B = 1;
+  }
+
+  ExampleEnum test_enum = 29;
+  NestedEnum test_nested_enum = 30;
+  Nested test_nested = 31;
+}
+
+message Empty {
+
+}

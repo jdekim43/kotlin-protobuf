@@ -9,7 +9,7 @@ import kotlinx.serialization.modules.SerializersModule
 class ProtobufFormat(override val serializersModule: SerializersModule = EmptySerializersModule()) : BinaryFormat {
 
     override fun <T> encodeToByteArray(serializer: SerializationStrategy<T>, value: T): ByteArray {
-        val encoder = ProtobufMapperEncoder(serializersModule)
+        val encoder = ProtobufConverterEncoder(serializersModule)
         serializer.serialize(encoder, value)
         return encoder.result
     }

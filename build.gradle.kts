@@ -18,7 +18,7 @@ allprojects {
 //    }
 }
 
-configure(allprojects.filterNot { it.path.startsWith(":kotlin-protobuf-generator") || it.path == ":kotlin-protobuf-example" }) {
+configure(allprojects.filterNot { it.path.startsWith(":kotlin-protobuf-generator") || it.name.startsWith("kotlin-protobuf-example") }) {
     apply {
         plugin("kotlin-multiplatform")
     }
@@ -51,7 +51,7 @@ configure(allprojects.filterNot { it.path.startsWith(":kotlin-protobuf-generator
     }
 }
 
-configure(allprojects.filterNot { it.path == ":kotlin-protobuf-example" }) {
+configure(allprojects.filterNot { it.name.startsWith("kotlin-protobuf-example") }) {
     apply {
         plugin("org.jetbrains.dokka")
         plugin("maven-publish")

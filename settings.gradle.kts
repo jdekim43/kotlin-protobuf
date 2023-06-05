@@ -3,9 +3,15 @@ rootProject.name = "kotlin-protobuf"
 
 include(
     ":kotlinx",
-    ":generator:grpc",
+    ":generator",
+    ":generator:converter",
+    ":generator:converter:jvm",
+    ":generator:converter:multiplatform",
+    ":generator:converter:multiplatform:jvm",
     ":generator:kotlinx",
+    ":generator:grpc",
     ":example",
+    ":example-multiplatform",
 )
 
 fun ProjectDescriptor.renameChildren() {

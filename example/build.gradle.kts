@@ -43,6 +43,10 @@ protobuf {
             val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx")
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
+        id("kotlin-protobuf-converter-jvm") {
+            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-jvm")
+            path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
+        }
 
         id("grpc") {
             val grpcVersion: String by project
@@ -59,9 +63,11 @@ protobuf {
             it.dependsOn(":kotlin-protobuf-generator:clean")
             it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-grpc:shadowJar")
             it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx:shadowJar")
+            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-jvm:shadowJar")
 
             it.plugins {
                 id("kotlin-protobuf-kotlinx")
+                id("kotlin-protobuf-converter-jvm")
 
                 id("grpc")
                 id("kotlin-protobuf-grpc")

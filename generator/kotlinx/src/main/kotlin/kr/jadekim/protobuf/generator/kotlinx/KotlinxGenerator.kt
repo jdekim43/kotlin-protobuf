@@ -1,8 +1,6 @@
 package kr.jadekim.protobuf.generator.kotlinx
 
 import kr.jadekim.protobuf.generator.Generator
-import kr.jadekim.protobuf.generator.converter.mapper.MessageMapperGenerator
-import kr.jadekim.protobuf.generator.file.ConverterFileGenerator
 import kr.jadekim.protobuf.generator.file.FileGenerator
 import kr.jadekim.protobuf.generator.file.TypeFileGenerator
 import kr.jadekim.protobuf.generator.kotlinx.plugin.type.EnumTypePlugin
@@ -34,14 +32,7 @@ object KotlinxGenerator : Generator() {
         messageTypeGenerator,
     )
 
-    private val messageMapperGenerator = MessageMapperGenerator()
-
-    private val converterGenerator = ConverterFileGenerator(
-        messageMapperGenerator,
-    )
-
     override val generators: List<FileGenerator> = listOf(
         typeGenerator,
-        converterGenerator,
     )
 }
