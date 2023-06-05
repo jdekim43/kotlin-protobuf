@@ -12,8 +12,8 @@ dependencies {
     val grpcKotlinVersion: String by project
     val kotlinxSerializationVersion: String by project
 
-    implementation(project(":"))
-    implementation(project(":kotlin-protobuf-kotlinx"))
+    implementation(project(fullPath(":")))
+    implementation(project(fullPath(":kotlinx")))
 
     implementation("com.google.protobuf:protobuf-java:$protobufVersion")
     implementation("io.grpc:grpc-protobuf:$grpcVersion")
@@ -40,11 +40,11 @@ protobuf {
 
     plugins {
         id("kotlin-protobuf-kotlinx") {
-            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx")
+            val targetProject = project(fullPath(":generator:kotlinx"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
         id("kotlin-protobuf-converter-jvm") {
-            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-jvm")
+            val targetProject = project(fullPath(":generator:converter:jvm"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
 
@@ -53,17 +53,17 @@ protobuf {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
         id("kotlin-protobuf-grpc") {
-            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-grpc")
+            val targetProject = project(fullPath(":generator:grpc"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
     }
 
     generateProtoTasks {
         all().forEach {
-            it.dependsOn(":kotlin-protobuf-generator:clean")
-            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-grpc:shadowJar")
-            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx:shadowJar")
-            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-jvm:shadowJar")
+            it.dependsOn(fullPath(":generator") + ":clean")
+            it.dependsOn(fullPath(":generator:grpc") + ":shadowJar")
+            it.dependsOn(fullPath(":generator:kotlinx") + ":shadowJar")
+            it.dependsOn(fullPath(":generator:converter:jvm") + ":shadowJar")
 
             it.plugins {
                 id("kotlin-protobuf-kotlinx")

@@ -15,7 +15,7 @@ allprojects {
     }
 
     dependencies {
-        implementation(project(":"))
+        implementation(project(fullPath(":")))
 
 //        implementation(kotlin("reflect"))
     }
@@ -23,7 +23,7 @@ allprojects {
 
 subprojects {
     dependencies {
-        implementation(project(":kotlin-protobuf-generator"))
+        implementation(project(fullPath(":generator")))
     }
 }
 

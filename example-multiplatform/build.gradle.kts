@@ -21,8 +21,8 @@ kotlin {
             dependencies {
                 val kotlinxSerializationVersion: String by project
 
-                implementation(project(":"))
-                implementation(project(":kotlin-protobuf-kotlinx"))
+                implementation(project(fullPath(":")))
+                implementation(project(fullPath(":kotlinx")))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
             }
         }
@@ -72,15 +72,15 @@ protobuf {
 
     plugins {
         id("kotlin-protobuf-kotlinx") {
-            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx")
+            val targetProject = project(fullPath(":generator:kotlinx"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
         id("kotlin-protobuf-converter-multiplatform") {
-            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-multiplatform")
+            val targetProject = project(fullPath(":generator:converter:multiplatform"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
         id("kotlin-protobuf-converter-multiplatform-jvm") {
-            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-multiplatform:kotlin-protobuf-generator-converter-multiplatform-jvm")
+            val targetProject = project(fullPath(":generator:converter:multiplatform:jvm"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
 
@@ -89,18 +89,18 @@ protobuf {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
         id("kotlin-protobuf-grpc") {
-            val targetProject = project(":kotlin-protobuf-generator:kotlin-protobuf-generator-grpc")
+            val targetProject = project(fullPath(":generator:grpc"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
     }
 
     generateProtoTasks {
         all().forEach {
-            it.dependsOn(":kotlin-protobuf-generator:clean")
-            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-grpc:shadowJar")
-            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-kotlinx:shadowJar")
-            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-multiplatform:shadowJar")
-            it.dependsOn(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-multiplatform:kotlin-protobuf-generator-converter-multiplatform-jvm:shadowJar")
+            it.dependsOn(fullPath(":generator") + ":clean")
+            it.dependsOn(fullPath(":generator:grpc") + ":shadowJar")
+            it.dependsOn(fullPath(":generator:kotlinx") + ":shadowJar")
+            it.dependsOn(fullPath(":generator:multiplatform") + ":shadowJar")
+            it.dependsOn(fullPath(":generator:multiplatform:jvm") + ":shadowJar")
 
             it.plugins {
                 id("kotlin-protobuf-kotlinx")

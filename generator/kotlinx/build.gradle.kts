@@ -5,8 +5,7 @@ application {
 dependencies {
     val kotlinxSerializationVersion: String by project
 
-    implementation(project(":kotlin-protobuf-kotlinx"))
-    implementation(project(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter"))
-
+    implementation(project(fullPath(":kotlinx")))
+    implementation(project(fullPath(":generator:converter")))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
 }

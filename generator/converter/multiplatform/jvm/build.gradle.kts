@@ -3,5 +3,5 @@ application {
 }
 
 dependencies {
-    api(project(":kotlin-protobuf-generator:kotlin-protobuf-generator-converter:kotlin-protobuf-generator-converter-jvm"))
+    api(project(fullPath(":generator:converter:jvm")))
 }
