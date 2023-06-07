@@ -44,17 +44,17 @@ sourceSets {
 protobuf {
     plugins {
         id("kotlin-protobuf-kotlinx") {
-            artifact = "kr.jadekim:kotlin-protobuf-kotlinx:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-kotlinx:$kotlinProtobufVersion"
         }
         id("kotlin-protobuf-converter-jvm") {
-            artifact = "kr.jadekim:kotlin-protobuf-converter-jvm:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-converter-jvm:$kotlinProtobufVersion"
         }
         
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
         id("kotlin-protobuf-grpc-jvm") {
-            artifact = "kr.jadekim:kotlin-protobuf-grpc-jvm:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-jvm:$kotlinProtobufVersion"
         }
     }
     
@@ -106,23 +106,23 @@ sourceSets {
 protobuf {
     plugins {
         id("kotlin-protobuf-kotlinx") {
-            artifact = "kr.jadekim:kotlin-protobuf-kotlinx:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-kotlinx:$kotlinProtobufVersion"
         }
         id("kotlin-protobuf-converter-multiplatform") {
-            artifact = "kr.jadekim:kotlin-protobuf-multiplatform:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-multiplatform:$kotlinProtobufVersion"
         }
         id("kotlin-protobuf-converter-multiplatform-jvm") {
-            artifact = "kr.jadekim:kotlin-protobuf-multiplatform-jvm:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-multiplatform-jvm:$kotlinProtobufVersion"
         }
         
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
         id("kotlin-protobuf-grpc-multiplatform") {
-            artifact = "kr.jadekim:kotlin-protobuf-grpc-multiplatform:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-multiplatform:$kotlinProtobufVersion"
         }
         id("kotlin-protobuf-grpc-multiplatform-jvm") {
-            artifact = "kr.jadekim:kotlin-protobuf-grpc-multiplatform-jvm:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-multiplatform-jvm:$kotlinProtobufVersion"
         }
     }
     
