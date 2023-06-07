@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = "kr.jadekim"
-    version = "0.1.2"
+    version = "0.2.1"
 
     repositories {
         mavenCentral()
