@@ -14,6 +14,7 @@ dependencies {
 
     implementation(project(fullPath(":")))
     implementation(project(fullPath(":kotlinx")))
+    implementation(project(fullPath(":grpc")))
 
     implementation("com.google.protobuf:protobuf-java:$protobufVersion")
     implementation("io.grpc:grpc-protobuf:$grpcVersion")
@@ -52,8 +53,8 @@ protobuf {
             val grpcVersion: String by project
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
-        id("kotlin-protobuf-grpc") {
-            val targetProject = project(fullPath(":generator:grpc"))
+        id("kotlin-protobuf-grpc-jvm") {
+            val targetProject = project(fullPath(":generator:grpc:jvm"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
     }
@@ -61,7 +62,7 @@ protobuf {
     generateProtoTasks {
         all().forEach {
             it.dependsOn(fullPath(":generator") + ":clean")
-            it.dependsOn(fullPath(":generator:grpc") + ":shadowJar")
+            it.dependsOn(fullPath(":generator:grpc:jvm") + ":shadowJar")
             it.dependsOn(fullPath(":generator:kotlinx") + ":shadowJar")
             it.dependsOn(fullPath(":generator:converter:jvm") + ":shadowJar")
 
@@ -70,7 +71,7 @@ protobuf {
                 id("kotlin-protobuf-converter-jvm")
 
                 id("grpc")
-                id("kotlin-protobuf-grpc")
+                id("kotlin-protobuf-grpc-jvm")
             }
         }
     }

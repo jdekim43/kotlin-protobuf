@@ -3,6 +3,7 @@ rootProject.name = "kotlin-protobuf"
 
 include(
     ":kotlinx",
+    ":grpc",
     ":generator",
     ":generator:converter",
     ":generator:converter:jvm",
@@ -10,6 +11,9 @@ include(
     ":generator:converter:multiplatform:jvm",
     ":generator:kotlinx",
     ":generator:grpc",
+    ":generator:grpc:jvm",
+    ":generator:grpc:multiplatform",
+    ":generator:grpc:multiplatform:jvm",
     ":example",
     ":example-multiplatform",
 )

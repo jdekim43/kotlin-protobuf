@@ -4,7 +4,7 @@ import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.FileSpec
 import kr.jadekim.protobuf.generator.addTo
 import kr.jadekim.protobuf.generator.converter.jvm.mapper.MessageMapperGenerator
-import kr.jadekim.protobuf.generator.converter.jvm.util.extention.outputConverterFileName
+import kr.jadekim.protobuf.generator.converter.jvm.util.extention.outputJvmConverterFileName
 import kr.jadekim.protobuf.generator.file.FileGenerator
 import kr.jadekim.protobuf.generator.util.extention.addGeneratorVersionAnnotation
 import kr.jadekim.protobuf.generator.util.extention.outputPackage
@@ -14,7 +14,7 @@ class JvmConverterFileGenerator(
 ) : FileGenerator {
 
     override fun generate(descriptor: Descriptors.FileDescriptor): FileSpec {
-        val spec = FileSpec.builder(descriptor.outputPackage, descriptor.outputConverterFileName)
+        val spec = FileSpec.builder(descriptor.outputPackage, descriptor.outputJvmConverterFileName)
         spec.addFileComment("Transform from %L", descriptor.name)
 
         spec.addGeneratorVersionAnnotation()

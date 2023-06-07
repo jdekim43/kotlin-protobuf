@@ -5,7 +5,7 @@ import com.squareup.kotlinpoet.ClassName
 import kr.jadekim.protobuf.generator.util.extention.fileName
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 
-val Descriptors.FileDescriptor.outputConverterFileName: String
+val Descriptors.FileDescriptor.outputJvmConverterFileName: String
     get() = "$fileName.converter.jvm.kt"
 
 val ClassName.jvmConverterTypeName: ClassName

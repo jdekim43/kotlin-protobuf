@@ -27,7 +27,7 @@ subprojects {
     }
 }
 
-configure(subprojects.filterNot { it.name == "kotlin-protobuf-generator-converter" }) {
+configure(subprojects.filterNot { it.name == "kotlin-protobuf-generator-converter" || it.name == "kotlin-protobuf-generator-grpc" }) {
     apply {
         plugin("org.gradle.application")
         plugin("com.github.johnrengelman.shadow")

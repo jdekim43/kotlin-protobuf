@@ -118,7 +118,7 @@ val Descriptors.OneofDescriptor.outputTypeName: ClassName
     get() = (this as Descriptors.GenericDescriptor).outputTypeName.peerClass(name.toPascalCase(ProtobufWordSplitter) + "OneOf")
 
 val Descriptors.ServiceDescriptor.outputTypeName: ClassName
-    get() = (this as Descriptors.GenericDescriptor).outputTypeName.peerClass(name.toPascalCase(ProtobufWordSplitter) + "Service")
+    get() = (this as Descriptors.GenericDescriptor).outputTypeName.peerClass(name.toPascalCase(ProtobufWordSplitter))
 
 val KClass<*>.typeName: ClassName
     get() = asTypeName()

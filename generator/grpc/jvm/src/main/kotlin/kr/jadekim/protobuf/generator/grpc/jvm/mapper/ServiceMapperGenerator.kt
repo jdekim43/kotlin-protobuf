@@ -1,4 +1,4 @@
-package kr.jadekim.protobuf.generator.converter.jvm.mapper
+package kr.jadekim.protobuf.generator.grpc.jvm.mapper
 
 import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.*
@@ -11,12 +11,15 @@ import io.grpc.kotlin.ServerCalls
 import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.jvm.mapper.util.extention.delegatorTypeName
 import kr.jadekim.protobuf.generator.converter.jvm.util.extention.jvmConverterTypeName
+import kr.jadekim.protobuf.generator.grpc.jvm.util.extension.jvmGrpcTypeName
+import kr.jadekim.protobuf.generator.grpc.util.extension.interfaceTypeName
 import kr.jadekim.protobuf.generator.type.TypeGenerator
 import kr.jadekim.protobuf.generator.type.TypeGeneratorPlugins
 import kr.jadekim.protobuf.generator.type.applyTo
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
+import kr.jadekim.protobuf.grpc.ClientOption
 import net.pearx.kasechange.toCamelCase
 import net.pearx.kasechange.toPascalCase
 import kotlin.coroutines.CoroutineContext
@@ -30,7 +33,7 @@ class ServiceMapperGenerator(
         get() = name.toCamelCase(ProtobufWordSplitter) + "Descriptor"
 
     override fun generate(descriptor: Descriptors.ServiceDescriptor): Pair<TypeSpec, Set<ImportName>> {
-        val name = descriptor.outputTypeName
+        val name = descriptor.jvmGrpcTypeName
         val spec = TypeSpec.objectBuilder(name)
         val imports = mutableSetOf<ImportName>()
 
@@ -78,6 +81,7 @@ class ServiceMapperGenerator(
             .addModifiers(KModifier.ABSTRACT)
             .superclass(AbstractCoroutineServerImpl::class)
             .addSuperclassConstructorParameter("context = coroutineContext")
+            .addSuperinterface(interfaceTypeName)
             .primaryConstructor(
                 FunSpec.constructorBuilder()
                     .addParameter(
@@ -97,7 +101,7 @@ class ServiceMapperGenerator(
             val functionName = method.name.toCamelCase(ProtobufWordSplitter)
             serverSpec.addFunction(
                 FunSpec.builder(functionName)
-                    .addModifiers(KModifier.OPEN, KModifier.SUSPEND)
+                    .addModifiers(KModifier.OPEN, KModifier.SUSPEND, KModifier.OVERRIDE)
                     .addParameter("request", method.inputType.outputTypeName)
                     .returns(method.outputType.outputTypeName)
                     .addStatement(
@@ -133,17 +137,24 @@ class ServiceMapperGenerator(
     private fun Descriptors.ServiceDescriptor.writeClientTo(spec: TypeSpec.Builder) {
         val clientTypeName = outputTypeName.nestedClass("Client")
         val clientSpec = TypeSpec.classBuilder(clientTypeName)
+            .addModifiers(KModifier.OPEN)
             .superclass(AbstractCoroutineStub::class.typeName.parameterizedBy(clientTypeName))
-            .addSuperclassConstructorParameter("channel = channel")
-            .addSuperclassConstructorParameter("callOptions = callOptions")
+            .addSuperclassConstructorParameter("channel = option.channel")
+            .addSuperclassConstructorParameter("callOptions = option.callOptions")
+            .addSuperinterface(interfaceTypeName)
             .primaryConstructor(
                 FunSpec.constructorBuilder()
-                    .addParameter("channel", Channel::class)
-                    .addParameter(
-                        ParameterSpec.builder("callOptions", CallOptions::class)
-                            .defaultValue("%T.DEFAULT", CallOptions::class)
-                            .build()
-                    )
+                    .addParameter("option", ClientOption::class)
+                    .build()
+            )
+            .addProperty(
+                PropertySpec.builder("channel", Channel::class)
+                    .initializer("option.channel")
+                    .build()
+            )
+            .addProperty(
+                PropertySpec.builder("callOptions", CallOptions::class)
+                    .initializer("option.callOptions")
                     .build()
             )
             .addFunction(
@@ -152,7 +163,7 @@ class ServiceMapperGenerator(
                     .addParameter("channel", Channel::class)
                     .addParameter("callOptions", CallOptions::class)
                     .returns(clientTypeName)
-                    .addStatement("return %T(channel, callOptions)", clientTypeName)
+                    .addStatement("return %T(%T(channel, callOptions))", clientTypeName, ClientOption::class)
                     .build()
             )
 
@@ -161,13 +172,18 @@ class ServiceMapperGenerator(
 
             clientSpec.addFunction(
                 FunSpec.builder(functionName)
+                    .addModifiers(KModifier.SUSPEND, KModifier.OVERRIDE)
+                    .addParameter("request", method.inputType.outputTypeName)
+                    .returns(method.outputType.outputTypeName)
+                    .addStatement("return $functionName(request, %T())", Metadata::class)
+                    .build()
+            )
+
+            clientSpec.addFunction(
+                FunSpec.builder(functionName)
                     .addModifiers(KModifier.SUSPEND)
                     .addParameter("request", method.inputType.outputTypeName)
-                    .addParameter(
-                        ParameterSpec.builder("metadata", Metadata::class)
-                            .defaultValue("%T()", Metadata::class)
-                            .build()
-                    )
+                    .addParameter("metadata", Metadata::class)
                     .returns(method.outputType.outputTypeName)
                     .addCode("return %T.convert(\n", method.outputType.jvmConverterTypeName)
                     .addCode("\t\t%T.unaryRpc(\n", ClientCalls::class)

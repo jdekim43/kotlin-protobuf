@@ -10,13 +10,9 @@ import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.jvm.mapper.util.extention.delegatorNameEscaped
 import kr.jadekim.protobuf.generator.converter.jvm.mapper.util.extention.delegatorTypeName
 import kr.jadekim.protobuf.generator.converter.jvm.util.extention.jvmConverterTypeName
-import kr.jadekim.protobuf.generator.util.extention.nameSuffix
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.*
 import net.pearx.kasechange.toPascalCase
-
-//todo: multiplatform 파일을 어떻게 생성할 것인지, 그랬을 때 only jvm 인 경우엔 어떻게 호환성을 유지할 것인지,
-// converter.jvm.kt, converter.kt, converter.js.kt 등의 파일을 생성하고 converter.kt 에 delegator (typealias, expect actual 등) 작성
 
 class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
 
@@ -230,7 +226,11 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                 )
                 toKotlinTypeFunction.addStatement("val value${field.index} = obj.%N", field.outputVariableNameString)
                 toKotlinTypeFunction.beginControlFlow("if (value${field.index} != null)")
-                toKotlinTypeFunction.addStatement("builder.$function($code)", field.name.toPascalCase(ProtobufWordSplitter).delegatorNameEscaped, *arguments)
+                toKotlinTypeFunction.addStatement(
+                    "builder.$function($code)",
+                    field.name.toPascalCase(ProtobufWordSplitter).delegatorNameEscaped,
+                    *arguments
+                )
                 toKotlinTypeFunction.endControlFlow()
             } else {
                 val (code, arguments) = field.getCodeForToProtobuf()

@@ -1,7 +1,11 @@
-application {
-    mainClass.set("kr.jadekim.protobuf.generator.grpc.GrpcGeneratorKt")
+allprojects {
+    dependencies {
+        implementation(project(fullPath(":grpc")))
+    }
 }
 
-dependencies {
-    implementation(project(fullPath(":generator:converter:jvm")))
+subprojects {
+    dependencies {
+        api(project(fullPath(":generator:grpc")))
+    }
 }
