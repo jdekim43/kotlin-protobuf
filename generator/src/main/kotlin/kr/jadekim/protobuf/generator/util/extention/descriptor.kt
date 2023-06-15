@@ -11,8 +11,23 @@ val Descriptors.GenericDescriptor.simpleNames: List<String>
 val Descriptors.GenericDescriptor.names: List<String>
     get() = listOf(file.`package`) + simpleNames
 
+internal fun getTypeUrlPrefix(): String {
+    //todo: modify to load from protobuf gradle plugin property
+    var prefix = System.getProperty("kotlin.protobuf.prefix")
+
+    if (prefix.isNullOrBlank()) {
+        prefix = System.getenv("KOTLIN_PROTOBUF_PREFIX")
+
+        if (prefix.isNullOrBlank()) {
+            return ""
+        }
+    }
+
+    return prefix
+}
+
 val Descriptors.GenericDescriptor.typeUrl: String
-    get() = fullName
+    get() = "${getTypeUrlPrefix()}/$fullName"
 
 val Descriptors.GenericDescriptor.fileName: String
     get() = file.name.split("/").last().removeSuffix(".proto")

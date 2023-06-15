@@ -52,8 +52,8 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
 
     private fun Descriptors.FieldDescriptor.getCodeForToKotlin(
         typeName: TypeName = outputTypeName,
-        variableName: String = "obj.%N",
-        variableNameArguments: Array<Any> = arrayOf(outputVariableNameString.delegatorNameEscaped),
+        variableName: String = "obj.get%L()",
+        variableNameArguments: Array<Any> = arrayOf(outputVariableNameString.toPascalCase(ProtobufWordSplitter).delegatorNameEscaped),
         isRepeated: Boolean = this.isRepeated,
     ): Pair<String, Array<Any>> = when (typeName.copy(nullable = false)) { //Make non-null for compare only type
         BYTE_ARRAY -> "$variableName.toByteArray()" to variableNameArguments
@@ -82,7 +82,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                     emptyArray(),
                     false,
                 )
-                "${variableName.nameSuffix("Map")}.map { $keyCode to $valueCode }.toMap()" to arrayOf(
+                "obj.get%LMap().map { $keyCode to $valueCode }.toMap()" to arrayOf(
                     *variableNameArguments,
                     *keyArguments,
                     *valueArguments,
@@ -94,7 +94,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                     emptyArray(),
                     false,
                 )
-                "${variableName.nameSuffix("List")}.map { $code }" to arrayOf(*variableNameArguments, *arguments)
+                "obj.get%LList().map { $code }" to arrayOf(*variableNameArguments, *arguments)
             } else {
                 "%T.convert($variableName)" to arrayOf(
                     (typeName as? ClassName)?.jvmConverterTypeName ?: messageType.jvmConverterTypeName,

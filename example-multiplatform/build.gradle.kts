@@ -22,7 +22,10 @@ kotlin {
             dependencies {
                 val kotlinxSerializationVersion: String by project
 
-                implementation(project(fullPath(":")))
+                implementation(project(fullPath(":"))) {
+                    exclude(project.group.toString(), "kotlin-protobuf-prebuilt")
+                }
+                implementation(project(fullPath(":prebuilt:kotlinx")))
                 implementation(project(fullPath(":kotlinx")))
                 implementation(project(fullPath(":grpc")))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
@@ -60,7 +63,7 @@ dependencies {
 sourceSets {
     main {
         proto {
-            srcDir(project.projectDir.absolutePath + "/src/commonMain/proto")
+            srcDir(File(projectDir, "src/proto"))
         }
     }
 }

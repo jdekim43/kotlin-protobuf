@@ -148,13 +148,9 @@ class ServiceMapperGenerator(
                     .build()
             )
             .addProperty(
-                PropertySpec.builder("channel", Channel::class)
-                    .initializer("option.channel")
-                    .build()
-            )
-            .addProperty(
-                PropertySpec.builder("callOptions", CallOptions::class)
-                    .initializer("option.callOptions")
+                PropertySpec.builder("option", ClientOption::class)
+                    .addModifiers(KModifier.PRIVATE)
+                    .initializer("option")
                     .build()
             )
             .addFunction(
@@ -175,7 +171,7 @@ class ServiceMapperGenerator(
                     .addModifiers(KModifier.SUSPEND, KModifier.OVERRIDE)
                     .addParameter("request", method.inputType.outputTypeName)
                     .returns(method.outputType.outputTypeName)
-                    .addStatement("return $functionName(request, %T())", Metadata::class)
+                    .addStatement("return %N(request, %T())", functionName, Metadata::class)
                     .build()
             )
 
@@ -187,9 +183,9 @@ class ServiceMapperGenerator(
                     .returns(method.outputType.outputTypeName)
                     .addCode("return %T.convert(\n", method.outputType.jvmConverterTypeName)
                     .addCode("\t\t%T.unaryRpc(\n", ClientCalls::class)
-                    .addCode("\t\t\tchannel, %N,\n", method.descriptorVariableName)
+                    .addCode("\t\t\toption.channel, %N,\n", method.descriptorVariableName)
                     .addCode("\t\t\t%T.convert(request),\n", method.inputType.jvmConverterTypeName)
-                    .addCode("\t\t\tcallOptions, metadata,\n")
+                    .addCode("\t\t\toption.callOptions, metadata,\n")
                     .addCode("\t\t),\n\t)\n")
                     .build()
             )

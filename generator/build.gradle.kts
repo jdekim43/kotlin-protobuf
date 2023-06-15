@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
 
 plugins {
     kotlin("jvm")
+    id("application")
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
 
@@ -15,7 +16,7 @@ allprojects {
     }
 
     dependencies {
-        implementation(project(fullPath(":")))
+        implementation(project(fullPath(":core")))
 
 //        implementation(kotlin("reflect"))
     }
@@ -27,7 +28,7 @@ subprojects {
     }
 }
 
-configure(subprojects.filterNot { it.name == "kotlin-protobuf-generator-converter" || it.name == "kotlin-protobuf-generator-grpc" }) {
+configure(allprojects.filterNot { it.name == "kotlin-protobuf-generator-converter" || it.name == "kotlin-protobuf-generator-grpc" }) {
     apply {
         plugin("org.gradle.application")
         plugin("com.github.johnrengelman.shadow")
@@ -48,6 +49,10 @@ configure(subprojects.filterNot { it.name == "kotlin-protobuf-generator-converte
             }
         }
     }
+}
+
+application {
+    mainClass.set("kr.jadekim.protobuf.generator.KotlinGeneratorKt")
 }
 
 dependencies {

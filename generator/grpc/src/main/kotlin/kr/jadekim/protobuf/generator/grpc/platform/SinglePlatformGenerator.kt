@@ -2,11 +2,14 @@ package kr.jadekim.protobuf.generator.grpc.platform
 
 import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.grpc.util.extension.interfaceTypeName
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
+import kr.jadekim.protobuf.generator.util.extention.typeName
 import kr.jadekim.protobuf.grpc.ClientOption
+import kr.jadekim.protobuf.grpc.GrpcService
 import net.pearx.kasechange.toCamelCase
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -26,14 +29,22 @@ class SinglePlatformGenerator(
             spec.addModifiers(KModifier.ACTUAL)
         }
 
-        descriptor.writeInterfaceTo(spec)
-        descriptor.writeServerTo(spec, platformTypeName)
-        descriptor.writeClientTo(spec, platformTypeName)
+        val interfaceTypeName = descriptor.writeInterfaceTo(spec)
+        val serverTypeName = descriptor.writeServerTo(spec, platformTypeName)
+        val clientTypeName = descriptor.writeClientTo(spec, platformTypeName)
+
+        spec.addSuperinterface(
+            GrpcService::class.typeName.parameterizedBy(
+                interfaceTypeName,
+                serverTypeName,
+                clientTypeName,
+            )
+        )
 
         return listOf(spec.build()) to imports.toSet()
     }
 
-    private fun Descriptors.ServiceDescriptor.writeInterfaceTo(spec: TypeSpec.Builder) {
+    private fun Descriptors.ServiceDescriptor.writeInterfaceTo(spec: TypeSpec.Builder): TypeName {
         val name = interfaceTypeName
         val interfaceSpec = TypeSpec.interfaceBuilder(name)
 
@@ -54,9 +65,14 @@ class SinglePlatformGenerator(
         }
 
         spec.addType(interfaceSpec.build())
+
+        return name
     }
 
-    private fun Descriptors.ServiceDescriptor.writeServerTo(spec: TypeSpec.Builder, platformTypeName: ClassName) {
+    private fun Descriptors.ServiceDescriptor.writeServerTo(
+        spec: TypeSpec.Builder,
+        platformTypeName: ClassName
+    ): TypeName {
         val name = outputTypeName.nestedClass("Server")
         val serverSpec = TypeSpec.classBuilder(name)
             .addModifiers(KModifier.ABSTRACT)
@@ -82,9 +98,14 @@ class SinglePlatformGenerator(
         )
 
         spec.addType(serverSpec.build())
+
+        return name
     }
 
-    private fun Descriptors.ServiceDescriptor.writeClientTo(spec: TypeSpec.Builder, platformTypeName: ClassName) {
+    private fun Descriptors.ServiceDescriptor.writeClientTo(
+        spec: TypeSpec.Builder,
+        platformTypeName: ClassName
+    ): TypeName {
         val name = outputTypeName.nestedClass("Client")
         val clientSpec = TypeSpec.classBuilder(name)
             .addModifiers(KModifier.OPEN, KModifier.ACTUAL)
@@ -102,5 +123,15 @@ class SinglePlatformGenerator(
         )
 
         spec.addType(clientSpec.build())
+
+        FunSpec.builder("createClient")
+            .addModifiers(KModifier.OVERRIDE)
+            .addParameter("option", ClientOption::class)
+            .returns(name)
+            .addStatement("return %T(option)", name)
+            .build()
+            .let(spec::addFunction)
+
+        return name
     }
 }

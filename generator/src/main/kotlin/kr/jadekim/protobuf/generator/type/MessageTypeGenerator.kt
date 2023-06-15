@@ -4,6 +4,7 @@ import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.*
 import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.util.extention.*
+import kr.jadekim.protobuf.type.ProtobufMessage
 
 class MessageTypeGenerator(
     private val enumTypeGenerator: EnumTypeGenerator,
@@ -21,8 +22,11 @@ class MessageTypeGenerator(
             spec.addModifiers(KModifier.DATA)
         }
 
+        spec.addSuperinterface(ProtobufMessage::class)
+
         val constructor = FunSpec.constructorBuilder()
 
+        descriptor.writeMetadataTo(spec)
         descriptor.readFields(spec, constructor, imports)
         descriptor.readOneOf(spec, constructor, imports)
         descriptor.readChildren(spec, imports)
@@ -32,6 +36,17 @@ class MessageTypeGenerator(
         plugins.applyTo(spec, imports, descriptor)
 
         return spec.build() to imports.toSet()
+    }
+
+    private fun Descriptors.Descriptor.writeMetadataTo(spec: TypeSpec.Builder) {
+        TypeSpec.companionObjectBuilder()
+            .addProperty(
+                PropertySpec.builder("TYPE_URL", String::class)
+                    .addModifiers(KModifier.CONST)
+                    .initializer("%S", typeUrl)
+                    .build()
+            )
+            .let { spec.addType(it.build()) }
     }
 
     private fun Descriptors.Descriptor.readChildren(spec: TypeSpec.Builder, imports: MutableSet<ImportName>) {

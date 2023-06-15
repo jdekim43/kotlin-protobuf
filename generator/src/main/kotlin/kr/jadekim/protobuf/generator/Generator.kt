@@ -7,6 +7,19 @@ import kr.jadekim.protobuf.generator.util.extention.toResponse
 import java.io.IOException
 import java.io.InputStream
 
+val PREBUILT_PROTO_FILES = listOf(
+    "google/protobuf/any.proto",
+    "google/protobuf/api.proto",
+    "google/protobuf/duration.proto",
+    "google/protobuf/empty.proto",
+    "google/protobuf/field_mask.proto",
+    "google/protobuf/source_context.proto",
+    "google/protobuf/struct.proto",
+    "google/protobuf/timestamp.proto",
+    "google/protobuf/type.proto",
+    "google/protobuf/wrapper.proto",
+)
+
 abstract class Generator {
 
     companion object {
@@ -43,6 +56,15 @@ abstract class Generator {
             .setSupportedFeatures(PluginProtos.CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL_VALUE.toLong())
 
         descriptors
+            .filter {
+                if (PREBUILT_PROTO_FILES.contains(it.key)) {
+                    if (!System.getenv("KOTLIN_PROTOBUF_BUILD_PREBUILT").equals("true", true)) {
+                        return@filter false
+                    }
+                }
+
+                true
+            }
             .flatMap { (_, descriptor) -> generators.map { it.generate(descriptor) } }
             .filter { it.members.isNotEmpty() }
             .map { it.toResponse() }

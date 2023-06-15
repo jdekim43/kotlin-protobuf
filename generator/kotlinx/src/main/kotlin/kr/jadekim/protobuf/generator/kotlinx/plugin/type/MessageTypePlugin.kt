@@ -16,6 +16,7 @@ import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
 import kr.jadekim.protobuf.generator.util.extention.typeUrl
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
+import kr.jadekim.protobuf.kotlinx.ProtobufFormat
 import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
 
 object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
@@ -28,7 +29,7 @@ object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
         )
         spec.addAnnotation(
             AnnotationSpec.builder(SerialName::class)
-                .addMember("value = %S", descriptor.typeUrl)
+                .addMember("value = %T.TYPE_URL", descriptor.outputTypeName)
                 .build()
         )
 

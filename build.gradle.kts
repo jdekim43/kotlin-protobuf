@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = "kr.jadekim"
-    version = "0.2.1"
+    version = "0.3.1"
 
     repositories {
         mavenCentral()
@@ -18,7 +18,11 @@ allprojects {
 //    }
 }
 
-configure(allprojects.filterNot { it.name.startsWith("kotlin-protobuf-generator") || it.name.startsWith("kotlin-protobuf-example") }) {
+configure(allprojects.filterNot {
+    it.name.startsWith("kotlin-protobuf-generator")
+            || it.name.startsWith("kotlin-protobuf-example")
+            || it.name.startsWith("kotlin-protobuf-prebuilt")
+}) {
     apply {
         plugin("kotlin-multiplatform")
     }
@@ -120,5 +124,16 @@ configure(allprojects.filterNot { it.name.startsWith("kotlin-protobuf-example") 
 
     signing {
         sign(publishing.publications)
+    }
+}
+
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(project(fullPath(":core")))
+                api(project(fullPath(":prebuilt")))
+            }
+        }
     }
 }

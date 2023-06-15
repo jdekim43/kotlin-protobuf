@@ -15,6 +15,10 @@ Protocol Buffer generator for kotlin multiplatform or single platform.
 * JSON
 * Kotlin/JS
 * Kotlin/Native
+* Gradle Plugin
+* Assign default value to non-null field
+* Improve Any util functions
+  * ProtobufMessage.toAny : support unknown type
 
 ### Note
 * This will use 'package' option of proto file. (Not java_package option)
@@ -43,6 +47,10 @@ sourceSets {
 
 protobuf {
     plugins {
+        //If you want without kotlinx-serialization.
+        //id("kotlin-protobuf-kotlin") {
+        //    artifact = "kr.jadekim:kotlin-protobuf-generator:$kotlinProtobufVersion"
+        //}
         id("kotlin-protobuf-kotlinx") {
             artifact = "kr.jadekim:kotlin-protobuf-generator-kotlinx:$kotlinProtobufVersion"
         }
@@ -105,6 +113,10 @@ sourceSets {
 
 protobuf {
     plugins {
+        //If you want without kotlinx-serialization.
+        //id("kotlin-protobuf-kotlin") {
+        //    artifact = "kr.jadekim:kotlin-protobuf-generator:$kotlinProtobufVersion"
+        //}
         id("kotlin-protobuf-kotlinx") {
             artifact = "kr.jadekim:kotlin-protobuf-generator-kotlinx:$kotlinProtobufVersion"
         }

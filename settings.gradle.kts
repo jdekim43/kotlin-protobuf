@@ -2,6 +2,9 @@
 rootProject.name = "kotlin-protobuf"
 
 include(
+    ":core",
+    ":prebuilt",
+    ":prebuilt:kotlinx",
     ":kotlinx",
     ":grpc",
     ":generator",
