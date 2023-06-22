@@ -1,6 +1,6 @@
 // Transform from google/protobuf/struct.proto
 @file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.2")
+@file:GeneratorVersion(version = "0.3.3")
 
 package google.protobuf
 
@@ -16,7 +16,8 @@ import kotlin.jvm.JvmInline
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
-import kr.jadekim.protobuf.type.ProtobufMessage
+import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
+import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 
 public enum class NullValue(
   public val number: Int,
@@ -31,18 +32,20 @@ public enum class NullValue(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Struct.TYPE_URL)
 public data class Struct(
   @ProtobufIndex(index = 1)
   public val fields: Map<String, Value> = emptyMap(),
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Struct"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Value.TYPE_URL)
 public data class Value(
   public val kind: KindOneOf,
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Value"
   }
@@ -86,10 +89,11 @@ public data class Value(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = ListValue.TYPE_URL)
 public data class ListValue(
   @ProtobufIndex(index = 1)
   public val values: List<Value> = emptyList(),
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.ListValue"
   }

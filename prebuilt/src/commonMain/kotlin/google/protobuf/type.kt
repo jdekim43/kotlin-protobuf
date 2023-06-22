@@ -1,6 +1,6 @@
 // Transform from google/protobuf/type.proto
 @file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.2")
+@file:GeneratorVersion(version = "0.3.3")
 
 package google.protobuf
 
@@ -12,7 +12,8 @@ import kotlin.collections.emptyList
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
-import kr.jadekim.protobuf.type.ProtobufMessage
+import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
+import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 
 public enum class Syntax(
   public val number: Int,
@@ -31,6 +32,7 @@ public enum class Syntax(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Type.TYPE_URL)
 public data class Type(
   @ProtobufIndex(index = 1)
   public val name: String = "",
@@ -46,12 +48,13 @@ public data class Type(
   public val syntax: Syntax = Syntax.values()[0],
   @ProtobufIndex(index = 7)
   public val edition: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Type"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Field.TYPE_URL)
 public data class Field(
   @ProtobufIndex(index = 1)
   public val kind: Kind = Kind.values()[0],
@@ -73,7 +76,7 @@ public data class Field(
   public val jsonName: String = "",
   @ProtobufIndex(index = 11)
   public val defaultValue: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Field"
   }
@@ -147,6 +150,7 @@ public data class Field(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Enum.TYPE_URL)
 public data class Enum(
   @ProtobufIndex(index = 1)
   public val name: String = "",
@@ -160,12 +164,13 @@ public data class Enum(
   public val syntax: Syntax = Syntax.values()[0],
   @ProtobufIndex(index = 6)
   public val edition: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Enum"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = EnumValue.TYPE_URL)
 public data class EnumValue(
   @ProtobufIndex(index = 1)
   public val name: String = "",
@@ -173,18 +178,19 @@ public data class EnumValue(
   public val number: Int = 0,
   @ProtobufIndex(index = 3)
   public val options: List<Option> = emptyList(),
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.EnumValue"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Option.TYPE_URL)
 public data class Option(
   @ProtobufIndex(index = 1)
   public val name: String = "",
   @ProtobufIndex(index = 2)
   public val `value`: Any = Any(),
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Option"
   }

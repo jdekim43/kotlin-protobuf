@@ -4,6 +4,10 @@ package kr.jadekim.protobuf.annotation
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ProtobufSyntax(val syntax: String)
 
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ProtobufMessage(val typeUrl: String)
+
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ProtobufIndex(val index: Int)

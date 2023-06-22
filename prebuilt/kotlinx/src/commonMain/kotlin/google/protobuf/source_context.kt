@@ -1,6 +1,6 @@
 // Transform from google/protobuf/source_context.proto
 @file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.2")
+@file:GeneratorVersion(version = "0.3.3")
 
 package google.protobuf
 
@@ -19,14 +19,16 @@ import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.type.ProtobufMessage
+import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
+import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 
+@AnnotationProtobufMessage(typeUrl = SourceContext.TYPE_URL)
 @Serializable(with = SourceContext.KotlinxSerializer::class)
 @SerialName(value = SourceContext.TYPE_URL)
 public data class SourceContext(
   @ProtobufIndex(index = 1)
   public val fileName: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.SourceContext"
   }

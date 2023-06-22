@@ -1,6 +1,6 @@
 // Transform from google/protobuf/api.proto
 @file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.2")
+@file:GeneratorVersion(version = "0.3.3")
 
 package google.protobuf
 
@@ -22,8 +22,10 @@ import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.type.ProtobufMessage
+import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
+import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 
+@AnnotationProtobufMessage(typeUrl = Api.TYPE_URL)
 @Serializable(with = Api.KotlinxSerializer::class)
 @SerialName(value = Api.TYPE_URL)
 public data class Api(
@@ -41,7 +43,7 @@ public data class Api(
   public val mixins: List<Mixin> = emptyList(),
   @ProtobufIndex(index = 7)
   public val syntax: Syntax = Syntax.values()[0],
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Api"
   }
@@ -72,6 +74,7 @@ public data class Api(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Method.TYPE_URL)
 @Serializable(with = Method.KotlinxSerializer::class)
 @SerialName(value = Method.TYPE_URL)
 public data class Method(
@@ -89,7 +92,7 @@ public data class Method(
   public val options: List<Option> = emptyList(),
   @ProtobufIndex(index = 7)
   public val syntax: Syntax = Syntax.values()[0],
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Method"
   }
@@ -120,6 +123,7 @@ public data class Method(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Mixin.TYPE_URL)
 @Serializable(with = Mixin.KotlinxSerializer::class)
 @SerialName(value = Mixin.TYPE_URL)
 public data class Mixin(
@@ -127,7 +131,7 @@ public data class Mixin(
   public val name: String = "",
   @ProtobufIndex(index = 2)
   public val root: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Mixin"
   }

@@ -1,6 +1,6 @@
 // Transform from google/protobuf/type.proto
 @file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.2")
+@file:GeneratorVersion(version = "0.3.3")
 
 package google.protobuf
 
@@ -23,7 +23,8 @@ import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.type.ProtobufMessage
+import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
+import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 
 @Serializable
 @SerialName(value = "type.googleapis.com/google.protobuf.Syntax")
@@ -44,6 +45,7 @@ public enum class Syntax(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Type.TYPE_URL)
 @Serializable(with = Type.KotlinxSerializer::class)
 @SerialName(value = Type.TYPE_URL)
 public data class Type(
@@ -61,7 +63,7 @@ public data class Type(
   public val syntax: Syntax = Syntax.values()[0],
   @ProtobufIndex(index = 7)
   public val edition: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Type"
   }
@@ -92,6 +94,7 @@ public data class Type(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Field.TYPE_URL)
 @Serializable(with = Field.KotlinxSerializer::class)
 @SerialName(value = Field.TYPE_URL)
 public data class Field(
@@ -115,7 +118,7 @@ public data class Field(
   public val jsonName: String = "",
   @ProtobufIndex(index = 11)
   public val defaultValue: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Field"
   }
@@ -218,6 +221,7 @@ public data class Field(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Enum.TYPE_URL)
 @Serializable(with = Enum.KotlinxSerializer::class)
 @SerialName(value = Enum.TYPE_URL)
 public data class Enum(
@@ -233,7 +237,7 @@ public data class Enum(
   public val syntax: Syntax = Syntax.values()[0],
   @ProtobufIndex(index = 6)
   public val edition: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Enum"
   }
@@ -264,6 +268,7 @@ public data class Enum(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = EnumValue.TYPE_URL)
 @Serializable(with = EnumValue.KotlinxSerializer::class)
 @SerialName(value = EnumValue.TYPE_URL)
 public data class EnumValue(
@@ -273,7 +278,7 @@ public data class EnumValue(
   public val number: Int = 0,
   @ProtobufIndex(index = 3)
   public val options: List<Option> = emptyList(),
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.EnumValue"
   }
@@ -304,6 +309,7 @@ public data class EnumValue(
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Option.TYPE_URL)
 @Serializable(with = Option.KotlinxSerializer::class)
 @SerialName(value = Option.TYPE_URL)
 public data class Option(
@@ -311,7 +317,7 @@ public data class Option(
   public val name: String = "",
   @ProtobufIndex(index = 2)
   public val `value`: Any = Any(),
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Option"
   }

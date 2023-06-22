@@ -1,6 +1,6 @@
 // Transform from google/protobuf/wrappers.proto
 @file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.2")
+@file:GeneratorVersion(version = "0.3.3")
 
 package google.protobuf
 
@@ -17,84 +17,94 @@ import kotlin.byteArrayOf
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
-import kr.jadekim.protobuf.type.ProtobufMessage
+import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
+import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 
+@AnnotationProtobufMessage(typeUrl = DoubleValue.TYPE_URL)
 public data class DoubleValue(
   @ProtobufIndex(index = 1)
   public val `value`: Double = 0.0,
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.DoubleValue"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = FloatValue.TYPE_URL)
 public data class FloatValue(
   @ProtobufIndex(index = 1)
   public val `value`: Float = 0.0f,
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.FloatValue"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Int64Value.TYPE_URL)
 public data class Int64Value(
   @ProtobufIndex(index = 1)
   public val `value`: Long = 0L,
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Int64Value"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = UInt64Value.TYPE_URL)
 public data class UInt64Value(
   @ProtobufIndex(index = 1)
   public val `value`: ULong = 0uL,
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.UInt64Value"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = Int32Value.TYPE_URL)
 public data class Int32Value(
   @ProtobufIndex(index = 1)
   public val `value`: Int = 0,
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Int32Value"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = UInt32Value.TYPE_URL)
 public data class UInt32Value(
   @ProtobufIndex(index = 1)
   public val `value`: UInt = 0u,
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.UInt32Value"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = BoolValue.TYPE_URL)
 public data class BoolValue(
   @ProtobufIndex(index = 1)
   public val `value`: Boolean = false,
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.BoolValue"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = StringValue.TYPE_URL)
 public data class StringValue(
   @ProtobufIndex(index = 1)
   public val `value`: String = "",
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.StringValue"
   }
 }
 
+@AnnotationProtobufMessage(typeUrl = BytesValue.TYPE_URL)
 public data class BytesValue(
   @ProtobufIndex(index = 1)
   public val `value`: ByteArray = byteArrayOf(),
-) : ProtobufMessage {
+) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.BytesValue"
   }

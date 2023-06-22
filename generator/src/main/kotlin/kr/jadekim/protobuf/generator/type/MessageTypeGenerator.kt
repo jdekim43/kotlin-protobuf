@@ -22,6 +22,11 @@ class MessageTypeGenerator(
             spec.addModifiers(KModifier.DATA)
         }
 
+        spec.addAnnotation(
+            AnnotationSpec.builder(kr.jadekim.protobuf.annotation.ProtobufMessage::class)
+                .addMember("typeUrl = %T.TYPE_URL", descriptor.outputTypeName)
+                .build()
+        )
         spec.addSuperinterface(ProtobufMessage::class)
 
         val constructor = FunSpec.constructorBuilder()
