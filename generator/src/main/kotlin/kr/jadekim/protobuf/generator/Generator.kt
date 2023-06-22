@@ -17,7 +17,7 @@ val PREBUILT_PROTO_FILES = listOf(
     "google/protobuf/struct.proto",
     "google/protobuf/timestamp.proto",
     "google/protobuf/type.proto",
-    "google/protobuf/wrapper.proto",
+    "google/protobuf/wrappers.proto",
 )
 
 abstract class Generator {

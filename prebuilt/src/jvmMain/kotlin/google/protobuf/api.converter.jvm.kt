@@ -1,5 +1,5 @@
 // Transform from google/protobuf/api.proto
-@file:GeneratorVersion(version = "0.2.3")
+@file:GeneratorVersion(version = "0.3.2")
 
 package google.protobuf
 
@@ -14,13 +14,13 @@ public object ApiJvmConverter : ProtobufTypeMapper<Api, com.google.protobuf.Api>
   public override val parser: Parser<com.google.protobuf.Api> = com.google.protobuf.Api.parser()
 
   public override fun convert(obj: com.google.protobuf.Api): Api = Api(
-  	name = obj.name,
-  	methods = obj.methodsList.map { MethodJvmConverter.convert(it) },
-  	options = obj.optionsList.map { OptionJvmConverter.convert(it) },
-  	version = obj.version,
-  	sourceContext = SourceContextJvmConverter.convert(obj.sourceContext),
-  	mixins = obj.mixinsList.map { MixinJvmConverter.convert(it) },
-  	syntax = Syntax.forNumber(obj.syntax.number),
+  	name = obj.getName(),
+  	methods = obj.getMethodsList().map { MethodJvmConverter.convert(it) },
+  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
+  	version = obj.getVersion(),
+  	sourceContext = SourceContextJvmConverter.convert(obj.getSourceContext()),
+  	mixins = obj.getMixinsList().map { MixinJvmConverter.convert(it) },
+  	syntax = Syntax.forNumber(obj.getSyntax().number),
   )
 
   public override fun convert(obj: Api): com.google.protobuf.Api {
@@ -44,13 +44,13 @@ public object MethodJvmConverter : ProtobufTypeMapper<Method, com.google.protobu
       com.google.protobuf.Method.parser()
 
   public override fun convert(obj: com.google.protobuf.Method): Method = Method(
-  	name = obj.name,
-  	requestTypeUrl = obj.requestTypeUrl,
-  	requestStreaming = obj.requestStreaming,
-  	responseTypeUrl = obj.responseTypeUrl,
-  	responseStreaming = obj.responseStreaming,
-  	options = obj.optionsList.map { OptionJvmConverter.convert(it) },
-  	syntax = Syntax.forNumber(obj.syntax.number),
+  	name = obj.getName(),
+  	requestTypeUrl = obj.getRequestTypeUrl(),
+  	requestStreaming = obj.getRequestStreaming(),
+  	responseTypeUrl = obj.getResponseTypeUrl(),
+  	responseStreaming = obj.getResponseStreaming(),
+  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
+  	syntax = Syntax.forNumber(obj.getSyntax().number),
   )
 
   public override fun convert(obj: Method): com.google.protobuf.Method {
@@ -72,8 +72,8 @@ public object MixinJvmConverter : ProtobufTypeMapper<Mixin, com.google.protobuf.
   public override val parser: Parser<com.google.protobuf.Mixin> = com.google.protobuf.Mixin.parser()
 
   public override fun convert(obj: com.google.protobuf.Mixin): Mixin = Mixin(
-  	name = obj.name,
-  	root = obj.root,
+  	name = obj.getName(),
+  	root = obj.getRoot(),
   )
 
   public override fun convert(obj: Mixin): com.google.protobuf.Mixin {

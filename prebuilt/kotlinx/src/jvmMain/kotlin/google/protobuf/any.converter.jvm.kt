@@ -1,5 +1,5 @@
 // Transform from google/protobuf/any.proto
-@file:GeneratorVersion(version = "0.2.3")
+@file:GeneratorVersion(version = "0.3.2")
 
 package google.protobuf
 
@@ -15,8 +15,8 @@ public object AnyJvmConverter : ProtobufTypeMapper<Any, com.google.protobuf.Any>
   public override val parser: Parser<com.google.protobuf.Any> = com.google.protobuf.Any.parser()
 
   public override fun convert(obj: com.google.protobuf.Any): Any = Any(
-  	typeUrl = obj.typeUrl,
-  	`value` = obj.`value`.toByteArray(),
+  	typeUrl = obj.getTypeUrl(),
+  	`value` = obj.getValue().toByteArray(),
   )
 
   public override fun convert(obj: Any): com.google.protobuf.Any {

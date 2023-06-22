@@ -1,5 +1,5 @@
 // Transform from google/protobuf/struct.proto
-@file:GeneratorVersion(version = "0.2.3")
+@file:GeneratorVersion(version = "0.3.2")
 
 package google.protobuf
 
@@ -16,7 +16,7 @@ public object StructJvmConverter : ProtobufTypeMapper<Struct, com.google.protobu
       com.google.protobuf.Struct.parser()
 
   public override fun convert(obj: com.google.protobuf.Struct): Struct = Struct(
-  	fields = obj.fieldsMap.map { it.key to ValueJvmConverter.convert(it.value) }.toMap(),
+  	fields = obj.getFieldsMap().map { it.key to ValueJvmConverter.convert(it.value) }.toMap(),
   )
 
   public override fun convert(obj: Struct): com.google.protobuf.Struct {
@@ -33,12 +33,12 @@ public object ValueJvmConverter : ProtobufTypeMapper<Value, com.google.protobuf.
 
   public override fun convert(obj: com.google.protobuf.Value): Value = Value(
   	kind = mapOf(
-  1 to { Value.KindOneOf.NullValue(NullValue.forNumber(obj.nullValue.number)) },
-  2 to { Value.KindOneOf.NumberValue(obj.numberValue) },
-  3 to { Value.KindOneOf.StringValue(obj.stringValue) },
-  4 to { Value.KindOneOf.BoolValue(obj.boolValue) },
-  5 to { Value.KindOneOf.StructValue(StructJvmConverter.convert(obj.structValue)) },
-  6 to { Value.KindOneOf.ListValue(ListValueJvmConverter.convert(obj.listValue)) },
+  1 to { Value.KindOneOf.NullValue(NullValue.forNumber(obj.getNullValue().number)) },
+  2 to { Value.KindOneOf.NumberValue(obj.getNumberValue()) },
+  3 to { Value.KindOneOf.StringValue(obj.getStringValue()) },
+  4 to { Value.KindOneOf.BoolValue(obj.getBoolValue()) },
+  5 to { Value.KindOneOf.StructValue(StructJvmConverter.convert(obj.getStructValue())) },
+  6 to { Value.KindOneOf.ListValue(ListValueJvmConverter.convert(obj.getListValue())) },
   ).getValue(obj.kindCase.number)(),
   )
 
@@ -67,7 +67,7 @@ public object ListValueJvmConverter : ProtobufTypeMapper<ListValue, com.google.p
       com.google.protobuf.ListValue.parser()
 
   public override fun convert(obj: com.google.protobuf.ListValue): ListValue = ListValue(
-  	values = obj.valuesList.map { ValueJvmConverter.convert(it) },
+  	values = obj.getValuesList().map { ValueJvmConverter.convert(it) },
   )
 
   public override fun convert(obj: ListValue): com.google.protobuf.ListValue {

@@ -1,5 +1,5 @@
 // Transform from google/protobuf/type.proto
-@file:GeneratorVersion(version = "0.2.3")
+@file:GeneratorVersion(version = "0.3.2")
 
 package google.protobuf
 
@@ -14,13 +14,13 @@ public object TypeJvmConverter : ProtobufTypeMapper<Type, com.google.protobuf.Ty
   public override val parser: Parser<com.google.protobuf.Type> = com.google.protobuf.Type.parser()
 
   public override fun convert(obj: com.google.protobuf.Type): Type = Type(
-  	name = obj.name,
-  	fields = obj.fieldsList.map { FieldJvmConverter.convert(it) },
-  	oneofs = obj.oneofsList.map { it },
-  	options = obj.optionsList.map { OptionJvmConverter.convert(it) },
-  	sourceContext = SourceContextJvmConverter.convert(obj.sourceContext),
-  	syntax = Syntax.forNumber(obj.syntax.number),
-  	edition = obj.edition,
+  	name = obj.getName(),
+  	fields = obj.getFieldsList().map { FieldJvmConverter.convert(it) },
+  	oneofs = obj.getOneofsList().map { it },
+  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
+  	sourceContext = SourceContextJvmConverter.convert(obj.getSourceContext()),
+  	syntax = Syntax.forNumber(obj.getSyntax().number),
+  	edition = obj.getEdition(),
   )
 
   public override fun convert(obj: Type): com.google.protobuf.Type {
@@ -42,16 +42,16 @@ public object FieldJvmConverter : ProtobufTypeMapper<Field, com.google.protobuf.
   public override val parser: Parser<com.google.protobuf.Field> = com.google.protobuf.Field.parser()
 
   public override fun convert(obj: com.google.protobuf.Field): Field = Field(
-  	kind = Field.Kind.forNumber(obj.kind.number),
-  	cardinality = Field.Cardinality.forNumber(obj.cardinality.number),
-  	number = obj.number,
-  	name = obj.name,
-  	typeUrl = obj.typeUrl,
-  	oneofIndex = obj.oneofIndex,
-  	packed = obj.packed,
-  	options = obj.optionsList.map { OptionJvmConverter.convert(it) },
-  	jsonName = obj.jsonName,
-  	defaultValue = obj.defaultValue,
+  	kind = Field.Kind.forNumber(obj.getKind().number),
+  	cardinality = Field.Cardinality.forNumber(obj.getCardinality().number),
+  	number = obj.getNumber(),
+  	name = obj.getName(),
+  	typeUrl = obj.getTypeUrl(),
+  	oneofIndex = obj.getOneofIndex(),
+  	packed = obj.getPacked(),
+  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
+  	jsonName = obj.getJsonName(),
+  	defaultValue = obj.getDefaultValue(),
   )
 
   public override fun convert(obj: Field): com.google.protobuf.Field {
@@ -76,12 +76,12 @@ public object EnumJvmConverter : ProtobufTypeMapper<Enum, com.google.protobuf.En
   public override val parser: Parser<com.google.protobuf.Enum> = com.google.protobuf.Enum.parser()
 
   public override fun convert(obj: com.google.protobuf.Enum): Enum = Enum(
-  	name = obj.name,
-  	enumvalue = obj.enumvalueList.map { EnumValueJvmConverter.convert(it) },
-  	options = obj.optionsList.map { OptionJvmConverter.convert(it) },
-  	sourceContext = SourceContextJvmConverter.convert(obj.sourceContext),
-  	syntax = Syntax.forNumber(obj.syntax.number),
-  	edition = obj.edition,
+  	name = obj.getName(),
+  	enumvalue = obj.getEnumvalueList().map { EnumValueJvmConverter.convert(it) },
+  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
+  	sourceContext = SourceContextJvmConverter.convert(obj.getSourceContext()),
+  	syntax = Syntax.forNumber(obj.getSyntax().number),
+  	edition = obj.getEdition(),
   )
 
   public override fun convert(obj: Enum): com.google.protobuf.Enum {
@@ -104,9 +104,9 @@ public object EnumValueJvmConverter : ProtobufTypeMapper<EnumValue, com.google.p
       com.google.protobuf.EnumValue.parser()
 
   public override fun convert(obj: com.google.protobuf.EnumValue): EnumValue = EnumValue(
-  	name = obj.name,
-  	number = obj.number,
-  	options = obj.optionsList.map { OptionJvmConverter.convert(it) },
+  	name = obj.getName(),
+  	number = obj.getNumber(),
+  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
   )
 
   public override fun convert(obj: EnumValue): com.google.protobuf.EnumValue {
@@ -126,8 +126,8 @@ public object OptionJvmConverter : ProtobufTypeMapper<Option, com.google.protobu
       com.google.protobuf.Option.parser()
 
   public override fun convert(obj: com.google.protobuf.Option): Option = Option(
-  	name = obj.name,
-  	`value` = AnyJvmConverter.convert(obj.`value`),
+  	name = obj.getName(),
+  	`value` = AnyJvmConverter.convert(obj.getValue()),
   )
 
   public override fun convert(obj: Option): com.google.protobuf.Option {

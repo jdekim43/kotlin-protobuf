@@ -1,5 +1,5 @@
 // Transform from google/protobuf/wrappers.proto
-@file:GeneratorVersion(version = "0.2.3")
+@file:GeneratorVersion(version = "0.3.2")
 
 package google.protobuf
 
@@ -20,7 +20,7 @@ public object DoubleValueJvmConverter :
       com.google.protobuf.DoubleValue.parser()
 
   public override fun convert(obj: com.google.protobuf.DoubleValue): DoubleValue = DoubleValue(
-  	`value` = obj.`value`,
+  	`value` = obj.getValue(),
   )
 
   public override fun convert(obj: DoubleValue): com.google.protobuf.DoubleValue {
@@ -39,7 +39,7 @@ public object FloatValueJvmConverter :
       com.google.protobuf.FloatValue.parser()
 
   public override fun convert(obj: com.google.protobuf.FloatValue): FloatValue = FloatValue(
-  	`value` = obj.`value`,
+  	`value` = obj.getValue(),
   )
 
   public override fun convert(obj: FloatValue): com.google.protobuf.FloatValue {
@@ -58,7 +58,7 @@ public object Int64ValueJvmConverter :
       com.google.protobuf.Int64Value.parser()
 
   public override fun convert(obj: com.google.protobuf.Int64Value): Int64Value = Int64Value(
-  	`value` = obj.`value`,
+  	`value` = obj.getValue(),
   )
 
   public override fun convert(obj: Int64Value): com.google.protobuf.Int64Value {
@@ -77,7 +77,7 @@ public object UInt64ValueJvmConverter :
       com.google.protobuf.UInt64Value.parser()
 
   public override fun convert(obj: com.google.protobuf.UInt64Value): UInt64Value = UInt64Value(
-  	`value` = obj.`value`.asKotlinType,
+  	`value` = obj.getValue().asKotlinType,
   )
 
   public override fun convert(obj: UInt64Value): com.google.protobuf.UInt64Value {
@@ -96,7 +96,7 @@ public object Int32ValueJvmConverter :
       com.google.protobuf.Int32Value.parser()
 
   public override fun convert(obj: com.google.protobuf.Int32Value): Int32Value = Int32Value(
-  	`value` = obj.`value`,
+  	`value` = obj.getValue(),
   )
 
   public override fun convert(obj: Int32Value): com.google.protobuf.Int32Value {
@@ -115,7 +115,7 @@ public object UInt32ValueJvmConverter :
       com.google.protobuf.UInt32Value.parser()
 
   public override fun convert(obj: com.google.protobuf.UInt32Value): UInt32Value = UInt32Value(
-  	`value` = obj.`value`.asKotlinType,
+  	`value` = obj.getValue().asKotlinType,
   )
 
   public override fun convert(obj: UInt32Value): com.google.protobuf.UInt32Value {
@@ -133,7 +133,7 @@ public object BoolValueJvmConverter : ProtobufTypeMapper<BoolValue, com.google.p
       com.google.protobuf.BoolValue.parser()
 
   public override fun convert(obj: com.google.protobuf.BoolValue): BoolValue = BoolValue(
-  	`value` = obj.`value`,
+  	`value` = obj.getValue(),
   )
 
   public override fun convert(obj: BoolValue): com.google.protobuf.BoolValue {
@@ -152,7 +152,7 @@ public object StringValueJvmConverter :
       com.google.protobuf.StringValue.parser()
 
   public override fun convert(obj: com.google.protobuf.StringValue): StringValue = StringValue(
-  	`value` = obj.`value`,
+  	`value` = obj.getValue(),
   )
 
   public override fun convert(obj: StringValue): com.google.protobuf.StringValue {
@@ -171,7 +171,7 @@ public object BytesValueJvmConverter :
       com.google.protobuf.BytesValue.parser()
 
   public override fun convert(obj: com.google.protobuf.BytesValue): BytesValue = BytesValue(
-  	`value` = obj.`value`.toByteArray(),
+  	`value` = obj.getValue().toByteArray(),
   )
 
   public override fun convert(obj: BytesValue): com.google.protobuf.BytesValue {

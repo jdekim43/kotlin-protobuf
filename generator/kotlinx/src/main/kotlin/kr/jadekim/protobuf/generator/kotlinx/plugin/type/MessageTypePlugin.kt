@@ -19,10 +19,16 @@ import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
 
 object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
 
+    private val Descriptors.Descriptor.reflectSerializerTypeName: ClassName
+        get() = outputTypeName.nestedClass("ReflectSerializer")
+
+    private val Descriptors.Descriptor.serializerTypeName: ClassName
+        get() = outputTypeName.nestedClass("KotlinxSerializer")
+
     override fun applyTo(spec: TypeSpec.Builder, imports: MutableSet<ImportName>, descriptor: Descriptors.Descriptor) {
         spec.addAnnotation(
             AnnotationSpec.builder(Serializable::class)
-                .addMember("with = %T::class", descriptor.outputTypeName.nestedClass("KotlinxSerializer"))
+                .addMember("with = %T::class", descriptor.serializerTypeName)
                 .build()
         )
         spec.addAnnotation(
@@ -37,13 +43,30 @@ object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
     private fun Descriptors.Descriptor.writeSerializerTo(spec: TypeSpec.Builder) {
         val outputTypeName = outputTypeName
         val converterTypeName = converterTypeName
+        val reflectSerializerTypeName = reflectSerializerTypeName
+        val serializerTypeName = serializerTypeName
 
-        TypeSpec.objectBuilder("KotlinxSerializer")
+        TypeSpec.objectBuilder(reflectSerializerTypeName)
+            .addModifiers(KModifier.PRIVATE)
+            .addAnnotation(
+                AnnotationSpec.builder(ClassName("kotlin", "OptIn"))
+                    .addMember("%T::class", ClassName("kotlinx.serialization", "ExperimentalSerializationApi"))
+                    .build()
+            )
+            .addAnnotation(
+                AnnotationSpec.builder(ClassName("kotlinx.serialization", "Serializer"))
+                    .addMember("forClass = %T::class", outputTypeName)
+                    .build()
+            )
+            .build()
+            .let(spec::addType)
+
+        TypeSpec.objectBuilder(serializerTypeName)
             .addSuperinterface(KSerializer::class.typeName.parameterizedBy(outputTypeName))
             .addProperty(
                 PropertySpec.builder("delegator", KSerializer::class.typeName.parameterizedBy(outputTypeName))
                     .addModifiers(KModifier.PRIVATE)
-                    .initializer("%T.serializer()", outputTypeName)
+                    .initializer("%T", reflectSerializerTypeName)
                     .build()
             )
             .addProperty(

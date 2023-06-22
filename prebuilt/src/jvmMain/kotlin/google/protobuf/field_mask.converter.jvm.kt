@@ -1,5 +1,5 @@
 // Transform from google/protobuf/field_mask.proto
-@file:GeneratorVersion(version = "0.2.3")
+@file:GeneratorVersion(version = "0.3.2")
 
 package google.protobuf
 
@@ -16,7 +16,7 @@ public object FieldMaskJvmConverter : ProtobufTypeMapper<FieldMask, com.google.p
       com.google.protobuf.FieldMask.parser()
 
   public override fun convert(obj: com.google.protobuf.FieldMask): FieldMask = FieldMask(
-  	paths = obj.pathsList.map { it },
+  	paths = obj.getPathsList().map { it },
   )
 
   public override fun convert(obj: FieldMask): com.google.protobuf.FieldMask {

@@ -1,28 +1,31 @@
 // Transform from google/protobuf/struct.proto
 @file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.2.3")
+@file:GeneratorVersion(version = "0.3.2")
 
 package google.protobuf
 
 import kotlin.Boolean
 import kotlin.Double
 import kotlin.Int
+import kotlin.OptIn
 import kotlin.String
 import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.Map
 import kotlin.jvm.JvmInline
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
-import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable
@@ -50,8 +53,12 @@ public data class Struct(
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Struct"
   }
 
+  @OptIn(ExperimentalSerializationApi::class)
+  @Serializer(forClass = Struct::class)
+  private object ReflectSerializer
+
   public object KotlinxSerializer : KSerializer<Struct> {
-    private val delegator: KSerializer<Struct> = Struct.serializer()
+    private val delegator: KSerializer<Struct> = ReflectSerializer
 
     public override val descriptor: SerialDescriptor = delegator.descriptor
 
@@ -120,8 +127,12 @@ public data class Value(
     ) : KindOneOf
   }
 
+  @OptIn(ExperimentalSerializationApi::class)
+  @Serializer(forClass = Value::class)
+  private object ReflectSerializer
+
   public object KotlinxSerializer : KSerializer<Value> {
-    private val delegator: KSerializer<Value> = Value.serializer()
+    private val delegator: KSerializer<Value> = ReflectSerializer
 
     public override val descriptor: SerialDescriptor = delegator.descriptor
 
@@ -152,8 +163,12 @@ public data class ListValue(
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.ListValue"
   }
 
+  @OptIn(ExperimentalSerializationApi::class)
+  @Serializer(forClass = ListValue::class)
+  private object ReflectSerializer
+
   public object KotlinxSerializer : KSerializer<ListValue> {
-    private val delegator: KSerializer<ListValue> = ListValue.serializer()
+    private val delegator: KSerializer<ListValue> = ReflectSerializer
 
     public override val descriptor: SerialDescriptor = delegator.descriptor
 
