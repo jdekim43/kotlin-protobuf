@@ -18,7 +18,7 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable(with = Api.KotlinxSerializer::class)
@@ -57,7 +57,7 @@ public data class Api(
     }
 
     public override fun deserialize(decoder: Decoder): Api {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return ApiConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -101,7 +101,7 @@ public data class Method(
     }
 
     public override fun deserialize(decoder: Decoder): Method {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return MethodConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -135,7 +135,7 @@ public data class Mixin(
     }
 
     public override fun deserialize(decoder: Decoder): Mixin {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return MixinConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)

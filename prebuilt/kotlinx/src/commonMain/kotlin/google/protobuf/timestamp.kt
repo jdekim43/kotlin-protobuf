@@ -18,7 +18,7 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable(with = Timestamp.KotlinxSerializer::class)
@@ -47,7 +47,7 @@ public data class Timestamp(
     }
 
     public override fun deserialize(decoder: Decoder): Timestamp {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return TimestampConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)

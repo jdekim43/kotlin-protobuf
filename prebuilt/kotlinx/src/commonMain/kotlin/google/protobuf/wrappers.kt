@@ -24,7 +24,7 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable(with = DoubleValue.KotlinxSerializer::class)
@@ -51,7 +51,7 @@ public data class DoubleValue(
     }
 
     public override fun deserialize(decoder: Decoder): DoubleValue {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return DoubleValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -83,7 +83,7 @@ public data class FloatValue(
     }
 
     public override fun deserialize(decoder: Decoder): FloatValue {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return FloatValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -115,7 +115,7 @@ public data class Int64Value(
     }
 
     public override fun deserialize(decoder: Decoder): Int64Value {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return Int64ValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -147,7 +147,7 @@ public data class UInt64Value(
     }
 
     public override fun deserialize(decoder: Decoder): UInt64Value {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return UInt64ValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -179,7 +179,7 @@ public data class Int32Value(
     }
 
     public override fun deserialize(decoder: Decoder): Int32Value {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return Int32ValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -211,7 +211,7 @@ public data class UInt32Value(
     }
 
     public override fun deserialize(decoder: Decoder): UInt32Value {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return UInt32ValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -243,7 +243,7 @@ public data class BoolValue(
     }
 
     public override fun deserialize(decoder: Decoder): BoolValue {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return BoolValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -275,7 +275,7 @@ public data class StringValue(
     }
 
     public override fun deserialize(decoder: Decoder): StringValue {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return StringValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -307,7 +307,7 @@ public data class BytesValue(
     }
 
     public override fun deserialize(decoder: Decoder): BytesValue {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return BytesValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)

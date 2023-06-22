@@ -15,7 +15,7 @@ import kotlinx.serialization.encoding.Encoder
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable(with = Empty.KotlinxSerializer::class)
@@ -39,7 +39,7 @@ public class Empty() : ProtobufMessage {
     }
 
     public override fun deserialize(decoder: Decoder): Empty {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return EmptyConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)

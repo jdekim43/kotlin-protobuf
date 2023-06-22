@@ -15,7 +15,7 @@ class ProtobufFormat(override val serializersModule: SerializersModule = EmptySe
     }
 
     override fun <T> decodeFromByteArray(deserializer: DeserializationStrategy<T>, bytes: ByteArray): T {
-        val decoder = ProtobufMapperDecoder(bytes, serializersModule)
+        val decoder = ProtobufConverterDecoder(bytes, serializersModule)
         return deserializer.deserialize(decoder)
     }
 }

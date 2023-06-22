@@ -22,7 +22,7 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable
@@ -64,7 +64,7 @@ public data class Struct(
     }
 
     public override fun deserialize(decoder: Decoder): Struct {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return StructConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -134,7 +134,7 @@ public data class Value(
     }
 
     public override fun deserialize(decoder: Decoder): Value {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return ValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -166,7 +166,7 @@ public data class ListValue(
     }
 
     public override fun deserialize(decoder: Decoder): ListValue {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return ListValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)

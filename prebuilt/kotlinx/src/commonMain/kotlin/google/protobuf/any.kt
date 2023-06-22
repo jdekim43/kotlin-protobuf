@@ -17,7 +17,7 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable(with = Any.KotlinxSerializer::class)
@@ -46,7 +46,7 @@ public data class Any(
     }
 
     public override fun deserialize(decoder: Decoder): Any {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return AnyConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)

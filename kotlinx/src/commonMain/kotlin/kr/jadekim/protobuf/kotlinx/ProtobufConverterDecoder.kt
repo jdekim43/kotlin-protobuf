@@ -6,7 +6,7 @@ import kotlinx.serialization.encoding.AbstractDecoder
 import kotlinx.serialization.modules.SerializersModule
 
 @OptIn(ExperimentalSerializationApi::class)
-class ProtobufMapperDecoder(val bytes: ByteArray, override val serializersModule: SerializersModule) :
+class ProtobufConverterDecoder(val bytes: ByteArray, override val serializersModule: SerializersModule) :
     AbstractDecoder() {
 
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {

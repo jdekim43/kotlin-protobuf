@@ -14,10 +14,8 @@ import kr.jadekim.protobuf.generator.converter.util.extention.converterTypeName
 import kr.jadekim.protobuf.generator.type.TypeGenerator
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
-import kr.jadekim.protobuf.generator.util.extention.typeUrl
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufFormat
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
 
 object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
 
@@ -71,7 +69,7 @@ object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
                     .addModifiers(KModifier.OVERRIDE)
                     .addParameter("decoder", Decoder::class)
                     .returns(outputTypeName)
-                    .beginControlFlow("if (decoder is %T)", ProtobufMapperDecoder::class)
+                    .beginControlFlow("if (decoder is %T)", ProtobufConverterDecoder::class)
                     .addStatement("return %T.deserialize(decoder.decodeByteArray())", converterTypeName)
                     .endControlFlow()
                     .addStatement("return delegator.deserialize(decoder)")

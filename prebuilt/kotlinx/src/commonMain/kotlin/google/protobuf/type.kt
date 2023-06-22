@@ -19,7 +19,7 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable
@@ -77,7 +77,7 @@ public data class Type(
     }
 
     public override fun deserialize(decoder: Decoder): Type {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return TypeConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -199,7 +199,7 @@ public data class Field(
     }
 
     public override fun deserialize(decoder: Decoder): Field {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return FieldConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -241,7 +241,7 @@ public data class Enum(
     }
 
     public override fun deserialize(decoder: Decoder): Enum {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return EnumConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -277,7 +277,7 @@ public data class EnumValue(
     }
 
     public override fun deserialize(decoder: Decoder): EnumValue {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return EnumValueConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
@@ -311,7 +311,7 @@ public data class Option(
     }
 
     public override fun deserialize(decoder: Decoder): Option {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return OptionConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)

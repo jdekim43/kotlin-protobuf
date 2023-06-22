@@ -17,7 +17,7 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
-import kr.jadekim.protobuf.kotlinx.ProtobufMapperDecoder
+import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.type.ProtobufMessage
 
 @Serializable(with = FieldMask.KotlinxSerializer::class)
@@ -44,7 +44,7 @@ public data class FieldMask(
     }
 
     public override fun deserialize(decoder: Decoder): FieldMask {
-      if (decoder is ProtobufMapperDecoder) {
+      if (decoder is ProtobufConverterDecoder) {
         return FieldMaskConverter.deserialize(decoder.decodeByteArray())
       }
       return delegator.deserialize(decoder)
