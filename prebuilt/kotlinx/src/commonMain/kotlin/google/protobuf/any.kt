@@ -7,7 +7,7 @@ package google.protobuf
 import kotlin.ByteArray
 import kotlin.OptIn
 import kotlin.String
-import kotlin.Unit
+import kotlin.byteArrayOf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -27,9 +27,9 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 @SerialName(value = Any.TYPE_URL)
 public data class Any(
   @ProtobufIndex(index = 1)
-  public val typeUrl: String,
+  public val typeUrl: String = "",
   @ProtobufIndex(index = 2)
-  public val `value`: ByteArray,
+  public val `value`: ByteArray = byteArrayOf(),
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Any"
@@ -42,9 +42,9 @@ public data class Any(
   public object KotlinxSerializer : KSerializer<Any> {
     private val delegator: KSerializer<Any> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: Any): Unit {
+    override fun serialize(encoder: Encoder, `value`: Any) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(AnyConverter.serialize(value))
         return
@@ -52,7 +52,7 @@ public data class Any(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): Any {
+    override fun deserialize(decoder: Decoder): Any {
       if (decoder is ProtobufConverterDecoder) {
         return AnyConverter.deserialize(decoder.decodeByteArray())
       }

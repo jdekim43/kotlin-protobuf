@@ -9,18 +9,16 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
 public object DurationJvmConverter : ProtobufTypeMapper<Duration, com.google.protobuf.Duration> {
-  public override val descriptor: Descriptors.Descriptor =
-      com.google.protobuf.Duration.getDescriptor()
+  override val descriptor: Descriptors.Descriptor = com.google.protobuf.Duration.getDescriptor()
 
-  public override val parser: Parser<com.google.protobuf.Duration> =
-      com.google.protobuf.Duration.parser()
+  override val parser: Parser<com.google.protobuf.Duration> = com.google.protobuf.Duration.parser()
 
-  public override fun convert(obj: com.google.protobuf.Duration): Duration = Duration(
+  override fun convert(obj: com.google.protobuf.Duration): Duration = Duration(
   	seconds = obj.getSeconds(),
   	nanos = obj.getNanos(),
   )
 
-  public override fun convert(obj: Duration): com.google.protobuf.Duration {
+  override fun convert(obj: Duration): com.google.protobuf.Duration {
     val builder = com.google.protobuf.Duration.newBuilder()
     builder.setSeconds(obj.seconds)
     builder.setNanos(obj.nanos)

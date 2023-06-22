@@ -13,6 +13,7 @@ import kotlin.Long
 import kotlin.String
 import kotlin.UInt
 import kotlin.ULong
+import kotlin.byteArrayOf
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
@@ -20,7 +21,7 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 
 public data class DoubleValue(
   @ProtobufIndex(index = 1)
-  public val `value`: Double,
+  public val `value`: Double = 0.0,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.DoubleValue"
@@ -29,7 +30,7 @@ public data class DoubleValue(
 
 public data class FloatValue(
   @ProtobufIndex(index = 1)
-  public val `value`: Float,
+  public val `value`: Float = 0.0f,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.FloatValue"
@@ -38,7 +39,7 @@ public data class FloatValue(
 
 public data class Int64Value(
   @ProtobufIndex(index = 1)
-  public val `value`: Long,
+  public val `value`: Long = 0L,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Int64Value"
@@ -47,7 +48,7 @@ public data class Int64Value(
 
 public data class UInt64Value(
   @ProtobufIndex(index = 1)
-  public val `value`: ULong,
+  public val `value`: ULong = 0uL,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.UInt64Value"
@@ -56,7 +57,7 @@ public data class UInt64Value(
 
 public data class Int32Value(
   @ProtobufIndex(index = 1)
-  public val `value`: Int,
+  public val `value`: Int = 0,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Int32Value"
@@ -65,7 +66,7 @@ public data class Int32Value(
 
 public data class UInt32Value(
   @ProtobufIndex(index = 1)
-  public val `value`: UInt,
+  public val `value`: UInt = 0u,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.UInt32Value"
@@ -74,7 +75,7 @@ public data class UInt32Value(
 
 public data class BoolValue(
   @ProtobufIndex(index = 1)
-  public val `value`: Boolean,
+  public val `value`: Boolean = false,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.BoolValue"
@@ -83,7 +84,7 @@ public data class BoolValue(
 
 public data class StringValue(
   @ProtobufIndex(index = 1)
-  public val `value`: String,
+  public val `value`: String = "",
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.StringValue"
@@ -92,7 +93,7 @@ public data class StringValue(
 
 public data class BytesValue(
   @ProtobufIndex(index = 1)
-  public val `value`: ByteArray,
+  public val `value`: ByteArray = byteArrayOf(),
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.BytesValue"

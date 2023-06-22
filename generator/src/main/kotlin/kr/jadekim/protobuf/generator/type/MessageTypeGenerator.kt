@@ -89,16 +89,12 @@ class MessageTypeGenerator(
         constructor: FunSpec.Builder,
         overrideName: String? = null
     ) {
-        val isOptional = hasOptionalKeyword()
         val typeName = outputTypeName
         val fieldName = overrideName ?: outputVariableNameString
         val parameter = ParameterSpec.builder(fieldName, typeName)
         val property = PropertySpec.builder(fieldName, typeName).initializer(fieldName)
 
-        if (isOptional) {
-            parameter.defaultValue("null")
-        }
-
+        parameter.defaultValue(kotlinDefaultValue)
         parameter.addNumberAnnotation(number)
 
         if (options.deprecated) {

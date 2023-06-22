@@ -9,17 +9,15 @@ import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
 public object StructJvmConverter : ProtobufTypeMapper<Struct, com.google.protobuf.Struct> {
-  public override val descriptor: Descriptors.Descriptor =
-      com.google.protobuf.Struct.getDescriptor()
+  override val descriptor: Descriptors.Descriptor = com.google.protobuf.Struct.getDescriptor()
 
-  public override val parser: Parser<com.google.protobuf.Struct> =
-      com.google.protobuf.Struct.parser()
+  override val parser: Parser<com.google.protobuf.Struct> = com.google.protobuf.Struct.parser()
 
-  public override fun convert(obj: com.google.protobuf.Struct): Struct = Struct(
+  override fun convert(obj: com.google.protobuf.Struct): Struct = Struct(
   	fields = obj.getFieldsMap().map { it.key to ValueJvmConverter.convert(it.value) }.toMap(),
   )
 
-  public override fun convert(obj: Struct): com.google.protobuf.Struct {
+  override fun convert(obj: Struct): com.google.protobuf.Struct {
     val builder = com.google.protobuf.Struct.newBuilder()
     builder.putAllFields(obj.fields.map { it.key to ValueJvmConverter.convert(it.value) }.toMap())
     return builder.build()
@@ -27,11 +25,11 @@ public object StructJvmConverter : ProtobufTypeMapper<Struct, com.google.protobu
 }
 
 public object ValueJvmConverter : ProtobufTypeMapper<Value, com.google.protobuf.Value> {
-  public override val descriptor: Descriptors.Descriptor = com.google.protobuf.Value.getDescriptor()
+  override val descriptor: Descriptors.Descriptor = com.google.protobuf.Value.getDescriptor()
 
-  public override val parser: Parser<com.google.protobuf.Value> = com.google.protobuf.Value.parser()
+  override val parser: Parser<com.google.protobuf.Value> = com.google.protobuf.Value.parser()
 
-  public override fun convert(obj: com.google.protobuf.Value): Value = Value(
+  override fun convert(obj: com.google.protobuf.Value): Value = Value(
   	kind = mapOf(
   1 to { Value.KindOneOf.NullValue(NullValue.forNumber(obj.getNullValue().number)) },
   2 to { Value.KindOneOf.NumberValue(obj.getNumberValue()) },
@@ -42,7 +40,7 @@ public object ValueJvmConverter : ProtobufTypeMapper<Value, com.google.protobuf.
   ).getValue(obj.kindCase.number)(),
   )
 
-  public override fun convert(obj: Value): com.google.protobuf.Value {
+  override fun convert(obj: Value): com.google.protobuf.Value {
     val builder = com.google.protobuf.Value.newBuilder()
     when (obj.kind) {
       is Value.KindOneOf.NullValue ->
@@ -60,17 +58,16 @@ public object ValueJvmConverter : ProtobufTypeMapper<Value, com.google.protobuf.
 }
 
 public object ListValueJvmConverter : ProtobufTypeMapper<ListValue, com.google.protobuf.ListValue> {
-  public override val descriptor: Descriptors.Descriptor =
-      com.google.protobuf.ListValue.getDescriptor()
+  override val descriptor: Descriptors.Descriptor = com.google.protobuf.ListValue.getDescriptor()
 
-  public override val parser: Parser<com.google.protobuf.ListValue> =
+  override val parser: Parser<com.google.protobuf.ListValue> =
       com.google.protobuf.ListValue.parser()
 
-  public override fun convert(obj: com.google.protobuf.ListValue): ListValue = ListValue(
+  override fun convert(obj: com.google.protobuf.ListValue): ListValue = ListValue(
   	values = obj.getValuesList().map { ValueJvmConverter.convert(it) },
   )
 
-  public override fun convert(obj: ListValue): com.google.protobuf.ListValue {
+  override fun convert(obj: ListValue): com.google.protobuf.ListValue {
     val builder = com.google.protobuf.ListValue.newBuilder()
     builder.addAllValues(obj.values.map { ValueJvmConverter.convert(it) })
     return builder.build()

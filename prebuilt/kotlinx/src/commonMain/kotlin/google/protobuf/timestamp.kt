@@ -8,7 +8,6 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.OptIn
 import kotlin.String
-import kotlin.Unit
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -28,9 +27,9 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 @SerialName(value = Timestamp.TYPE_URL)
 public data class Timestamp(
   @ProtobufIndex(index = 1)
-  public val seconds: Long,
+  public val seconds: Long = 0L,
   @ProtobufIndex(index = 2)
-  public val nanos: Int,
+  public val nanos: Int = 0,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Timestamp"
@@ -43,9 +42,9 @@ public data class Timestamp(
   public object KotlinxSerializer : KSerializer<Timestamp> {
     private val delegator: KSerializer<Timestamp> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: Timestamp): Unit {
+    override fun serialize(encoder: Encoder, `value`: Timestamp) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(TimestampConverter.serialize(value))
         return
@@ -53,7 +52,7 @@ public data class Timestamp(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): Timestamp {
+    override fun deserialize(decoder: Decoder): Timestamp {
       if (decoder is ProtobufConverterDecoder) {
         return TimestampConverter.deserialize(decoder.decodeByteArray())
       }

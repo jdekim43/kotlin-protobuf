@@ -8,6 +8,7 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
 import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
@@ -32,19 +33,19 @@ public enum class Syntax(
 
 public data class Type(
   @ProtobufIndex(index = 1)
-  public val name: String,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val fields: List<Field>,
+  public val fields: List<Field> = emptyList(),
   @ProtobufIndex(index = 3)
-  public val oneofs: List<String>,
+  public val oneofs: List<String> = emptyList(),
   @ProtobufIndex(index = 4)
-  public val options: List<Option>,
+  public val options: List<Option> = emptyList(),
   @ProtobufIndex(index = 5)
-  public val sourceContext: SourceContext,
+  public val sourceContext: SourceContext = SourceContext(),
   @ProtobufIndex(index = 6)
-  public val syntax: Syntax,
+  public val syntax: Syntax = Syntax.values()[0],
   @ProtobufIndex(index = 7)
-  public val edition: String,
+  public val edition: String = "",
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Type"
@@ -53,25 +54,25 @@ public data class Type(
 
 public data class Field(
   @ProtobufIndex(index = 1)
-  public val kind: Kind,
+  public val kind: Kind = Kind.values()[0],
   @ProtobufIndex(index = 2)
-  public val cardinality: Cardinality,
+  public val cardinality: Cardinality = Cardinality.values()[0],
   @ProtobufIndex(index = 3)
-  public val number: Int,
+  public val number: Int = 0,
   @ProtobufIndex(index = 4)
-  public val name: String,
+  public val name: String = "",
   @ProtobufIndex(index = 6)
-  public val typeUrl: String,
+  public val typeUrl: String = "",
   @ProtobufIndex(index = 7)
-  public val oneofIndex: Int,
+  public val oneofIndex: Int = 0,
   @ProtobufIndex(index = 8)
-  public val packed: Boolean,
+  public val packed: Boolean = false,
   @ProtobufIndex(index = 9)
-  public val options: List<Option>,
+  public val options: List<Option> = emptyList(),
   @ProtobufIndex(index = 10)
-  public val jsonName: String,
+  public val jsonName: String = "",
   @ProtobufIndex(index = 11)
-  public val defaultValue: String,
+  public val defaultValue: String = "",
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Field"
@@ -148,17 +149,17 @@ public data class Field(
 
 public data class Enum(
   @ProtobufIndex(index = 1)
-  public val name: String,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val enumvalue: List<EnumValue>,
+  public val enumvalue: List<EnumValue> = emptyList(),
   @ProtobufIndex(index = 3)
-  public val options: List<Option>,
+  public val options: List<Option> = emptyList(),
   @ProtobufIndex(index = 4)
-  public val sourceContext: SourceContext,
+  public val sourceContext: SourceContext = SourceContext(),
   @ProtobufIndex(index = 5)
-  public val syntax: Syntax,
+  public val syntax: Syntax = Syntax.values()[0],
   @ProtobufIndex(index = 6)
-  public val edition: String,
+  public val edition: String = "",
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Enum"
@@ -167,11 +168,11 @@ public data class Enum(
 
 public data class EnumValue(
   @ProtobufIndex(index = 1)
-  public val name: String,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val number: Int,
+  public val number: Int = 0,
   @ProtobufIndex(index = 3)
-  public val options: List<Option>,
+  public val options: List<Option> = emptyList(),
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.EnumValue"
@@ -180,9 +181,9 @@ public data class EnumValue(
 
 public data class Option(
   @ProtobufIndex(index = 1)
-  public val name: String,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val `value`: Any,
+  public val `value`: Any = Any(),
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Option"

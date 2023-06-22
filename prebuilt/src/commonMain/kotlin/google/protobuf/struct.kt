@@ -10,6 +10,8 @@ import kotlin.Int
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.Map
+import kotlin.collections.emptyList
+import kotlin.collections.emptyMap
 import kotlin.jvm.JvmInline
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
@@ -31,7 +33,7 @@ public enum class NullValue(
 
 public data class Struct(
   @ProtobufIndex(index = 1)
-  public val fields: Map<String, Value>,
+  public val fields: Map<String, Value> = emptyMap(),
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Struct"
@@ -49,44 +51,44 @@ public data class Value(
     @JvmInline
     public value class NullValue(
       @ProtobufIndex(index = 1)
-      public val `value`: google.protobuf.NullValue,
+      public val `value`: google.protobuf.NullValue = google.protobuf.NullValue.values()[0],
     ) : KindOneOf
 
     @JvmInline
     public value class NumberValue(
       @ProtobufIndex(index = 2)
-      public val `value`: Double,
+      public val `value`: Double = 0.0,
     ) : KindOneOf
 
     @JvmInline
     public value class StringValue(
       @ProtobufIndex(index = 3)
-      public val `value`: String,
+      public val `value`: String = "",
     ) : KindOneOf
 
     @JvmInline
     public value class BoolValue(
       @ProtobufIndex(index = 4)
-      public val `value`: Boolean,
+      public val `value`: Boolean = false,
     ) : KindOneOf
 
     @JvmInline
     public value class StructValue(
       @ProtobufIndex(index = 5)
-      public val `value`: Struct,
+      public val `value`: Struct = Struct(),
     ) : KindOneOf
 
     @JvmInline
     public value class ListValue(
       @ProtobufIndex(index = 6)
-      public val `value`: google.protobuf.ListValue,
+      public val `value`: google.protobuf.ListValue = google.protobuf.ListValue(),
     ) : KindOneOf
   }
 }
 
 public data class ListValue(
   @ProtobufIndex(index = 1)
-  public val values: List<Value>,
+  public val values: List<Value> = emptyList(),
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.ListValue"

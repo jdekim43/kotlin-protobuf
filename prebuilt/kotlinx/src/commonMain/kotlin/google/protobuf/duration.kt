@@ -8,7 +8,6 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.OptIn
 import kotlin.String
-import kotlin.Unit
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -28,9 +27,9 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 @SerialName(value = Duration.TYPE_URL)
 public data class Duration(
   @ProtobufIndex(index = 1)
-  public val seconds: Long,
+  public val seconds: Long = 0L,
   @ProtobufIndex(index = 2)
-  public val nanos: Int,
+  public val nanos: Int = 0,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Duration"
@@ -43,9 +42,9 @@ public data class Duration(
   public object KotlinxSerializer : KSerializer<Duration> {
     private val delegator: KSerializer<Duration> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: Duration): Unit {
+    override fun serialize(encoder: Encoder, `value`: Duration) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(DurationConverter.serialize(value))
         return
@@ -53,7 +52,7 @@ public data class Duration(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): Duration {
+    override fun deserialize(decoder: Decoder): Duration {
       if (decoder is ProtobufConverterDecoder) {
         return DurationConverter.deserialize(decoder.decodeByteArray())
       }

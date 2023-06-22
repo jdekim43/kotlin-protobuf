@@ -12,7 +12,7 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 
 public data class SourceContext(
   @ProtobufIndex(index = 1)
-  public val fileName: String,
+  public val fileName: String = "",
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.SourceContext"

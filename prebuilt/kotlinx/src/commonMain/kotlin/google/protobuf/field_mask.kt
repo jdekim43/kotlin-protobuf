@@ -6,8 +6,8 @@ package google.protobuf
 
 import kotlin.OptIn
 import kotlin.String
-import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.emptyList
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -27,7 +27,7 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 @SerialName(value = FieldMask.TYPE_URL)
 public data class FieldMask(
   @ProtobufIndex(index = 1)
-  public val paths: List<String>,
+  public val paths: List<String> = emptyList(),
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.FieldMask"
@@ -40,9 +40,9 @@ public data class FieldMask(
   public object KotlinxSerializer : KSerializer<FieldMask> {
     private val delegator: KSerializer<FieldMask> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: FieldMask): Unit {
+    override fun serialize(encoder: Encoder, `value`: FieldMask) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(FieldMaskConverter.serialize(value))
         return
@@ -50,7 +50,7 @@ public data class FieldMask(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): FieldMask {
+    override fun deserialize(decoder: Decoder): FieldMask {
       if (decoder is ProtobufConverterDecoder) {
         return FieldMaskConverter.deserialize(decoder.decodeByteArray())
       }

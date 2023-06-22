@@ -14,7 +14,7 @@ import kotlin.OptIn
 import kotlin.String
 import kotlin.UInt
 import kotlin.ULong
-import kotlin.Unit
+import kotlin.byteArrayOf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -34,7 +34,7 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 @SerialName(value = DoubleValue.TYPE_URL)
 public data class DoubleValue(
   @ProtobufIndex(index = 1)
-  public val `value`: Double,
+  public val `value`: Double = 0.0,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.DoubleValue"
@@ -47,9 +47,9 @@ public data class DoubleValue(
   public object KotlinxSerializer : KSerializer<DoubleValue> {
     private val delegator: KSerializer<DoubleValue> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: DoubleValue): Unit {
+    override fun serialize(encoder: Encoder, `value`: DoubleValue) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(DoubleValueConverter.serialize(value))
         return
@@ -57,7 +57,7 @@ public data class DoubleValue(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): DoubleValue {
+    override fun deserialize(decoder: Decoder): DoubleValue {
       if (decoder is ProtobufConverterDecoder) {
         return DoubleValueConverter.deserialize(decoder.decodeByteArray())
       }
@@ -70,7 +70,7 @@ public data class DoubleValue(
 @SerialName(value = FloatValue.TYPE_URL)
 public data class FloatValue(
   @ProtobufIndex(index = 1)
-  public val `value`: Float,
+  public val `value`: Float = 0.0f,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.FloatValue"
@@ -83,9 +83,9 @@ public data class FloatValue(
   public object KotlinxSerializer : KSerializer<FloatValue> {
     private val delegator: KSerializer<FloatValue> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: FloatValue): Unit {
+    override fun serialize(encoder: Encoder, `value`: FloatValue) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(FloatValueConverter.serialize(value))
         return
@@ -93,7 +93,7 @@ public data class FloatValue(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): FloatValue {
+    override fun deserialize(decoder: Decoder): FloatValue {
       if (decoder is ProtobufConverterDecoder) {
         return FloatValueConverter.deserialize(decoder.decodeByteArray())
       }
@@ -106,7 +106,7 @@ public data class FloatValue(
 @SerialName(value = Int64Value.TYPE_URL)
 public data class Int64Value(
   @ProtobufIndex(index = 1)
-  public val `value`: Long,
+  public val `value`: Long = 0L,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Int64Value"
@@ -119,9 +119,9 @@ public data class Int64Value(
   public object KotlinxSerializer : KSerializer<Int64Value> {
     private val delegator: KSerializer<Int64Value> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: Int64Value): Unit {
+    override fun serialize(encoder: Encoder, `value`: Int64Value) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(Int64ValueConverter.serialize(value))
         return
@@ -129,7 +129,7 @@ public data class Int64Value(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): Int64Value {
+    override fun deserialize(decoder: Decoder): Int64Value {
       if (decoder is ProtobufConverterDecoder) {
         return Int64ValueConverter.deserialize(decoder.decodeByteArray())
       }
@@ -142,7 +142,7 @@ public data class Int64Value(
 @SerialName(value = UInt64Value.TYPE_URL)
 public data class UInt64Value(
   @ProtobufIndex(index = 1)
-  public val `value`: ULong,
+  public val `value`: ULong = 0uL,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.UInt64Value"
@@ -155,9 +155,9 @@ public data class UInt64Value(
   public object KotlinxSerializer : KSerializer<UInt64Value> {
     private val delegator: KSerializer<UInt64Value> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: UInt64Value): Unit {
+    override fun serialize(encoder: Encoder, `value`: UInt64Value) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(UInt64ValueConverter.serialize(value))
         return
@@ -165,7 +165,7 @@ public data class UInt64Value(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): UInt64Value {
+    override fun deserialize(decoder: Decoder): UInt64Value {
       if (decoder is ProtobufConverterDecoder) {
         return UInt64ValueConverter.deserialize(decoder.decodeByteArray())
       }
@@ -178,7 +178,7 @@ public data class UInt64Value(
 @SerialName(value = Int32Value.TYPE_URL)
 public data class Int32Value(
   @ProtobufIndex(index = 1)
-  public val `value`: Int,
+  public val `value`: Int = 0,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Int32Value"
@@ -191,9 +191,9 @@ public data class Int32Value(
   public object KotlinxSerializer : KSerializer<Int32Value> {
     private val delegator: KSerializer<Int32Value> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: Int32Value): Unit {
+    override fun serialize(encoder: Encoder, `value`: Int32Value) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(Int32ValueConverter.serialize(value))
         return
@@ -201,7 +201,7 @@ public data class Int32Value(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): Int32Value {
+    override fun deserialize(decoder: Decoder): Int32Value {
       if (decoder is ProtobufConverterDecoder) {
         return Int32ValueConverter.deserialize(decoder.decodeByteArray())
       }
@@ -214,7 +214,7 @@ public data class Int32Value(
 @SerialName(value = UInt32Value.TYPE_URL)
 public data class UInt32Value(
   @ProtobufIndex(index = 1)
-  public val `value`: UInt,
+  public val `value`: UInt = 0u,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.UInt32Value"
@@ -227,9 +227,9 @@ public data class UInt32Value(
   public object KotlinxSerializer : KSerializer<UInt32Value> {
     private val delegator: KSerializer<UInt32Value> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: UInt32Value): Unit {
+    override fun serialize(encoder: Encoder, `value`: UInt32Value) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(UInt32ValueConverter.serialize(value))
         return
@@ -237,7 +237,7 @@ public data class UInt32Value(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): UInt32Value {
+    override fun deserialize(decoder: Decoder): UInt32Value {
       if (decoder is ProtobufConverterDecoder) {
         return UInt32ValueConverter.deserialize(decoder.decodeByteArray())
       }
@@ -250,7 +250,7 @@ public data class UInt32Value(
 @SerialName(value = BoolValue.TYPE_URL)
 public data class BoolValue(
   @ProtobufIndex(index = 1)
-  public val `value`: Boolean,
+  public val `value`: Boolean = false,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.BoolValue"
@@ -263,9 +263,9 @@ public data class BoolValue(
   public object KotlinxSerializer : KSerializer<BoolValue> {
     private val delegator: KSerializer<BoolValue> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: BoolValue): Unit {
+    override fun serialize(encoder: Encoder, `value`: BoolValue) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(BoolValueConverter.serialize(value))
         return
@@ -273,7 +273,7 @@ public data class BoolValue(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): BoolValue {
+    override fun deserialize(decoder: Decoder): BoolValue {
       if (decoder is ProtobufConverterDecoder) {
         return BoolValueConverter.deserialize(decoder.decodeByteArray())
       }
@@ -286,7 +286,7 @@ public data class BoolValue(
 @SerialName(value = StringValue.TYPE_URL)
 public data class StringValue(
   @ProtobufIndex(index = 1)
-  public val `value`: String,
+  public val `value`: String = "",
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.StringValue"
@@ -299,9 +299,9 @@ public data class StringValue(
   public object KotlinxSerializer : KSerializer<StringValue> {
     private val delegator: KSerializer<StringValue> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: StringValue): Unit {
+    override fun serialize(encoder: Encoder, `value`: StringValue) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(StringValueConverter.serialize(value))
         return
@@ -309,7 +309,7 @@ public data class StringValue(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): StringValue {
+    override fun deserialize(decoder: Decoder): StringValue {
       if (decoder is ProtobufConverterDecoder) {
         return StringValueConverter.deserialize(decoder.decodeByteArray())
       }
@@ -322,7 +322,7 @@ public data class StringValue(
 @SerialName(value = BytesValue.TYPE_URL)
 public data class BytesValue(
   @ProtobufIndex(index = 1)
-  public val `value`: ByteArray,
+  public val `value`: ByteArray = byteArrayOf(),
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.BytesValue"
@@ -335,9 +335,9 @@ public data class BytesValue(
   public object KotlinxSerializer : KSerializer<BytesValue> {
     private val delegator: KSerializer<BytesValue> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: BytesValue): Unit {
+    override fun serialize(encoder: Encoder, `value`: BytesValue) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(BytesValueConverter.serialize(value))
         return
@@ -345,7 +345,7 @@ public data class BytesValue(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): BytesValue {
+    override fun deserialize(decoder: Decoder): BytesValue {
       if (decoder is ProtobufConverterDecoder) {
         return BytesValueConverter.deserialize(decoder.decodeByteArray())
       }

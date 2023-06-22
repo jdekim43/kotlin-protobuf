@@ -14,9 +14,9 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 
 public data class Timestamp(
   @ProtobufIndex(index = 1)
-  public val seconds: Long,
+  public val seconds: Long = 0L,
   @ProtobufIndex(index = 2)
-  public val nanos: Int,
+  public val nanos: Int = 0,
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Timestamp"

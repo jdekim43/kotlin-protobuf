@@ -122,3 +122,39 @@ val Descriptors.ServiceDescriptor.outputTypeName: ClassName
 
 val KClass<*>.typeName: ClassName
     get() = asTypeName()
+
+val Descriptors.FieldDescriptor.kotlinDefaultValue: CodeBlock
+    get() {
+        if (hasOptionalKeyword()) {
+            return CodeBlock.of("null")
+        }
+
+        if (isMapField) {
+            return CodeBlock.of("%M()", MemberName("kotlin.collections", "emptyMap"))
+        }
+
+        if (isRepeated && !isMapField) {
+            return CodeBlock.of("%M()", MemberName("kotlin.collections", "emptyList"))
+        }
+
+        return when (type) {
+            Descriptors.FieldDescriptor.Type.DOUBLE -> CodeBlock.of("0.0")
+            Descriptors.FieldDescriptor.Type.FLOAT -> CodeBlock.of("0.0f")
+            Descriptors.FieldDescriptor.Type.INT64 -> CodeBlock.of("0L")
+            Descriptors.FieldDescriptor.Type.UINT64 -> CodeBlock.of("0uL")
+            Descriptors.FieldDescriptor.Type.INT32 -> CodeBlock.of("0")
+            Descriptors.FieldDescriptor.Type.FIXED64 -> CodeBlock.of("0uL")
+            Descriptors.FieldDescriptor.Type.FIXED32 -> CodeBlock.of("0u")
+            Descriptors.FieldDescriptor.Type.BOOL -> CodeBlock.of("false")
+            Descriptors.FieldDescriptor.Type.STRING -> CodeBlock.of("%S", "")
+            Descriptors.FieldDescriptor.Type.GROUP, Descriptors.FieldDescriptor.Type.MESSAGE -> CodeBlock.of("%T()", messageType.outputTypeName)
+            Descriptors.FieldDescriptor.Type.ENUM -> CodeBlock.of("%T.values()[0]", enumType.outputTypeName)
+            Descriptors.FieldDescriptor.Type.BYTES -> CodeBlock.of("%M()", MemberName("kotlin", "byteArrayOf"))
+            Descriptors.FieldDescriptor.Type.UINT32 -> CodeBlock.of("0u")
+            Descriptors.FieldDescriptor.Type.SFIXED32 -> CodeBlock.of("0")
+            Descriptors.FieldDescriptor.Type.SFIXED64 -> CodeBlock.of("0L")
+            Descriptors.FieldDescriptor.Type.SINT32 -> CodeBlock.of("0")
+            Descriptors.FieldDescriptor.Type.SINT64 -> CodeBlock.of("0L")
+            null -> throw NullPointerException()
+        }
+    }

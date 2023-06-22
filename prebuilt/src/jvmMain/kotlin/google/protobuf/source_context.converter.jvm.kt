@@ -10,18 +10,17 @@ import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
 public object SourceContextJvmConverter :
     ProtobufTypeMapper<SourceContext, com.google.protobuf.SourceContext> {
-  public override val descriptor: Descriptors.Descriptor =
+  override val descriptor: Descriptors.Descriptor =
       com.google.protobuf.SourceContext.getDescriptor()
 
-  public override val parser: Parser<com.google.protobuf.SourceContext> =
+  override val parser: Parser<com.google.protobuf.SourceContext> =
       com.google.protobuf.SourceContext.parser()
 
-  public override fun convert(obj: com.google.protobuf.SourceContext): SourceContext =
-      SourceContext(
+  override fun convert(obj: com.google.protobuf.SourceContext): SourceContext = SourceContext(
   	fileName = obj.getFileName(),
   )
 
-  public override fun convert(obj: SourceContext): com.google.protobuf.SourceContext {
+  override fun convert(obj: SourceContext): com.google.protobuf.SourceContext {
     val builder = com.google.protobuf.SourceContext.newBuilder()
     builder.setFileName(obj.fileName)
     return builder.build()

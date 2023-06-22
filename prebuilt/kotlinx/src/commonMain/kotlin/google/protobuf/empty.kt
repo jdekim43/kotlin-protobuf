@@ -6,7 +6,6 @@ package google.protobuf
 
 import kotlin.OptIn
 import kotlin.String
-import kotlin.Unit
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -35,9 +34,9 @@ public class Empty() : ProtobufMessage {
   public object KotlinxSerializer : KSerializer<Empty> {
     private val delegator: KSerializer<Empty> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: Empty): Unit {
+    override fun serialize(encoder: Encoder, `value`: Empty) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(EmptyConverter.serialize(value))
         return
@@ -45,7 +44,7 @@ public class Empty() : ProtobufMessage {
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): Empty {
+    override fun deserialize(decoder: Decoder): Empty {
       if (decoder is ProtobufConverterDecoder) {
         return EmptyConverter.deserialize(decoder.decodeByteArray())
       }

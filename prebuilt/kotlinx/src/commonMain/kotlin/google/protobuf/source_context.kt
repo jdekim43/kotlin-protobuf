@@ -6,7 +6,6 @@ package google.protobuf
 
 import kotlin.OptIn
 import kotlin.String
-import kotlin.Unit
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -26,7 +25,7 @@ import kr.jadekim.protobuf.type.ProtobufMessage
 @SerialName(value = SourceContext.TYPE_URL)
 public data class SourceContext(
   @ProtobufIndex(index = 1)
-  public val fileName: String,
+  public val fileName: String = "",
 ) : ProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.SourceContext"
@@ -39,9 +38,9 @@ public data class SourceContext(
   public object KotlinxSerializer : KSerializer<SourceContext> {
     private val delegator: KSerializer<SourceContext> = ReflectSerializer
 
-    public override val descriptor: SerialDescriptor = delegator.descriptor
+    override val descriptor: SerialDescriptor = delegator.descriptor
 
-    public override fun serialize(encoder: Encoder, `value`: SourceContext): Unit {
+    override fun serialize(encoder: Encoder, `value`: SourceContext) {
       if (encoder is ProtobufConverterEncoder) {
         encoder.encodeValue(SourceContextConverter.serialize(value))
         return
@@ -49,7 +48,7 @@ public data class SourceContext(
       delegator.serialize(encoder, value)
     }
 
-    public override fun deserialize(decoder: Decoder): SourceContext {
+    override fun deserialize(decoder: Decoder): SourceContext {
       if (decoder is ProtobufConverterDecoder) {
         return SourceContextConverter.deserialize(decoder.decodeByteArray())
       }
