@@ -55,12 +55,12 @@ class SinglePlatformGenerator(
         for (method in methods) {
             val functionName = method.name.toCamelCase(ProtobufWordSplitter)
 
-            interfaceSpec.addFunction(
-                FunSpec.builder(functionName)
-                    .addModifiers(KModifier.SUSPEND, KModifier.ABSTRACT, KModifier.ACTUAL)
-                    .addParameter("request", method.inputType.outputTypeName)
-                    .returns(method.outputType.outputTypeName)
-                    .build()
+            interfaceSpec.addFunction(FunSpec.builder(functionName)
+                .addModifiers(KModifier.SUSPEND, KModifier.ABSTRACT)
+                .addParameter("request", method.inputType.outputTypeName)
+                .returns(method.outputType.outputTypeName)
+                .apply { if (isActual) addModifiers(KModifier.ACTUAL) }
+                .build()
             )
         }
 
@@ -88,7 +88,7 @@ class SinglePlatformGenerator(
 
         serverSpec.primaryConstructor(
             FunSpec.constructorBuilder()
-                .addModifiers(KModifier.ACTUAL)
+                .apply { if (isActual) addModifiers(KModifier.ACTUAL) }
                 .addParameter(
                     ParameterSpec.builder("coroutineContext", CoroutineContext::class)
                         .apply { if (!isActual) defaultValue("%T", EmptyCoroutineContext::class) }
@@ -108,7 +108,8 @@ class SinglePlatformGenerator(
     ): TypeName {
         val name = outputTypeName.nestedClass("Client")
         val clientSpec = TypeSpec.classBuilder(name)
-            .addModifiers(KModifier.OPEN, KModifier.ACTUAL)
+            .addModifiers(KModifier.OPEN)
+            .apply { if (isActual) addModifiers(KModifier.ACTUAL) }
 
         clientSpec.superclass(platformTypeName.nestedClass("Client"))
         clientSpec.addSuperclassConstructorParameter("option")
@@ -117,7 +118,7 @@ class SinglePlatformGenerator(
 
         clientSpec.primaryConstructor(
             FunSpec.constructorBuilder()
-                .addModifiers(KModifier.ACTUAL)
+                .apply { if (isActual) addModifiers(KModifier.ACTUAL) }
                 .addParameter("option", ClientOption::class)
                 .build()
         )
