@@ -15,10 +15,13 @@ Protocol Buffer generator for kotlin multiplatform or single platform.
 * JSON
 * Kotlin/JS
 * Kotlin/Native
+* Grpc Web
+* google.api (Restful Api)
 * Gradle Plugin
-* Assign default value to non-null field
-* Improve Any util functions
-  * ProtobufMessage.toAny : support unknown type
+* Utilities
+  * ProtobufMessage.toAny : optimize toAny usage
+  * Type Registry
+* Add option infos of protobuf to generated files.
 
 ### Note
 * This will use 'package' option of proto file. (Not java_package option)
