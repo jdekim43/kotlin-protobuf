@@ -1,5 +1,5 @@
 // Transform from google/protobuf/struct.proto
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -12,26 +12,38 @@ public expect object StructConverter : ProtobufConverter<Struct>
 
 public fun Struct.toAny(): Any = Any(Struct.TYPE_URL, with(StructConverter) { toByteArray() })
 
-public fun Any.parse(converter: ProtobufConverter<Struct>): Struct {
+public fun Any.parse(converter: ProtobufConverter<Struct> = StructConverter): Struct {
   if (typeUrl != Struct.TYPE_URL) throw IllegalStateException("Please check the type_url")
+  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
+
+public val Struct.Companion.converter: StructConverter
+  get() = StructConverter
 
 public expect object ValueConverter : ProtobufConverter<Value>
 
 public fun Value.toAny(): Any = Any(Value.TYPE_URL, with(ValueConverter) { toByteArray() })
 
-public fun Any.parse(converter: ProtobufConverter<Value>): Value {
+public fun Any.parse(converter: ProtobufConverter<Value> = ValueConverter): Value {
   if (typeUrl != Value.TYPE_URL) throw IllegalStateException("Please check the type_url")
+  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
+
+public val Value.Companion.converter: ValueConverter
+  get() = ValueConverter
 
 public expect object ListValueConverter : ProtobufConverter<ListValue>
 
 public fun ListValue.toAny(): Any = Any(ListValue.TYPE_URL, with(ListValueConverter) { toByteArray()
     })
 
-public fun Any.parse(converter: ProtobufConverter<ListValue>): ListValue {
+public fun Any.parse(converter: ProtobufConverter<ListValue> = ListValueConverter): ListValue {
   if (typeUrl != ListValue.TYPE_URL) throw IllegalStateException("Please check the type_url")
+  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
+
+public val ListValue.Companion.converter: ListValueConverter
+  get() = ListValueConverter

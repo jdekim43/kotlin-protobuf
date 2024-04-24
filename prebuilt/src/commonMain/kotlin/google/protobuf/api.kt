@@ -1,6 +1,5 @@
 // Transform from google/protobuf/api.proto
-@file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -10,7 +9,6 @@ import kotlin.collections.List
 import kotlin.collections.emptyList
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
-import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
 import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 
@@ -25,7 +23,7 @@ public data class Api(
   @ProtobufIndex(index = 4)
   public val version: String = "",
   @ProtobufIndex(index = 5)
-  public val sourceContext: SourceContext = SourceContext(),
+  public val sourceContext: SourceContext? = null,
   @ProtobufIndex(index = 6)
   public val mixins: List<Mixin> = emptyList(),
   @ProtobufIndex(index = 7)

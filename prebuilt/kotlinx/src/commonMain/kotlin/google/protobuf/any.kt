@@ -1,6 +1,5 @@
 // Transform from google/protobuf/any.proto
-@file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -18,7 +17,6 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
-import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
 import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage

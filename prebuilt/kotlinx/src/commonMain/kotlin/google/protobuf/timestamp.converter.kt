@@ -1,5 +1,5 @@
 // Transform from google/protobuf/timestamp.proto
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -13,7 +13,11 @@ public expect object TimestampConverter : ProtobufConverter<Timestamp>
 public fun Timestamp.toAny(): Any = Any(Timestamp.TYPE_URL, with(TimestampConverter) { toByteArray()
     })
 
-public fun Any.parse(converter: ProtobufConverter<Timestamp>): Timestamp {
+public fun Any.parse(converter: ProtobufConverter<Timestamp> = TimestampConverter): Timestamp {
   if (typeUrl != Timestamp.TYPE_URL) throw IllegalStateException("Please check the type_url")
+  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
+
+public val Timestamp.Companion.converter: TimestampConverter
+  get() = TimestampConverter

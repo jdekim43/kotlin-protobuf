@@ -1,10 +1,7 @@
 package kr.jadekim.protobuf.generator.converter
 
 import com.google.protobuf.Descriptors
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.MemberName
+import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kr.jadekim.protobuf.converter.ProtobufConverter
 import kr.jadekim.protobuf.generator.addTo
@@ -59,14 +56,34 @@ class ConverterFileGenerator(
             FunSpec.builder("parse")
                 .receiver(ClassName("google.protobuf", "Any"))
                 .returns(outputTypeName)
-                .addParameter("converter", ProtobufConverter::class.typeName.parameterizedBy(outputTypeName))
+                .addParameter(
+                    ParameterSpec.builder("converter", ProtobufConverter::class.typeName.parameterizedBy(outputTypeName))
+                        .defaultValue("%T", converterTypeName)
+                        .build()
+                )
                 .addStatement(
                     "if (typeUrl != %T.TYPE_URL) throw %T(%S)",
                     outputTypeName,
                     IllegalStateException::class,
                     "Please check the type_url",
                 )
+                .addStatement(
+                    "if (value == null) throw %T(%S)",
+                    IllegalStateException::class,
+                    "value can not be null",
+                )
                 .addStatement("return value.%M(converter)", MemberName("kr.jadekim.protobuf.converter", "parseProtobuf"))
+                .build()
+        )
+
+        spec.addProperty(
+            PropertySpec.builder("converter", converterTypeName)
+                .receiver(outputTypeName.nestedClass("Companion"))
+                .getter(
+                    FunSpec.getterBuilder()
+                        .addStatement("return %T", converterTypeName)
+                        .build()
+                )
                 .build()
         )
     }

@@ -48,14 +48,6 @@ fun PropertySpec.Builder.addDeprecatedAnnotation(
     )
 }
 
-fun FileSpec.Builder.addSyntaxAnnotation(descriptor: Descriptors.FileDescriptor) {
-    addAnnotation(
-        AnnotationSpec.builder(ProtobufSyntax::class)
-            .addMember("syntax = %S", descriptor.syntax.name)
-            .build()
-    )
-}
-
 fun FileSpec.Builder.addGeneratorVersionAnnotation() {
     addAnnotation(
         AnnotationSpec.builder(GeneratorVersion::class)
@@ -108,7 +100,7 @@ val Descriptors.FieldDescriptor.outputTypeName: TypeName
             typeName = LIST.parameterizedBy(typeName.copy(nullable = false))
         }
 
-        return typeName.copy(nullable = hasOptionalKeyword())
+        return typeName.copy(nullable = isNullable)
     }
 
 val Descriptors.GenericDescriptor.outputTypeName: ClassName
@@ -125,7 +117,7 @@ val KClass<*>.typeName: ClassName
 
 val Descriptors.FieldDescriptor.kotlinDefaultValue: CodeBlock
     get() {
-        if (hasOptionalKeyword()) {
+        if (isNullable) {
             return CodeBlock.of("null")
         }
 

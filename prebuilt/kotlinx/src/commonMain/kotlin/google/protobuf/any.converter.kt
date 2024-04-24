@@ -1,5 +1,5 @@
 // Transform from google/protobuf/any.proto
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -12,7 +12,11 @@ public expect object AnyConverter : ProtobufConverter<Any>
 
 public fun Any.toAny(): Any = Any(Any.TYPE_URL, with(AnyConverter) { toByteArray() })
 
-public fun Any.parse(converter: ProtobufConverter<Any>): Any {
+public fun Any.parse(converter: ProtobufConverter<Any> = AnyConverter): Any {
   if (typeUrl != Any.TYPE_URL) throw IllegalStateException("Please check the type_url")
+  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
+
+public val Any.Companion.converter: AnyConverter
+  get() = AnyConverter

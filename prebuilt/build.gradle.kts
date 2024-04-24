@@ -2,7 +2,7 @@ import com.google.protobuf.gradle.id
 
 plugins {
     kotlin("multiplatform")
-    id("com.google.protobuf") version "0.9.3"
+    id("com.google.protobuf") version "0.9.4"
     `java-library`
 }
 
@@ -85,9 +85,15 @@ allprojects {
                 it.plugins {
                     id("kotlin-protobuf-converter-multiplatform") {
                         outputSubDir = "commonMain/kotlin"
+
+                        option("kotlin-protobuf.prefix=type.googleapis.com")
+                        option("kotlin-protobuf.include_prebuilt=true")
                     }
                     id("kotlin-protobuf-converter-multiplatform-jvm") {
                         outputSubDir = "jvmMain/kotlin"
+
+                        option("kotlin-protobuf.prefix=type.googleapis.com")
+                        option("kotlin-protobuf.include_prebuilt=true")
                     }
                 }
             }
@@ -138,6 +144,9 @@ protobuf {
             it.plugins {
                 id("kotlin-protobuf") {
                     outputSubDir = "commonMain/kotlin"
+
+                    option("kotlin-protobuf.prefix=type.googleapis.com")
+                    option("kotlin-protobuf.include_prebuilt=true")
                 }
             }
         }

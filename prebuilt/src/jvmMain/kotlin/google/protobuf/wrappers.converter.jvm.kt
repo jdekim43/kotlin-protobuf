@@ -1,5 +1,5 @@
 // Transform from google/protobuf/wrappers.proto
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 

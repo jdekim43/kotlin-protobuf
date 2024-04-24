@@ -1,5 +1,5 @@
 // Transform from google/protobuf/field_mask.proto
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -13,7 +13,11 @@ public expect object FieldMaskConverter : ProtobufConverter<FieldMask>
 public fun FieldMask.toAny(): Any = Any(FieldMask.TYPE_URL, with(FieldMaskConverter) { toByteArray()
     })
 
-public fun Any.parse(converter: ProtobufConverter<FieldMask>): FieldMask {
+public fun Any.parse(converter: ProtobufConverter<FieldMask> = FieldMaskConverter): FieldMask {
   if (typeUrl != FieldMask.TYPE_URL) throw IllegalStateException("Please check the type_url")
+  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
+
+public val FieldMask.Companion.converter: FieldMaskConverter
+  get() = FieldMaskConverter

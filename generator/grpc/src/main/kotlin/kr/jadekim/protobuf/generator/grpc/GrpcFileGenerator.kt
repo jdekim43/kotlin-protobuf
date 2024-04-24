@@ -5,16 +5,16 @@ import com.squareup.kotlinpoet.FileSpec
 import kr.jadekim.protobuf.generator.addTo
 import kr.jadekim.protobuf.generator.file.FileGenerator
 import kr.jadekim.protobuf.generator.grpc.platform.PlatformGrpcGenerator
+import kr.jadekim.protobuf.generator.grpc.util.extension.outputGrpcFileName
+import kr.jadekim.protobuf.generator.grpc.util.extension.outputGrpcPackageName
 import kr.jadekim.protobuf.generator.util.extention.addGeneratorVersionAnnotation
-import kr.jadekim.protobuf.generator.util.extention.outputGrpcFileName
-import kr.jadekim.protobuf.generator.util.extention.outputPackage
 
 class GrpcFileGenerator(
     vararg val platformGenerators: PlatformGrpcGenerator,
 ) : FileGenerator {
 
     override fun generate(descriptor: Descriptors.FileDescriptor): FileSpec {
-        val spec = FileSpec.builder(descriptor.outputPackage, descriptor.outputGrpcFileName)
+        val spec = FileSpec.builder(descriptor.outputGrpcPackageName, descriptor.outputGrpcFileName)
         spec.addFileComment("Transform from %L", descriptor.name)
 
         spec.addGeneratorVersionAnnotation()

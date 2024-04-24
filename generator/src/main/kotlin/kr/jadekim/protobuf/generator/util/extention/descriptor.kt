@@ -12,8 +12,7 @@ val Descriptors.GenericDescriptor.names: List<String>
     get() = listOf(file.`package`) + simpleNames
 
 internal fun getTypeUrlPrefix(): String {
-    //todo: modify to load from protobuf gradle plugin property
-    var prefix = System.getProperty("kotlin.protobuf.prefix")
+    var prefix = System.getProperty("kotlin-protobuf.prefix")
 
     if (prefix.isNullOrBlank()) {
         prefix = System.getenv("KOTLIN_PROTOBUF_PREFIX")
@@ -38,3 +37,9 @@ val Descriptors.Descriptor.realFields: List<Descriptors.FieldDescriptor>
 
         return fields.filterNot { oneOfFieldNames.contains(it.name) || it.isExtension }
     }
+
+val Descriptors.FieldDescriptor.isOneOfField: Boolean
+    get() = containingOneof != null
+
+val Descriptors.FieldDescriptor.isNullable: Boolean
+    get() = hasPresence() && !isOneOfField

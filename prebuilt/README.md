@@ -11,8 +11,3 @@
 * google/protobuf/timestamp.proto
 * google/protobuf/type.proto
 * google/protobuf/wrapper.proto
-
-### Note for builder
-* Required to set environment variable before build
-  * KOTLIN_PROTOBUF_PREFIX=type.googleapis.com
-  * KOTLIN_PROTOBUF_BUILD_PREBUILT=true

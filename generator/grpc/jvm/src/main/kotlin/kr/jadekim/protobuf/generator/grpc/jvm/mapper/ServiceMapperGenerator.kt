@@ -12,6 +12,8 @@ import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.jvm.mapper.util.extention.delegatorTypeName
 import kr.jadekim.protobuf.generator.converter.jvm.util.extention.jvmConverterTypeName
 import kr.jadekim.protobuf.generator.grpc.jvm.util.extension.jvmGrpcTypeName
+import kr.jadekim.protobuf.generator.grpc.util.extension.grpcClientTypeName
+import kr.jadekim.protobuf.generator.grpc.util.extension.grpcServerTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.interfaceTypeName
 import kr.jadekim.protobuf.generator.type.TypeGenerator
 import kr.jadekim.protobuf.generator.type.TypeGeneratorPlugins
@@ -50,7 +52,7 @@ class ServiceMapperGenerator(
         val delegatorTypeName = delegatorTypeName
 
         spec.addProperty(
-            PropertySpec.builder("descriptor", ServiceDescriptor::class, KModifier.PRIVATE)
+            PropertySpec.builder("descriptor", ServiceDescriptor::class)
                 .initializer("%T.getServiceDescriptor()!!", delegatorTypeName)
                 .build(),
         )
@@ -63,7 +65,6 @@ class ServiceMapperGenerator(
                         method.inputType.delegatorTypeName,
                         method.outputType.delegatorTypeName,
                     ),
-                    KModifier.PRIVATE,
                 )
                     .initializer(
                         "%T.get%LMethod()!!",
@@ -76,7 +77,7 @@ class ServiceMapperGenerator(
     }
 
     private fun Descriptors.ServiceDescriptor.writeServerTo(spec: TypeSpec.Builder) {
-        val serverTypeName = outputTypeName.nestedClass("Server")
+        val serverTypeName = grpcServerTypeName
         val serverSpec = TypeSpec.classBuilder(serverTypeName)
             .addModifiers(KModifier.ABSTRACT)
             .superclass(AbstractCoroutineServerImpl::class)
@@ -135,7 +136,7 @@ class ServiceMapperGenerator(
     }
 
     private fun Descriptors.ServiceDescriptor.writeClientTo(spec: TypeSpec.Builder) {
-        val clientTypeName = outputTypeName.nestedClass("Client")
+        val clientTypeName = grpcClientTypeName
         val clientSpec = TypeSpec.classBuilder(clientTypeName)
             .addModifiers(KModifier.OPEN)
             .superclass(AbstractCoroutineStub::class.typeName.parameterizedBy(clientTypeName))

@@ -42,6 +42,8 @@ abstract class Generator {
     abstract val generators: List<FileGenerator>
 
     fun generate(request: PluginProtos.CodeGeneratorRequest) {
+        setParameters(request)
+
         val descriptors = mutableMapOf<String, Descriptors.FileDescriptor>()
 
         for (file in request.protoFileList) {
@@ -58,7 +60,7 @@ abstract class Generator {
         descriptors
             .filter {
                 if (PREBUILT_PROTO_FILES.contains(it.key)) {
-                    if (!System.getenv("KOTLIN_PROTOBUF_BUILD_PREBUILT").equals("true", true)) {
+                    if (!System.getProperty("kotlin-protobuf.include_prebuilt", "false").equals("true", true)) {
                         return@filter false
                     }
                 }
@@ -70,7 +72,46 @@ abstract class Generator {
             .map { it.toResponse() }
             .forEach(outputBuilder::addFile)
 
+        onGenerate(request, outputBuilder)
+
         outputBuilder.build()
             .writeTo(System.out)
+    }
+
+    protected open fun onGenerate(
+        request: PluginProtos.CodeGeneratorRequest,
+        builder: PluginProtos.CodeGeneratorResponse.Builder,
+    ) {
+        //do nothing
+    }
+
+    protected open fun parseParameter(input: String?): Map<String, String> {
+        if (input.isNullOrBlank()) {
+            return emptyMap()
+        }
+
+        val result = mutableMapOf<String, String>()
+
+        val pairs = input.split(',')
+
+        for (str in pairs) {
+            val pair = str.split('=', limit = 2)
+
+            if (pair.isEmpty()) {
+                continue
+            } else if (pair.size == 1) {
+                result[pair[0].trim()] = ""
+            } else if (pair.size == 2) {
+                result[pair[0].trim()] = pair[1].trim()
+            } else {
+                result[pair[0].trim()] = pairs.drop(1).joinToString("=").trim()
+            }
+        }
+
+        return result
+    }
+
+    private fun setParameters(request: PluginProtos.CodeGeneratorRequest) {
+        parseParameter(request.parameter).forEach { (k, v) -> System.setProperty(k, v) }
     }
 }

@@ -1,5 +1,5 @@
 // Transform from google/protobuf/source_context.proto
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -13,7 +13,12 @@ public expect object SourceContextConverter : ProtobufConverter<SourceContext>
 public fun SourceContext.toAny(): Any = Any(SourceContext.TYPE_URL, with(SourceContextConverter) {
     toByteArray() })
 
-public fun Any.parse(converter: ProtobufConverter<SourceContext>): SourceContext {
+public fun Any.parse(converter: ProtobufConverter<SourceContext> = SourceContextConverter):
+    SourceContext {
   if (typeUrl != SourceContext.TYPE_URL) throw IllegalStateException("Please check the type_url")
+  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
+
+public val SourceContext.Companion.converter: SourceContextConverter
+  get() = SourceContextConverter

@@ -11,10 +11,12 @@ Protocol Buffer generator for kotlin multiplatform or single platform.
 * Plugin
   * kotlinx-serialization adapter (You can use protobuf serializer with ProtobufFormat)
 
-### Not yet implemented
+### Backlog
+* Type Registry : Require to specify type registry class name
 * JSON
 * Kotlin/JS
 * Kotlin/Native
+* Plain kotlin serializer
 * Grpc Web
 * google.api (Restful Api)
 * Gradle Plugin
@@ -22,9 +24,14 @@ Protocol Buffer generator for kotlin multiplatform or single platform.
   * ProtobufMessage.toAny : optimize toAny usage
   * Type Registry
 * Add option infos of protobuf to generated files.
+* Improve kotlin type mapping
+  * google.protobuf.Any to kotlin.Any
+  * google.protobuf.Empty to kotlin.Unit
+  * some prebuilt types
+  * Kotlinx serialization annotations
 
 ### Note
-* This will use 'package' option of proto file. (Not java_package option)
+* This will use 'package' option in proto file. (Not java_package option)
 
 ### Examples
 * [JVM Example](example/build.gradle.kts)
@@ -35,9 +42,9 @@ Protocol Buffer generator for kotlin multiplatform or single platform.
 #### build.gradle.kts
 ```
 plugins {
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.serialization") version "1.8.22" //optional
-    id("com.google.protobuf") version "0.9.3"
+    kotlin("jvm") version "1.9.23"
+    kotlin("plugin.serialization") version "1.9.23" //optional
+    id("com.google.protobuf") version "0.9.4"
 }
 
 sourceSets {
@@ -100,9 +107,9 @@ dependencies {
 #### build.gradle.kts
 ```
 plugins {
-    kotlin("multiplatform") version "1.8.22"
-    kotlin("plugin.serialization") version "1.8.22" //optional
-    id("com.google.protobuf") version "0.9.3"
+    kotlin("multiplatform") version "1.9.23"
+    kotlin("plugin.serialization") version "1.9.23" //optional
+    id("com.google.protobuf") version "0.9.4"
     `java-library`
 }
 
@@ -190,5 +197,31 @@ kotlin {
             }
         }
     }
+}
+```
+
+### Options
+* Include prebuilt files : `kotlin-protobuf.include_prebuilt=true`
+* Set prefix to type url : `kotlin-protobuf.prefix=[some_prefix]`
+
+#### Note
+Option value can't have ','.
+
+#### How to apply options
+```
+protobuf {
+  ...
+  generateProtoTasks {
+    all().forEach {
+      it.plugins {
+        id(...) {
+          option("[option string]")
+          
+          //example
+          //option("kotlin-protobuf.include_prebuilt=true")
+        }
+      }
+    }
+  }
 }
 ```

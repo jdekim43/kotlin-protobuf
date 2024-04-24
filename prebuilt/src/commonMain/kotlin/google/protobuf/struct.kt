@@ -1,6 +1,5 @@
 // Transform from google/protobuf/struct.proto
-@file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -15,7 +14,6 @@ import kotlin.collections.emptyMap
 import kotlin.jvm.JvmInline
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
-import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
 import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 

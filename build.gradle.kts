@@ -1,13 +1,13 @@
 plugins {
-    kotlin("multiplatform") version "1.8.22"
-    id("org.jetbrains.dokka") version "1.8.20"
+    kotlin("multiplatform") version "1.9.23"
+    id("org.jetbrains.dokka") version "1.9.20"
     id("maven-publish")
     id("signing")
 }
 
 allprojects {
     group = "kr.jadekim"
-    version = "0.3.3"
+    version = "0.4.0"
 
     repositories {
         mavenCentral()

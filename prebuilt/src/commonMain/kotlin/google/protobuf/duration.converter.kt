@@ -1,5 +1,5 @@
 // Transform from google/protobuf/duration.proto
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -12,7 +12,11 @@ public expect object DurationConverter : ProtobufConverter<Duration>
 
 public fun Duration.toAny(): Any = Any(Duration.TYPE_URL, with(DurationConverter) { toByteArray() })
 
-public fun Any.parse(converter: ProtobufConverter<Duration>): Duration {
+public fun Any.parse(converter: ProtobufConverter<Duration> = DurationConverter): Duration {
   if (typeUrl != Duration.TYPE_URL) throw IllegalStateException("Please check the type_url")
+  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
+
+public val Duration.Companion.converter: DurationConverter
+  get() = DurationConverter

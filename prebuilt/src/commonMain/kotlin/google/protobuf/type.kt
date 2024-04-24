@@ -1,6 +1,5 @@
 // Transform from google/protobuf/type.proto
-@file:ProtobufSyntax(syntax = "PROTO3")
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -11,7 +10,6 @@ import kotlin.collections.List
 import kotlin.collections.emptyList
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.`annotation`.ProtobufIndex
-import kr.jadekim.protobuf.`annotation`.ProtobufSyntax
 import kr.jadekim.protobuf.`annotation`.ProtobufMessage as AnnotationProtobufMessage
 import kr.jadekim.protobuf.type.ProtobufMessage as TypeProtobufMessage
 
@@ -43,7 +41,7 @@ public data class Type(
   @ProtobufIndex(index = 4)
   public val options: List<Option> = emptyList(),
   @ProtobufIndex(index = 5)
-  public val sourceContext: SourceContext = SourceContext(),
+  public val sourceContext: SourceContext? = null,
   @ProtobufIndex(index = 6)
   public val syntax: Syntax = Syntax.values()[0],
   @ProtobufIndex(index = 7)
@@ -159,7 +157,7 @@ public data class Enum(
   @ProtobufIndex(index = 3)
   public val options: List<Option> = emptyList(),
   @ProtobufIndex(index = 4)
-  public val sourceContext: SourceContext = SourceContext(),
+  public val sourceContext: SourceContext? = null,
   @ProtobufIndex(index = 5)
   public val syntax: Syntax = Syntax.values()[0],
   @ProtobufIndex(index = 6)
@@ -189,7 +187,7 @@ public data class Option(
   @ProtobufIndex(index = 1)
   public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val `value`: Any = Any(),
+  public val `value`: Any? = null,
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Option"

@@ -219,7 +219,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                 "set%L"
             }
 
-            if (field.hasOptionalKeyword()) {
+            if (field.isNullable) {
                 val (code, arguments) = field.getCodeForToProtobuf(
                     variableName = "value${field.index}",
                     variableNameArguments = emptyArray(),

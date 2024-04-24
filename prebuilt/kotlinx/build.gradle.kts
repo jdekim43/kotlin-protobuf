@@ -1,7 +1,7 @@
 import com.google.protobuf.gradle.id
 
 plugins {
-    kotlin("plugin.serialization") version "1.8.22"
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 dependencies {
@@ -26,6 +26,9 @@ protobuf {
             it.plugins {
                 id("kotlin-protobuf-kotlinx") {
                     outputSubDir = "commonMain/kotlin"
+
+                    option("kotlin-protobuf.prefix=type.googleapis.com")
+                    option("kotlin-protobuf.include_prebuilt=true")
                 }
             }
         }

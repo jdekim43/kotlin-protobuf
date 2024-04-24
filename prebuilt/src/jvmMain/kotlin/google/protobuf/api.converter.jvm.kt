@@ -1,5 +1,5 @@
 // Transform from google/protobuf/api.proto
-@file:GeneratorVersion(version = "0.3.3")
+@file:GeneratorVersion(version = "0.4.0")
 
 package google.protobuf
 
@@ -29,7 +29,10 @@ public object ApiJvmConverter : ProtobufTypeMapper<Api, com.google.protobuf.Api>
     builder.addAllMethods(obj.methods.map { MethodJvmConverter.convert(it) })
     builder.addAllOptions(obj.options.map { OptionJvmConverter.convert(it) })
     builder.setVersion(obj.version)
-    builder.setSourceContext(SourceContextJvmConverter.convert(obj.sourceContext))
+    val value4 = obj.sourceContext
+    if (value4 != null) {
+      builder.setSourceContext(SourceContextJvmConverter.convert(value4))
+    }
     builder.addAllMixins(obj.mixins.map { MixinJvmConverter.convert(it) })
     builder.setSyntax(com.google.protobuf.Syntax.forNumber(obj.syntax.number))
     return builder.build()

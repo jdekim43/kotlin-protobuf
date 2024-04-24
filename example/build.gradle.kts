@@ -2,8 +2,8 @@ import com.google.protobuf.gradle.id
 
 plugins {
     kotlin("jvm")
-    kotlin("plugin.serialization") version "1.8.22"
-    id("com.google.protobuf") version "0.9.3"
+    kotlin("plugin.serialization") version "1.9.23"
+    id("com.google.protobuf") version "0.9.4"
 }
 
 dependencies {
@@ -31,7 +31,6 @@ sourceSets {
     main {
         proto {
             srcDir(File(projectDir, "src/proto"))
-            srcDir(project.projectDir.absolutePath + "/src/proto")
         }
     }
 }
