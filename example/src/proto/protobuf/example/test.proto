@@ -1,9 +1,32 @@
 syntax = "proto3";
 
+import "google/api/annotations.proto";
+
 service TestService {
   rpc TestTEST(Test) returns (Test);
+
+  rpc TestGateway(Test) returns (Test) {
+    option (google.api.http) = {
+      post: "/test/gateway"
+    };
+  }
 }
 
 message Test {
   string test1k1 = 1;
+}
+
+service Messaging {
+  rpc GetMessage(GetMessageRequest) returns (Test) {
+    option (google.api.http) = {
+      get: "/v1/messages/{message_id}/users/{user_id}"
+      additional_bindings {
+        get: "/v1/users/{user_id}/messages/{message_id}"
+      }
+    };
+  }
+}
+message GetMessageRequest {
+  string message_id = 1;
+  string user_id = 2;
 }

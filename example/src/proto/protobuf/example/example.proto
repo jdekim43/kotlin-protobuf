@@ -1,13 +1,18 @@
 syntax = "proto3";
 
 import "google/protobuf/any.proto";
+import "google/api/annotations.proto";
 
 package protobuf.example;
 
 option java_package = "kr.jadekim.protobuf.example";
 
 service ExampleService {
-  rpc TestRpc (Empty) returns(ExampleMessage);
+  rpc TestRpc (Empty) returns(ExampleMessage) {
+    option (google.api.http) = {
+      get: "/test/gateway"
+    };
+  }
   rpc Test2Rpc (ExampleMessage) returns(ExampleMessage);
 }
 

@@ -67,11 +67,6 @@ class ConverterFileGenerator(
                     IllegalStateException::class,
                     "Please check the type_url",
                 )
-                .addStatement(
-                    "if (value == null) throw %T(%S)",
-                    IllegalStateException::class,
-                    "value can not be null",
-                )
                 .addStatement("return value.%M(converter)", MemberName("kr.jadekim.protobuf.converter", "parseProtobuf"))
                 .build()
         )

@@ -7,6 +7,7 @@ include(
     ":prebuilt:kotlinx",
     ":kotlinx",
     ":grpc",
+    ":grpc-gateway",
     ":generator",
     ":generator:converter",
     ":generator:converter:jvm",
@@ -17,6 +18,7 @@ include(
     ":generator:grpc:jvm",
     ":generator:grpc:multiplatform",
     ":generator:grpc:multiplatform:jvm",
+    ":generator:grpc-gateway",
     ":example",
     ":example-multiplatform",
 )

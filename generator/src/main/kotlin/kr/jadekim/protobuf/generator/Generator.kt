@@ -1,11 +1,15 @@
 package kr.jadekim.protobuf.generator
 
+import com.google.api.AnnotationsProto
 import com.google.protobuf.Descriptors
+import com.google.protobuf.ExtensionRegistry
 import com.google.protobuf.compiler.PluginProtos
 import kr.jadekim.protobuf.generator.file.FileGenerator
 import kr.jadekim.protobuf.generator.util.extention.toResponse
 import java.io.IOException
 import java.io.InputStream
+import java.io.PipedInputStream
+import java.io.PipedOutputStream
 
 val PREBUILT_PROTO_FILES = listOf(
     "google/protobuf/any.proto",
@@ -24,22 +28,30 @@ abstract class Generator {
 
     companion object {
 
+        @Deprecated("Moved instance function", ReplaceWith("Generator.generate"))
         fun runWith(generator: Generator, input: InputStream = System.`in`) {
-            val request = try {
-                PluginProtos.CodeGeneratorRequest.parseFrom(input)
-            } catch (e: Throwable) {
-                throw IOException("Fail to parse protobuf file", e)
-            }
-
-            try {
-                generator.generate(request)
-            } catch (e: Throwable) {
-                throw IOException("Fail to generate code from protobuf", e)
-            }
+            generator.generate(input)
         }
     }
 
     abstract val generators: List<FileGenerator>
+
+    fun generate(input: InputStream = System.`in`) {
+        val registry = ExtensionRegistry.newInstance()
+        onRegisterExtension(registry)
+
+        val request = try {
+            PluginProtos.CodeGeneratorRequest.parseFrom(input, registry)
+        } catch (e: Throwable) {
+            throw IOException("Fail to parse protobuf file", e)
+        }
+
+        try {
+            generate(request)
+        } catch (e: Throwable) {
+            throw IOException("Fail to generate code from protobuf", e)
+        }
+    }
 
     fun generate(request: PluginProtos.CodeGeneratorRequest) {
         setParameters(request)
@@ -83,6 +95,9 @@ abstract class Generator {
         builder: PluginProtos.CodeGeneratorResponse.Builder,
     ) {
         //do nothing
+    }
+
+    protected open fun onRegisterExtension(registry: ExtensionRegistry) {
     }
 
     protected open fun parseParameter(input: String?): Map<String, String> {

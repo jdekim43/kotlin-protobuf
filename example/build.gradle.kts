@@ -11,6 +11,7 @@ dependencies {
     val grpcVersion: String by project
     val grpcKotlinVersion: String by project
     val kotlinxSerializationVersion: String by project
+    val ktorVersion: String by project
 
     implementation(project(fullPath(":"))) {
         exclude(project.group.toString(), "kotlin-protobuf-prebuilt")
@@ -18,11 +19,16 @@ dependencies {
     implementation(project(fullPath(":prebuilt:kotlinx")))
     implementation(project(fullPath(":kotlinx")))
     implementation(project(fullPath(":grpc")))
+    implementation(project(fullPath(":grpc-gateway")))
 
     implementation("com.google.protobuf:protobuf-java:$protobufVersion")
+    implementation("com.google.protobuf:protobuf-java-util:$protobufVersion")
+
     implementation("io.grpc:grpc-protobuf:$grpcVersion")
     implementation("io.grpc:grpc-stub:$grpcVersion")
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
 }
@@ -60,21 +66,31 @@ protobuf {
             val targetProject = project(fullPath(":generator:grpc:jvm"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
+        id("kotlin-protobuf-grpc-gateway") {
+            val targetProject = project(fullPath(":generator:grpc-gateway"))
+            path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
+        }
     }
 
     generateProtoTasks {
         all().forEach {
             it.dependsOn(fullPath(":generator") + ":clean")
             it.dependsOn(fullPath(":generator:grpc:jvm") + ":shadowJar")
+            it.dependsOn(fullPath(":generator:grpc-gateway") + ":shadowJar")
             it.dependsOn(fullPath(":generator:kotlinx") + ":shadowJar")
             it.dependsOn(fullPath(":generator:converter:jvm") + ":shadowJar")
 
             it.plugins {
-                id("kotlin-protobuf-kotlinx")
-                id("kotlin-protobuf-converter-jvm")
+                id("kotlin-protobuf-kotlinx") {
+                    option("kotlin-protobuf.type_registry=protobuf.example.TypeRegistry")
+                }
+                id("kotlin-protobuf-converter-jvm") {
+                    option("kotlin-protobuf.jvm_type_registry=protobuf.example.JvmTypeRegistry")
+                }
 
                 id("grpc")
                 id("kotlin-protobuf-grpc-jvm")
+                id("kotlin-protobuf-grpc-gateway")
             }
         }
     }
