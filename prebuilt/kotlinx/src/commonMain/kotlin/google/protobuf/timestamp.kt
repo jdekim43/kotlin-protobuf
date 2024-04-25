@@ -46,7 +46,7 @@ public data class Timestamp(
 
     override fun serialize(encoder: Encoder, `value`: Timestamp) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(TimestampConverter.serialize(value))
+        encoder.serialize(TimestampConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -54,7 +54,7 @@ public data class Timestamp(
 
     override fun deserialize(decoder: Decoder): Timestamp {
       if (decoder is ProtobufConverterDecoder) {
-        return TimestampConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(TimestampConverter)
       }
       return delegator.deserialize(decoder)
     }

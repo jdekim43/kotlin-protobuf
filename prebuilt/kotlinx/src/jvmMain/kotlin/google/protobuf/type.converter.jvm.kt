@@ -8,17 +8,19 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public object TypeJvmConverter : ProtobufTypeMapper<Type, com.google.protobuf.Type> {
+public open class TypeJvmConverter : ProtobufTypeMapper<Type, com.google.protobuf.Type> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Type.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Type> = com.google.protobuf.Type.parser()
 
+  override val default: com.google.protobuf.Type = com.google.protobuf.Type.getDefaultInstance()
+
   override fun convert(obj: com.google.protobuf.Type): Type = Type(
   	name = obj.getName(),
-  	fields = obj.getFieldsList().map { FieldJvmConverter.convert(it) },
+  	fields = obj.getFieldsList().map { FieldConverter.convert(it) },
   	oneofs = obj.getOneofsList().map { it },
-  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
-  	sourceContext = SourceContextJvmConverter.convert(obj.getSourceContext()),
+  	options = obj.getOptionsList().map { OptionConverter.convert(it) },
+  	sourceContext = SourceContextConverter.convert(obj.getSourceContext()),
   	syntax = Syntax.forNumber(obj.getSyntax().number),
   	edition = obj.getEdition(),
   )
@@ -26,12 +28,12 @@ public object TypeJvmConverter : ProtobufTypeMapper<Type, com.google.protobuf.Ty
   override fun convert(obj: Type): com.google.protobuf.Type {
     val builder = com.google.protobuf.Type.newBuilder()
     builder.setName(obj.name)
-    builder.addAllFields(obj.fields.map { FieldJvmConverter.convert(it) })
+    builder.addAllFields(obj.fields.map { FieldConverter.convert(it) })
     builder.addAllOneofs(obj.oneofs.map { it })
-    builder.addAllOptions(obj.options.map { OptionJvmConverter.convert(it) })
+    builder.addAllOptions(obj.options.map { OptionConverter.convert(it) })
     val value4 = obj.sourceContext
     if (value4 != null) {
-      builder.setSourceContext(SourceContextJvmConverter.convert(value4))
+      builder.setSourceContext(SourceContextConverter.convert(value4))
     }
     builder.setSyntax(com.google.protobuf.Syntax.forNumber(obj.syntax.number))
     builder.setEdition(obj.edition)
@@ -39,10 +41,12 @@ public object TypeJvmConverter : ProtobufTypeMapper<Type, com.google.protobuf.Ty
   }
 }
 
-public object FieldJvmConverter : ProtobufTypeMapper<Field, com.google.protobuf.Field> {
+public open class FieldJvmConverter : ProtobufTypeMapper<Field, com.google.protobuf.Field> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Field.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Field> = com.google.protobuf.Field.parser()
+
+  override val default: com.google.protobuf.Field = com.google.protobuf.Field.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.Field): Field = Field(
   	kind = Field.Kind.forNumber(obj.getKind().number),
@@ -52,7 +56,7 @@ public object FieldJvmConverter : ProtobufTypeMapper<Field, com.google.protobuf.
   	typeUrl = obj.getTypeUrl(),
   	oneofIndex = obj.getOneofIndex(),
   	packed = obj.getPacked(),
-  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
+  	options = obj.getOptionsList().map { OptionConverter.convert(it) },
   	jsonName = obj.getJsonName(),
   	defaultValue = obj.getDefaultValue(),
   )
@@ -66,23 +70,25 @@ public object FieldJvmConverter : ProtobufTypeMapper<Field, com.google.protobuf.
     builder.setTypeUrl(obj.typeUrl)
     builder.setOneofIndex(obj.oneofIndex)
     builder.setPacked(obj.packed)
-    builder.addAllOptions(obj.options.map { OptionJvmConverter.convert(it) })
+    builder.addAllOptions(obj.options.map { OptionConverter.convert(it) })
     builder.setJsonName(obj.jsonName)
     builder.setDefaultValue(obj.defaultValue)
     return builder.build()
   }
 }
 
-public object EnumJvmConverter : ProtobufTypeMapper<Enum, com.google.protobuf.Enum> {
+public open class EnumJvmConverter : ProtobufTypeMapper<Enum, com.google.protobuf.Enum> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Enum.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Enum> = com.google.protobuf.Enum.parser()
 
+  override val default: com.google.protobuf.Enum = com.google.protobuf.Enum.getDefaultInstance()
+
   override fun convert(obj: com.google.protobuf.Enum): Enum = Enum(
   	name = obj.getName(),
-  	enumvalue = obj.getEnumvalueList().map { EnumValueJvmConverter.convert(it) },
-  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
-  	sourceContext = SourceContextJvmConverter.convert(obj.getSourceContext()),
+  	enumvalue = obj.getEnumvalueList().map { EnumValueConverter.convert(it) },
+  	options = obj.getOptionsList().map { OptionConverter.convert(it) },
+  	sourceContext = SourceContextConverter.convert(obj.getSourceContext()),
   	syntax = Syntax.forNumber(obj.getSyntax().number),
   	edition = obj.getEdition(),
   )
@@ -90,11 +96,11 @@ public object EnumJvmConverter : ProtobufTypeMapper<Enum, com.google.protobuf.En
   override fun convert(obj: Enum): com.google.protobuf.Enum {
     val builder = com.google.protobuf.Enum.newBuilder()
     builder.setName(obj.name)
-    builder.addAllEnumvalue(obj.enumvalue.map { EnumValueJvmConverter.convert(it) })
-    builder.addAllOptions(obj.options.map { OptionJvmConverter.convert(it) })
+    builder.addAllEnumvalue(obj.enumvalue.map { EnumValueConverter.convert(it) })
+    builder.addAllOptions(obj.options.map { OptionConverter.convert(it) })
     val value3 = obj.sourceContext
     if (value3 != null) {
-      builder.setSourceContext(SourceContextJvmConverter.convert(value3))
+      builder.setSourceContext(SourceContextConverter.convert(value3))
     }
     builder.setSyntax(com.google.protobuf.Syntax.forNumber(obj.syntax.number))
     builder.setEdition(obj.edition)
@@ -102,35 +108,41 @@ public object EnumJvmConverter : ProtobufTypeMapper<Enum, com.google.protobuf.En
   }
 }
 
-public object EnumValueJvmConverter : ProtobufTypeMapper<EnumValue, com.google.protobuf.EnumValue> {
+public open class EnumValueJvmConverter :
+    ProtobufTypeMapper<EnumValue, com.google.protobuf.EnumValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.EnumValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.EnumValue> =
       com.google.protobuf.EnumValue.parser()
 
+  override val default: com.google.protobuf.EnumValue =
+      com.google.protobuf.EnumValue.getDefaultInstance()
+
   override fun convert(obj: com.google.protobuf.EnumValue): EnumValue = EnumValue(
   	name = obj.getName(),
   	number = obj.getNumber(),
-  	options = obj.getOptionsList().map { OptionJvmConverter.convert(it) },
+  	options = obj.getOptionsList().map { OptionConverter.convert(it) },
   )
 
   override fun convert(obj: EnumValue): com.google.protobuf.EnumValue {
     val builder = com.google.protobuf.EnumValue.newBuilder()
     builder.setName(obj.name)
     builder.setNumber(obj.number)
-    builder.addAllOptions(obj.options.map { OptionJvmConverter.convert(it) })
+    builder.addAllOptions(obj.options.map { OptionConverter.convert(it) })
     return builder.build()
   }
 }
 
-public object OptionJvmConverter : ProtobufTypeMapper<Option, com.google.protobuf.Option> {
+public open class OptionJvmConverter : ProtobufTypeMapper<Option, com.google.protobuf.Option> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Option.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Option> = com.google.protobuf.Option.parser()
 
+  override val default: com.google.protobuf.Option = com.google.protobuf.Option.getDefaultInstance()
+
   override fun convert(obj: com.google.protobuf.Option): Option = Option(
   	name = obj.getName(),
-  	`value` = AnyJvmConverter.convert(obj.getValue()),
+  	`value` = AnyConverter.convert(obj.getValue()),
   )
 
   override fun convert(obj: Option): com.google.protobuf.Option {
@@ -138,7 +150,7 @@ public object OptionJvmConverter : ProtobufTypeMapper<Option, com.google.protobu
     builder.setName(obj.name)
     val value1 = obj.`value`
     if (value1 != null) {
-      builder.setValue(AnyJvmConverter.convert(value1))
+      builder.setValue(AnyConverter.convert(value1))
     }
     return builder.build()
   }

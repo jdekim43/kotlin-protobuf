@@ -5,24 +5,23 @@ Protocol Buffer generator for kotlin multiplatform or single platform.
 
 ## Overview
 ### Features
-* Compile data types
-  * Support optional, repeated, map, oneof features
-* Compile service type (grpc)
+* Support data types
+  * optional, repeated, map, oneof features
+* Support service type (grpc)
+* Support JSON format
+* Makable type registry
 * Plugin
   * kotlinx-serialization adapter (You can use protobuf serializer with ProtobufFormat)
 
 ### Backlog
-* Type Registry : Require to specify type registry class name
-* JSON
 * Kotlin/JS
 * Kotlin/Native
 * Plain kotlin serializer
 * Grpc Web
-* google.api (Restful Api)
+* google.api (Grpc Gateway)
 * Gradle Plugin
 * Utilities
   * ProtobufMessage.toAny : optimize toAny usage
-  * Type Registry
 * Add option infos of protobuf to generated files.
 * Improve kotlin type mapping
   * google.protobuf.Any to kotlin.Any

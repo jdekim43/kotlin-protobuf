@@ -6,4 +6,4 @@ package google.protobuf
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.ProtobufConverter
 
-public actual object TimestampConverter : ProtobufConverter<Timestamp> by TimestampJvmConverter
+public actual object TimestampConverter : TimestampJvmConverter(), ProtobufConverter<Timestamp>

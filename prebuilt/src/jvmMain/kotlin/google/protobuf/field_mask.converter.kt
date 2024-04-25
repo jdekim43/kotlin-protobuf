@@ -6,4 +6,4 @@ package google.protobuf
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.ProtobufConverter
 
-public actual object FieldMaskConverter : ProtobufConverter<FieldMask> by FieldMaskJvmConverter
+public actual object FieldMaskConverter : FieldMaskJvmConverter(), ProtobufConverter<FieldMask>

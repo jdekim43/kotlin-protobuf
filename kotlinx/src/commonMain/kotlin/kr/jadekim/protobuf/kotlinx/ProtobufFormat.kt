@@ -9,13 +9,13 @@ import kotlinx.serialization.modules.SerializersModule
 class ProtobufFormat(override val serializersModule: SerializersModule = EmptySerializersModule()) : BinaryFormat {
 
     override fun <T> encodeToByteArray(serializer: SerializationStrategy<T>, value: T): ByteArray {
-        val encoder = ProtobufConverterEncoder(serializersModule)
+        val encoder = ProtobufEncoder(serializersModule)
         serializer.serialize(encoder, value)
         return encoder.result
     }
 
     override fun <T> decodeFromByteArray(deserializer: DeserializationStrategy<T>, bytes: ByteArray): T {
-        val decoder = ProtobufConverterDecoder(bytes, serializersModule)
+        val decoder = ProtobufDecoder(bytes, serializersModule)
         return deserializer.deserialize(decoder)
     }
 }

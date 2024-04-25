@@ -14,7 +14,6 @@ public fun Duration.toAny(): Any = Any(Duration.TYPE_URL, with(DurationConverter
 
 public fun Any.parse(converter: ProtobufConverter<Duration> = DurationConverter): Duration {
   if (typeUrl != Duration.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 

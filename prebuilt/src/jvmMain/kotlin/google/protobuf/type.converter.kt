@@ -6,12 +6,12 @@ package google.protobuf
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.ProtobufConverter
 
-public actual object TypeConverter : ProtobufConverter<Type> by TypeJvmConverter
+public actual object TypeConverter : TypeJvmConverter(), ProtobufConverter<Type>
 
-public actual object FieldConverter : ProtobufConverter<Field> by FieldJvmConverter
+public actual object FieldConverter : FieldJvmConverter(), ProtobufConverter<Field>
 
-public actual object EnumConverter : ProtobufConverter<Enum> by EnumJvmConverter
+public actual object EnumConverter : EnumJvmConverter(), ProtobufConverter<Enum>
 
-public actual object EnumValueConverter : ProtobufConverter<EnumValue> by EnumValueJvmConverter
+public actual object EnumValueConverter : EnumValueJvmConverter(), ProtobufConverter<EnumValue>
 
-public actual object OptionConverter : ProtobufConverter<Option> by OptionJvmConverter
+public actual object OptionConverter : OptionJvmConverter(), ProtobufConverter<Option>

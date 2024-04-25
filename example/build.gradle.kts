@@ -83,6 +83,7 @@ protobuf {
             it.plugins {
                 id("kotlin-protobuf-kotlinx") {
                     option("kotlin-protobuf.type_registry=protobuf.example.TypeRegistry")
+                    option("kotlin-protobuf.serializers_module=protobuf.example.SerializersModules")
                 }
                 id("kotlin-protobuf-converter-jvm") {
                     option("kotlin-protobuf.jvm_type_registry=protobuf.example.JvmTypeRegistry")

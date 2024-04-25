@@ -12,6 +12,8 @@ interface ProtobufTypeMapper<OutputType : ProtobufMessage, DelegatorType : Messa
 
     val parser: Parser<DelegatorType>
 
+    val default: DelegatorType
+
     fun convert(obj: OutputType): DelegatorType
 
     fun convert(obj: DelegatorType): OutputType

@@ -14,7 +14,6 @@ public fun Empty.toAny(): Any = Any(Empty.TYPE_URL, with(EmptyConverter) { toByt
 
 public fun Any.parse(converter: ProtobufConverter<Empty> = EmptyConverter): Empty {
   if (typeUrl != Empty.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 

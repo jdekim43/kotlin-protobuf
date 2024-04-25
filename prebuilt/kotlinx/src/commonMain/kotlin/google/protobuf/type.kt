@@ -77,7 +77,7 @@ public data class Type(
 
     override fun serialize(encoder: Encoder, `value`: Type) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(TypeConverter.serialize(value))
+        encoder.serialize(TypeConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -85,7 +85,7 @@ public data class Type(
 
     override fun deserialize(decoder: Decoder): Type {
       if (decoder is ProtobufConverterDecoder) {
-        return TypeConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(TypeConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -204,7 +204,7 @@ public data class Field(
 
     override fun serialize(encoder: Encoder, `value`: Field) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(FieldConverter.serialize(value))
+        encoder.serialize(FieldConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -212,7 +212,7 @@ public data class Field(
 
     override fun deserialize(decoder: Decoder): Field {
       if (decoder is ProtobufConverterDecoder) {
-        return FieldConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(FieldConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -251,7 +251,7 @@ public data class Enum(
 
     override fun serialize(encoder: Encoder, `value`: Enum) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(EnumConverter.serialize(value))
+        encoder.serialize(EnumConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -259,7 +259,7 @@ public data class Enum(
 
     override fun deserialize(decoder: Decoder): Enum {
       if (decoder is ProtobufConverterDecoder) {
-        return EnumConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(EnumConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -292,7 +292,7 @@ public data class EnumValue(
 
     override fun serialize(encoder: Encoder, `value`: EnumValue) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(EnumValueConverter.serialize(value))
+        encoder.serialize(EnumValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -300,7 +300,7 @@ public data class EnumValue(
 
     override fun deserialize(decoder: Decoder): EnumValue {
       if (decoder is ProtobufConverterDecoder) {
-        return EnumValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(EnumValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -331,7 +331,7 @@ public data class Option(
 
     override fun serialize(encoder: Encoder, `value`: Option) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(OptionConverter.serialize(value))
+        encoder.serialize(OptionConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -339,7 +339,7 @@ public data class Option(
 
     override fun deserialize(decoder: Decoder): Option {
       if (decoder is ProtobufConverterDecoder) {
-        return OptionConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(OptionConverter)
       }
       return delegator.deserialize(decoder)
     }

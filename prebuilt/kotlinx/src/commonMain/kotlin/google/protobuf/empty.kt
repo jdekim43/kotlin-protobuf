@@ -38,7 +38,7 @@ public class Empty() : TypeProtobufMessage {
 
     override fun serialize(encoder: Encoder, `value`: Empty) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(EmptyConverter.serialize(value))
+        encoder.serialize(EmptyConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -46,7 +46,7 @@ public class Empty() : TypeProtobufMessage {
 
     override fun deserialize(decoder: Decoder): Empty {
       if (decoder is ProtobufConverterDecoder) {
-        return EmptyConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(EmptyConverter)
       }
       return delegator.deserialize(decoder)
     }

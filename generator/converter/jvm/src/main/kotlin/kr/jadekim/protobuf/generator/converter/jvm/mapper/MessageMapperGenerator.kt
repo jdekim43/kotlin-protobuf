@@ -10,6 +10,7 @@ import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.jvm.mapper.util.extention.delegatorNameEscaped
 import kr.jadekim.protobuf.generator.converter.jvm.mapper.util.extention.delegatorTypeName
 import kr.jadekim.protobuf.generator.converter.jvm.util.extention.jvmConverterTypeName
+import kr.jadekim.protobuf.generator.converter.util.extention.converterTypeName
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.*
 import net.pearx.kasechange.toPascalCase
@@ -20,7 +21,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
         val outputTypeName = descriptor.outputTypeName
         val delegatorTypeName = descriptor.delegatorTypeName
         val name = descriptor.jvmConverterTypeName
-        val spec = TypeSpec.objectBuilder(name)
+        val spec = TypeSpec.classBuilder(name).addModifiers(KModifier.OPEN)
         val imports = mutableSetOf<ImportName>()
 
         val parentType = ProtobufTypeMapper::class.typeName.parameterizedBy(outputTypeName, delegatorTypeName)
@@ -46,6 +47,12 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
             PropertySpec.builder("parser", Parser::class.typeName.parameterizedBy(protobufTypeName))
                 .addModifiers(KModifier.OVERRIDE)
                 .initializer("%T.parser()", protobufTypeName)
+                .build()
+        )
+        spec.addProperty(
+            PropertySpec.builder("default", protobufTypeName)
+                .addModifiers(KModifier.OVERRIDE)
+                .initializer("%T.getDefaultInstance()", protobufTypeName)
                 .build()
         )
     }
@@ -97,7 +104,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                 "obj.get%LList().map { $code }" to arrayOf(*variableNameArguments, *arguments)
             } else {
                 "%T.convert($variableName)" to arrayOf(
-                    (typeName as? ClassName)?.jvmConverterTypeName ?: messageType.jvmConverterTypeName,
+                    (typeName as? ClassName)?.converterTypeName ?: messageType.converterTypeName,
                     *variableNameArguments,
                 )
             }
@@ -192,7 +199,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                 "$variableName.map { $code }" to arrayOf(*variableNameArguments, *arguments)
             } else {
                 "%T.convert($variableName)" to arrayOf(
-                    (typeName as? ClassName)?.jvmConverterTypeName ?: messageType.jvmConverterTypeName,
+                    (typeName as? ClassName)?.converterTypeName ?: messageType.converterTypeName,
                     *variableNameArguments,
                 )
             }

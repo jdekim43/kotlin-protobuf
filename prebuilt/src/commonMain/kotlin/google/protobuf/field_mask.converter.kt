@@ -15,7 +15,6 @@ public fun FieldMask.toAny(): Any = Any(FieldMask.TYPE_URL, with(FieldMaskConver
 
 public fun Any.parse(converter: ProtobufConverter<FieldMask> = FieldMaskConverter): FieldMask {
   if (typeUrl != FieldMask.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 

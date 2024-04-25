@@ -9,10 +9,12 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public object AnyJvmConverter : ProtobufTypeMapper<Any, com.google.protobuf.Any> {
+public open class AnyJvmConverter : ProtobufTypeMapper<Any, com.google.protobuf.Any> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Any.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Any> = com.google.protobuf.Any.parser()
+
+  override val default: com.google.protobuf.Any = com.google.protobuf.Any.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.Any): Any = Any(
   	typeUrl = obj.getTypeUrl(),

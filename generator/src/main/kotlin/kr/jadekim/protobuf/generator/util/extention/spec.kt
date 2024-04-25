@@ -6,7 +6,6 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kr.jadekim.protobuf.annotation.GeneratorVersion
 import kr.jadekim.protobuf.annotation.ProtobufIndex
-import kr.jadekim.protobuf.annotation.ProtobufSyntax
 import kr.jadekim.protobuf.generator.BUILD_VERSION
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import net.pearx.kasechange.toPascalCase
@@ -139,7 +138,11 @@ val Descriptors.FieldDescriptor.kotlinDefaultValue: CodeBlock
             Descriptors.FieldDescriptor.Type.FIXED32 -> CodeBlock.of("0u")
             Descriptors.FieldDescriptor.Type.BOOL -> CodeBlock.of("false")
             Descriptors.FieldDescriptor.Type.STRING -> CodeBlock.of("%S", "")
-            Descriptors.FieldDescriptor.Type.GROUP, Descriptors.FieldDescriptor.Type.MESSAGE -> CodeBlock.of("%T()", messageType.outputTypeName)
+            Descriptors.FieldDescriptor.Type.GROUP, Descriptors.FieldDescriptor.Type.MESSAGE -> CodeBlock.of(
+                "%T()",
+                messageType.outputTypeName
+            )
+
             Descriptors.FieldDescriptor.Type.ENUM -> CodeBlock.of("%T.values()[0]", enumType.outputTypeName)
             Descriptors.FieldDescriptor.Type.BYTES -> CodeBlock.of("%M()", MemberName("kotlin", "byteArrayOf"))
             Descriptors.FieldDescriptor.Type.UINT32 -> CodeBlock.of("0u")

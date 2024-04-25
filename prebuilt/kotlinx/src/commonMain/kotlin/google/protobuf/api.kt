@@ -57,7 +57,7 @@ public data class Api(
 
     override fun serialize(encoder: Encoder, `value`: Api) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(ApiConverter.serialize(value))
+        encoder.serialize(ApiConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -65,7 +65,7 @@ public data class Api(
 
     override fun deserialize(decoder: Decoder): Api {
       if (decoder is ProtobufConverterDecoder) {
-        return ApiConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(ApiConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -106,7 +106,7 @@ public data class Method(
 
     override fun serialize(encoder: Encoder, `value`: Method) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(MethodConverter.serialize(value))
+        encoder.serialize(MethodConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -114,7 +114,7 @@ public data class Method(
 
     override fun deserialize(decoder: Decoder): Method {
       if (decoder is ProtobufConverterDecoder) {
-        return MethodConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(MethodConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -145,7 +145,7 @@ public data class Mixin(
 
     override fun serialize(encoder: Encoder, `value`: Mixin) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(MixinConverter.serialize(value))
+        encoder.serialize(MixinConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -153,7 +153,7 @@ public data class Mixin(
 
     override fun deserialize(decoder: Decoder): Mixin {
       if (decoder is ProtobufConverterDecoder) {
-        return MixinConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(MixinConverter)
       }
       return delegator.deserialize(decoder)
     }

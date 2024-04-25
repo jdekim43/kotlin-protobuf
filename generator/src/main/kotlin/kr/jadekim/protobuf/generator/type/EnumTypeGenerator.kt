@@ -5,11 +5,9 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import kr.jadekim.protobuf.generator.ImportName
-import kr.jadekim.protobuf.generator.file.TypeRegistryGenerator
 import kr.jadekim.protobuf.generator.util.extention.addDeprecatedAnnotation
 import kr.jadekim.protobuf.generator.util.extention.addNumberAnnotation
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
-import kr.jadekim.protobuf.generator.util.extention.typeUrl
 
 class EnumTypeGenerator(
     private val enumValueTypeGenerator: EnumValueTypeGenerator,
@@ -62,7 +60,6 @@ class EnumTypeGenerator(
         }
 
         plugins.applyTo(spec, imports, descriptor)
-        TypeRegistryGenerator.registerEnum(descriptor.typeUrl, name)
 
         return spec.build() to imports.toSet()
     }

@@ -42,7 +42,7 @@ public data class SourceContext(
 
     override fun serialize(encoder: Encoder, `value`: SourceContext) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(SourceContextConverter.serialize(value))
+        encoder.serialize(SourceContextConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -50,7 +50,7 @@ public data class SourceContext(
 
     override fun deserialize(decoder: Decoder): SourceContext {
       if (decoder is ProtobufConverterDecoder) {
-        return SourceContextConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(SourceContextConverter)
       }
       return delegator.deserialize(decoder)
     }

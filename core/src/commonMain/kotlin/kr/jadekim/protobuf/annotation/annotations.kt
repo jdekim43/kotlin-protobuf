@@ -1,9 +1,5 @@
 package kr.jadekim.protobuf.annotation
 
-@Target(AnnotationTarget.FILE)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class ProtobufSyntax(val syntax: String)
-
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ProtobufMessage(val typeUrl: String)

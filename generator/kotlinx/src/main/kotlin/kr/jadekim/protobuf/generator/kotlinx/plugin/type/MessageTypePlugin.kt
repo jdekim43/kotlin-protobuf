@@ -11,6 +11,8 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.util.extention.converterTypeName
+import kr.jadekim.protobuf.generator.kotlinx.util.reflectSerializerTypeName
+import kr.jadekim.protobuf.generator.kotlinx.util.serializerTypeName
 import kr.jadekim.protobuf.generator.type.TypeGenerator
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
@@ -18,12 +20,6 @@ import kr.jadekim.protobuf.kotlinx.ProtobufConverterDecoder
 import kr.jadekim.protobuf.kotlinx.ProtobufConverterEncoder
 
 object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
-
-    private val Descriptors.Descriptor.reflectSerializerTypeName: ClassName
-        get() = outputTypeName.nestedClass("ReflectSerializer")
-
-    private val Descriptors.Descriptor.serializerTypeName: ClassName
-        get() = outputTypeName.nestedClass("KotlinxSerializer")
 
     override fun applyTo(spec: TypeSpec.Builder, imports: MutableSet<ImportName>, descriptor: Descriptors.Descriptor) {
         spec.addAnnotation(
@@ -81,7 +77,7 @@ object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
                     .addParameter("encoder", Encoder::class)
                     .addParameter("value", outputTypeName)
                     .beginControlFlow("if (encoder is %T)", ProtobufConverterEncoder::class)
-                    .addStatement("encoder.encodeValue(%T.serialize(value))", converterTypeName)
+                    .addStatement("encoder.serialize(%T, value)", converterTypeName)
                     .addStatement("return")
                     .endControlFlow()
                     .addStatement("delegator.serialize(encoder, value)")
@@ -93,7 +89,7 @@ object MessageTypePlugin : TypeGenerator.Plugin<Descriptors.Descriptor> {
                     .addParameter("decoder", Decoder::class)
                     .returns(outputTypeName)
                     .beginControlFlow("if (decoder is %T)", ProtobufConverterDecoder::class)
-                    .addStatement("return %T.deserialize(decoder.decodeByteArray())", converterTypeName)
+                    .addStatement("return decoder.deserialize(%T)", converterTypeName)
                     .endControlFlow()
                     .addStatement("return delegator.deserialize(decoder)")
                     .build()

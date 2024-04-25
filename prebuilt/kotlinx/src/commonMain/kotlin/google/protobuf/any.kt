@@ -46,7 +46,7 @@ public data class Any(
 
     override fun serialize(encoder: Encoder, `value`: Any) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(AnyConverter.serialize(value))
+        encoder.serialize(AnyConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -54,7 +54,7 @@ public data class Any(
 
     override fun deserialize(decoder: Decoder): Any {
       if (decoder is ProtobufConverterDecoder) {
-        return AnyConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(AnyConverter)
       }
       return delegator.deserialize(decoder)
     }

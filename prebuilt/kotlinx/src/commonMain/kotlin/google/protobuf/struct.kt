@@ -65,7 +65,7 @@ public data class Struct(
 
     override fun serialize(encoder: Encoder, `value`: Struct) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(StructConverter.serialize(value))
+        encoder.serialize(StructConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -73,7 +73,7 @@ public data class Struct(
 
     override fun deserialize(decoder: Decoder): Struct {
       if (decoder is ProtobufConverterDecoder) {
-        return StructConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(StructConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -140,7 +140,7 @@ public data class Value(
 
     override fun serialize(encoder: Encoder, `value`: Value) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(ValueConverter.serialize(value))
+        encoder.serialize(ValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -148,7 +148,7 @@ public data class Value(
 
     override fun deserialize(decoder: Decoder): Value {
       if (decoder is ProtobufConverterDecoder) {
-        return ValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(ValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -177,7 +177,7 @@ public data class ListValue(
 
     override fun serialize(encoder: Encoder, `value`: ListValue) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(ListValueConverter.serialize(value))
+        encoder.serialize(ListValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -185,7 +185,7 @@ public data class ListValue(
 
     override fun deserialize(decoder: Decoder): ListValue {
       if (decoder is ProtobufConverterDecoder) {
-        return ListValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(ListValueConverter)
       }
       return delegator.deserialize(decoder)
     }

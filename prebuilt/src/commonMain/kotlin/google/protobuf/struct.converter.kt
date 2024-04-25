@@ -14,7 +14,6 @@ public fun Struct.toAny(): Any = Any(Struct.TYPE_URL, with(StructConverter) { to
 
 public fun Any.parse(converter: ProtobufConverter<Struct> = StructConverter): Struct {
   if (typeUrl != Struct.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -27,7 +26,6 @@ public fun Value.toAny(): Any = Any(Value.TYPE_URL, with(ValueConverter) { toByt
 
 public fun Any.parse(converter: ProtobufConverter<Value> = ValueConverter): Value {
   if (typeUrl != Value.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -41,7 +39,6 @@ public fun ListValue.toAny(): Any = Any(ListValue.TYPE_URL, with(ListValueConver
 
 public fun Any.parse(converter: ProtobufConverter<ListValue> = ListValueConverter): ListValue {
   if (typeUrl != ListValue.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 

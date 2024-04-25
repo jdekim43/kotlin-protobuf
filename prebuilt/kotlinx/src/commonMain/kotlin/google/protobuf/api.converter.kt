@@ -14,7 +14,6 @@ public fun Api.toAny(): Any = Any(Api.TYPE_URL, with(ApiConverter) { toByteArray
 
 public fun Any.parse(converter: ProtobufConverter<Api> = ApiConverter): Api {
   if (typeUrl != Api.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -27,7 +26,6 @@ public fun Method.toAny(): Any = Any(Method.TYPE_URL, with(MethodConverter) { to
 
 public fun Any.parse(converter: ProtobufConverter<Method> = MethodConverter): Method {
   if (typeUrl != Method.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -40,7 +38,6 @@ public fun Mixin.toAny(): Any = Any(Mixin.TYPE_URL, with(MixinConverter) { toByt
 
 public fun Any.parse(converter: ProtobufConverter<Mixin> = MixinConverter): Mixin {
   if (typeUrl != Mixin.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 

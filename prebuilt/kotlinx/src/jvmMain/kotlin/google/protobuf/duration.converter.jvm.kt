@@ -8,10 +8,14 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public object DurationJvmConverter : ProtobufTypeMapper<Duration, com.google.protobuf.Duration> {
+public open class DurationJvmConverter : ProtobufTypeMapper<Duration, com.google.protobuf.Duration>
+    {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Duration.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Duration> = com.google.protobuf.Duration.parser()
+
+  override val default: com.google.protobuf.Duration =
+      com.google.protobuf.Duration.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.Duration): Duration = Duration(
   	seconds = obj.getSeconds(),

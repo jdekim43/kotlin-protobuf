@@ -32,6 +32,7 @@ object KotlinGenerator : Generator() {
 
     override val generators: List<FileGenerator> = listOf(
         typeGenerator,
+        TypeRegistryGenerator.collector(),
     )
 
     override fun onGenerate(

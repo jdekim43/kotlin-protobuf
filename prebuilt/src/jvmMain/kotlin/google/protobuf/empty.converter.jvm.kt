@@ -8,10 +8,12 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public object EmptyJvmConverter : ProtobufTypeMapper<Empty, com.google.protobuf.Empty> {
+public open class EmptyJvmConverter : ProtobufTypeMapper<Empty, com.google.protobuf.Empty> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Empty.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Empty> = com.google.protobuf.Empty.parser()
+
+  override val default: com.google.protobuf.Empty = com.google.protobuf.Empty.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.Empty): Empty = Empty(
   )

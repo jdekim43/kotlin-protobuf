@@ -51,7 +51,7 @@ public data class DoubleValue(
 
     override fun serialize(encoder: Encoder, `value`: DoubleValue) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(DoubleValueConverter.serialize(value))
+        encoder.serialize(DoubleValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -59,7 +59,7 @@ public data class DoubleValue(
 
     override fun deserialize(decoder: Decoder): DoubleValue {
       if (decoder is ProtobufConverterDecoder) {
-        return DoubleValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(DoubleValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -88,7 +88,7 @@ public data class FloatValue(
 
     override fun serialize(encoder: Encoder, `value`: FloatValue) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(FloatValueConverter.serialize(value))
+        encoder.serialize(FloatValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -96,7 +96,7 @@ public data class FloatValue(
 
     override fun deserialize(decoder: Decoder): FloatValue {
       if (decoder is ProtobufConverterDecoder) {
-        return FloatValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(FloatValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -125,7 +125,7 @@ public data class Int64Value(
 
     override fun serialize(encoder: Encoder, `value`: Int64Value) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(Int64ValueConverter.serialize(value))
+        encoder.serialize(Int64ValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -133,7 +133,7 @@ public data class Int64Value(
 
     override fun deserialize(decoder: Decoder): Int64Value {
       if (decoder is ProtobufConverterDecoder) {
-        return Int64ValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(Int64ValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -162,7 +162,7 @@ public data class UInt64Value(
 
     override fun serialize(encoder: Encoder, `value`: UInt64Value) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(UInt64ValueConverter.serialize(value))
+        encoder.serialize(UInt64ValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -170,7 +170,7 @@ public data class UInt64Value(
 
     override fun deserialize(decoder: Decoder): UInt64Value {
       if (decoder is ProtobufConverterDecoder) {
-        return UInt64ValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(UInt64ValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -199,7 +199,7 @@ public data class Int32Value(
 
     override fun serialize(encoder: Encoder, `value`: Int32Value) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(Int32ValueConverter.serialize(value))
+        encoder.serialize(Int32ValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -207,7 +207,7 @@ public data class Int32Value(
 
     override fun deserialize(decoder: Decoder): Int32Value {
       if (decoder is ProtobufConverterDecoder) {
-        return Int32ValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(Int32ValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -236,7 +236,7 @@ public data class UInt32Value(
 
     override fun serialize(encoder: Encoder, `value`: UInt32Value) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(UInt32ValueConverter.serialize(value))
+        encoder.serialize(UInt32ValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -244,7 +244,7 @@ public data class UInt32Value(
 
     override fun deserialize(decoder: Decoder): UInt32Value {
       if (decoder is ProtobufConverterDecoder) {
-        return UInt32ValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(UInt32ValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -273,7 +273,7 @@ public data class BoolValue(
 
     override fun serialize(encoder: Encoder, `value`: BoolValue) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(BoolValueConverter.serialize(value))
+        encoder.serialize(BoolValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -281,7 +281,7 @@ public data class BoolValue(
 
     override fun deserialize(decoder: Decoder): BoolValue {
       if (decoder is ProtobufConverterDecoder) {
-        return BoolValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(BoolValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -310,7 +310,7 @@ public data class StringValue(
 
     override fun serialize(encoder: Encoder, `value`: StringValue) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(StringValueConverter.serialize(value))
+        encoder.serialize(StringValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -318,7 +318,7 @@ public data class StringValue(
 
     override fun deserialize(decoder: Decoder): StringValue {
       if (decoder is ProtobufConverterDecoder) {
-        return StringValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(StringValueConverter)
       }
       return delegator.deserialize(decoder)
     }
@@ -347,7 +347,7 @@ public data class BytesValue(
 
     override fun serialize(encoder: Encoder, `value`: BytesValue) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(BytesValueConverter.serialize(value))
+        encoder.serialize(BytesValueConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -355,7 +355,7 @@ public data class BytesValue(
 
     override fun deserialize(decoder: Decoder): BytesValue {
       if (decoder is ProtobufConverterDecoder) {
-        return BytesValueConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(BytesValueConverter)
       }
       return delegator.deserialize(decoder)
     }

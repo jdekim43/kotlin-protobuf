@@ -1,11 +1,8 @@
 package kr.jadekim.protobuf.generator.converter.platform
 
 import com.google.protobuf.Descriptors
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.CodeBlock
-import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.TypeSpec
 import kr.jadekim.protobuf.converter.ProtobufConverter
 import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.util.extention.converterTypeName
@@ -28,10 +25,8 @@ class SinglePlatformGenerator(
             spec.addModifiers(KModifier.ACTUAL)
         }
 
-        spec.addSuperinterface(
-            ProtobufConverter::class.typeName.parameterizedBy(outputTypeName),
-            CodeBlock.of("%T", platformTypeName),
-        )
+        spec.addSuperinterface(ProtobufConverter::class.typeName.parameterizedBy(outputTypeName))
+        spec.superclass(platformTypeName)
 
         descriptor.readChildren(spec, imports)
 

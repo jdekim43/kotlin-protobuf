@@ -15,7 +15,6 @@ public fun Timestamp.toAny(): Any = Any(Timestamp.TYPE_URL, with(TimestampConver
 
 public fun Any.parse(converter: ProtobufConverter<Timestamp> = TimestampConverter): Timestamp {
   if (typeUrl != Timestamp.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 

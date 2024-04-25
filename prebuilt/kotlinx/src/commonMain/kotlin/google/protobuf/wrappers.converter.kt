@@ -16,7 +16,6 @@ public fun DoubleValue.toAny(): Any = Any(DoubleValue.TYPE_URL, with(DoubleValue
 public fun Any.parse(converter: ProtobufConverter<DoubleValue> = DoubleValueConverter):
     DoubleValue {
   if (typeUrl != DoubleValue.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -30,7 +29,6 @@ public fun FloatValue.toAny(): Any = Any(FloatValue.TYPE_URL, with(FloatValueCon
 
 public fun Any.parse(converter: ProtobufConverter<FloatValue> = FloatValueConverter): FloatValue {
   if (typeUrl != FloatValue.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -44,7 +42,6 @@ public fun Int64Value.toAny(): Any = Any(Int64Value.TYPE_URL, with(Int64ValueCon
 
 public fun Any.parse(converter: ProtobufConverter<Int64Value> = Int64ValueConverter): Int64Value {
   if (typeUrl != Int64Value.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -59,7 +56,6 @@ public fun UInt64Value.toAny(): Any = Any(UInt64Value.TYPE_URL, with(UInt64Value
 public fun Any.parse(converter: ProtobufConverter<UInt64Value> = UInt64ValueConverter):
     UInt64Value {
   if (typeUrl != UInt64Value.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -73,7 +69,6 @@ public fun Int32Value.toAny(): Any = Any(Int32Value.TYPE_URL, with(Int32ValueCon
 
 public fun Any.parse(converter: ProtobufConverter<Int32Value> = Int32ValueConverter): Int32Value {
   if (typeUrl != Int32Value.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -88,7 +83,6 @@ public fun UInt32Value.toAny(): Any = Any(UInt32Value.TYPE_URL, with(UInt32Value
 public fun Any.parse(converter: ProtobufConverter<UInt32Value> = UInt32ValueConverter):
     UInt32Value {
   if (typeUrl != UInt32Value.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -102,7 +96,6 @@ public fun BoolValue.toAny(): Any = Any(BoolValue.TYPE_URL, with(BoolValueConver
 
 public fun Any.parse(converter: ProtobufConverter<BoolValue> = BoolValueConverter): BoolValue {
   if (typeUrl != BoolValue.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -117,7 +110,6 @@ public fun StringValue.toAny(): Any = Any(StringValue.TYPE_URL, with(StringValue
 public fun Any.parse(converter: ProtobufConverter<StringValue> = StringValueConverter):
     StringValue {
   if (typeUrl != StringValue.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 
@@ -131,7 +123,6 @@ public fun BytesValue.toAny(): Any = Any(BytesValue.TYPE_URL, with(BytesValueCon
 
 public fun Any.parse(converter: ProtobufConverter<BytesValue> = BytesValueConverter): BytesValue {
   if (typeUrl != BytesValue.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 

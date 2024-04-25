@@ -8,11 +8,15 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public object TimestampJvmConverter : ProtobufTypeMapper<Timestamp, com.google.protobuf.Timestamp> {
+public open class TimestampJvmConverter :
+    ProtobufTypeMapper<Timestamp, com.google.protobuf.Timestamp> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Timestamp.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Timestamp> =
       com.google.protobuf.Timestamp.parser()
+
+  override val default: com.google.protobuf.Timestamp =
+      com.google.protobuf.Timestamp.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.Timestamp): Timestamp = Timestamp(
   	seconds = obj.getSeconds(),

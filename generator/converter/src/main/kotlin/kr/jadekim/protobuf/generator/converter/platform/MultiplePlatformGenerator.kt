@@ -1,8 +1,6 @@
 package kr.jadekim.protobuf.generator.converter.platform
 
 import com.google.protobuf.Descriptors
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeSpec

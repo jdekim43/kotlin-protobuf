@@ -11,4 +11,4 @@ interface ProtobufConverter<KotlinType : ProtobufMessage> {
     fun KotlinType.toByteArray(): ByteArray = serialize(this)
 }
 
-fun <M : ProtobufMessage> ByteArray.parseProtobuf(mapper: ProtobufConverter<M>): M = mapper.deserialize(this)
+fun <M : ProtobufMessage> ByteArray.parseProtobuf(converter: ProtobufConverter<M>): M = converter.deserialize(this)

@@ -41,6 +41,8 @@ object KotlinxGenerator : Generator() {
 
     override val generators: List<FileGenerator> = listOf(
         typeGenerator,
+        TypeRegistryGenerator.collector(),
+        SerializationModuleFileGenerator.collector(),
     )
 
     override fun onGenerate(
@@ -48,5 +50,6 @@ object KotlinxGenerator : Generator() {
         builder: PluginProtos.CodeGeneratorResponse.Builder
     ) {
         TypeRegistryGenerator.generate()?.let { builder.addFile(it.toResponse()) }
+        SerializationModuleFileGenerator.generate()?.let { builder.addFile(it.toResponse()) }
     }
 }

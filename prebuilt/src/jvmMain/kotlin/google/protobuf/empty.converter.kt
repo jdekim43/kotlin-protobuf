@@ -6,4 +6,4 @@ package google.protobuf
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.ProtobufConverter
 
-public actual object EmptyConverter : ProtobufConverter<Empty> by EmptyJvmConverter
+public actual object EmptyConverter : EmptyJvmConverter(), ProtobufConverter<Empty>

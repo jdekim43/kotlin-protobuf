@@ -6,4 +6,4 @@ package google.protobuf
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.ProtobufConverter
 
-public actual object DurationConverter : ProtobufConverter<Duration> by DurationJvmConverter
+public actual object DurationConverter : DurationJvmConverter(), ProtobufConverter<Duration>

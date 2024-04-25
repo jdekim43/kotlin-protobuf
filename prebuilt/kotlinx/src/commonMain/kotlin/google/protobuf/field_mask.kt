@@ -44,7 +44,7 @@ public data class FieldMask(
 
     override fun serialize(encoder: Encoder, `value`: FieldMask) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(FieldMaskConverter.serialize(value))
+        encoder.serialize(FieldMaskConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -52,7 +52,7 @@ public data class FieldMask(
 
     override fun deserialize(decoder: Decoder): FieldMask {
       if (decoder is ProtobufConverterDecoder) {
-        return FieldMaskConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(FieldMaskConverter)
       }
       return delegator.deserialize(decoder)
     }

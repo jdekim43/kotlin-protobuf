@@ -16,7 +16,6 @@ public fun SourceContext.toAny(): Any = Any(SourceContext.TYPE_URL, with(SourceC
 public fun Any.parse(converter: ProtobufConverter<SourceContext> = SourceContextConverter):
     SourceContext {
   if (typeUrl != SourceContext.TYPE_URL) throw IllegalStateException("Please check the type_url")
-  if (value == null) throw IllegalStateException("value can not be null")
   return value.parseProtobuf(converter)
 }
 

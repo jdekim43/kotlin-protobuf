@@ -3,7 +3,6 @@ package kr.jadekim.protobuf.generator.type
 import com.google.protobuf.Descriptors
 import com.squareup.kotlinpoet.*
 import kr.jadekim.protobuf.generator.ImportName
-import kr.jadekim.protobuf.generator.file.TypeRegistryGenerator
 import kr.jadekim.protobuf.generator.util.extention.*
 import kr.jadekim.protobuf.type.ProtobufMessage
 
@@ -40,7 +39,6 @@ class MessageTypeGenerator(
         spec.primaryConstructor(constructor.build())
 
         plugins.applyTo(spec, imports, descriptor)
-        TypeRegistryGenerator.registerMessage(descriptor.typeUrl, name)
 
         return spec.build() to imports.toSet()
     }

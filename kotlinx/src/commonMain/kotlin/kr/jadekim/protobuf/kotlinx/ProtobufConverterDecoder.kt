@@ -4,14 +4,27 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.AbstractDecoder
 import kotlinx.serialization.modules.SerializersModule
+import kr.jadekim.protobuf.converter.ProtobufConverter
+import kr.jadekim.protobuf.type.ProtobufMessage
 
 @OptIn(ExperimentalSerializationApi::class)
-class ProtobufConverterDecoder(val bytes: ByteArray, override val serializersModule: SerializersModule) :
-    AbstractDecoder() {
+abstract class ProtobufConverterDecoder(
+    override val serializersModule: SerializersModule,
+) : AbstractDecoder() {
 
     override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
         throw IllegalStateException("Not usable decodeElementIndex")
     }
 
-    fun decodeByteArray(): ByteArray = bytes
+    abstract fun <T : ProtobufMessage> deserialize(converter: ProtobufConverter<T>): T
+}
+
+class ProtobufDecoder(
+    val bytes: ByteArray,
+    serializersModule: SerializersModule,
+) : ProtobufConverterDecoder(serializersModule) {
+
+    override fun <T : ProtobufMessage> deserialize(converter: ProtobufConverter<T>): T {
+        return converter.deserialize(bytes)
+    }
 }

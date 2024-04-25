@@ -8,26 +8,30 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public object StructJvmConverter : ProtobufTypeMapper<Struct, com.google.protobuf.Struct> {
+public open class StructJvmConverter : ProtobufTypeMapper<Struct, com.google.protobuf.Struct> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Struct.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Struct> = com.google.protobuf.Struct.parser()
 
+  override val default: com.google.protobuf.Struct = com.google.protobuf.Struct.getDefaultInstance()
+
   override fun convert(obj: com.google.protobuf.Struct): Struct = Struct(
-  	fields = obj.getFieldsMap().map { it.key to ValueJvmConverter.convert(it.value) }.toMap(),
+  	fields = obj.getFieldsMap().map { it.key to ValueConverter.convert(it.value) }.toMap(),
   )
 
   override fun convert(obj: Struct): com.google.protobuf.Struct {
     val builder = com.google.protobuf.Struct.newBuilder()
-    builder.putAllFields(obj.fields.map { it.key to ValueJvmConverter.convert(it.value) }.toMap())
+    builder.putAllFields(obj.fields.map { it.key to ValueConverter.convert(it.value) }.toMap())
     return builder.build()
   }
 }
 
-public object ValueJvmConverter : ProtobufTypeMapper<Value, com.google.protobuf.Value> {
+public open class ValueJvmConverter : ProtobufTypeMapper<Value, com.google.protobuf.Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Value> = com.google.protobuf.Value.parser()
+
+  override val default: com.google.protobuf.Value = com.google.protobuf.Value.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.Value): Value = Value(
   	kind = mapOf(
@@ -35,8 +39,8 @@ public object ValueJvmConverter : ProtobufTypeMapper<Value, com.google.protobuf.
   2 to { Value.KindOneOf.NumberValue(obj.getNumberValue()) },
   3 to { Value.KindOneOf.StringValue(obj.getStringValue()) },
   4 to { Value.KindOneOf.BoolValue(obj.getBoolValue()) },
-  5 to { Value.KindOneOf.StructValue(StructJvmConverter.convert(obj.getStructValue())) },
-  6 to { Value.KindOneOf.ListValue(ListValueJvmConverter.convert(obj.getListValue())) },
+  5 to { Value.KindOneOf.StructValue(StructConverter.convert(obj.getStructValue())) },
+  6 to { Value.KindOneOf.ListValue(ListValueConverter.convert(obj.getListValue())) },
   ).getValue(obj.kindCase.number)(),
   )
 
@@ -49,27 +53,31 @@ public object ValueJvmConverter : ProtobufTypeMapper<Value, com.google.protobuf.
       is Value.KindOneOf.StringValue -> builder.setStringValue(obj.kind.value)
       is Value.KindOneOf.BoolValue -> builder.setBoolValue(obj.kind.value)
       is Value.KindOneOf.StructValue ->
-          builder.setStructValue(StructJvmConverter.convert(obj.kind.value))
+          builder.setStructValue(StructConverter.convert(obj.kind.value))
       is Value.KindOneOf.ListValue ->
-          builder.setListValue(ListValueJvmConverter.convert(obj.kind.value))
+          builder.setListValue(ListValueConverter.convert(obj.kind.value))
     }
     return builder.build()
   }
 }
 
-public object ListValueJvmConverter : ProtobufTypeMapper<ListValue, com.google.protobuf.ListValue> {
+public open class ListValueJvmConverter :
+    ProtobufTypeMapper<ListValue, com.google.protobuf.ListValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.ListValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.ListValue> =
       com.google.protobuf.ListValue.parser()
 
+  override val default: com.google.protobuf.ListValue =
+      com.google.protobuf.ListValue.getDefaultInstance()
+
   override fun convert(obj: com.google.protobuf.ListValue): ListValue = ListValue(
-  	values = obj.getValuesList().map { ValueJvmConverter.convert(it) },
+  	values = obj.getValuesList().map { ValueConverter.convert(it) },
   )
 
   override fun convert(obj: ListValue): com.google.protobuf.ListValue {
     val builder = com.google.protobuf.ListValue.newBuilder()
-    builder.addAllValues(obj.values.map { ValueJvmConverter.convert(it) })
+    builder.addAllValues(obj.values.map { ValueConverter.convert(it) })
     return builder.build()
   }
 }

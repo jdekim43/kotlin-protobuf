@@ -10,7 +10,7 @@ import io.grpc.kotlin.ClientCalls
 import io.grpc.kotlin.ServerCalls
 import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.converter.jvm.mapper.util.extention.delegatorTypeName
-import kr.jadekim.protobuf.generator.converter.jvm.util.extention.jvmConverterTypeName
+import kr.jadekim.protobuf.generator.converter.util.extention.converterTypeName
 import kr.jadekim.protobuf.generator.grpc.jvm.util.extension.jvmGrpcTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.grpcClientTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.grpcServerTypeName
@@ -120,9 +120,9 @@ class ServiceMapperGenerator(
                 .addCode("\t\t\t\tdescriptor = %N,\n", method.descriptorVariableName)
                 .addCode(
                     "\t\t\t\timplementation = { %T.convert(%N(%T.convert(it))) },\n",
-                    method.outputType.jvmConverterTypeName,
+                    method.outputType.converterTypeName,
                     functionName,
-                    method.inputType.jvmConverterTypeName,
+                    method.inputType.converterTypeName,
                 )
                 .addCode("\t\t\t)\n\t\t)\n")
         }
@@ -182,10 +182,10 @@ class ServiceMapperGenerator(
                     .addParameter("request", method.inputType.outputTypeName)
                     .addParameter("metadata", Metadata::class)
                     .returns(method.outputType.outputTypeName)
-                    .addCode("return %T.convert(\n", method.outputType.jvmConverterTypeName)
+                    .addCode("return %T.convert(\n", method.outputType.converterTypeName)
                     .addCode("\t\t%T.unaryRpc(\n", ClientCalls::class)
                     .addCode("\t\t\toption.channel, %N,\n", method.descriptorVariableName)
-                    .addCode("\t\t\t%T.convert(request),\n", method.inputType.jvmConverterTypeName)
+                    .addCode("\t\t\t%T.convert(request),\n", method.inputType.converterTypeName)
                     .addCode("\t\t\toption.callOptions, metadata,\n")
                     .addCode("\t\t),\n\t)\n")
                     .build()

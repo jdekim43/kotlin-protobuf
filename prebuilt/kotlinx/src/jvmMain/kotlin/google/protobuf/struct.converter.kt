@@ -6,8 +6,8 @@ package google.protobuf
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.ProtobufConverter
 
-public actual object StructConverter : ProtobufConverter<Struct> by StructJvmConverter
+public actual object StructConverter : StructJvmConverter(), ProtobufConverter<Struct>
 
-public actual object ValueConverter : ProtobufConverter<Value> by ValueJvmConverter
+public actual object ValueConverter : ValueJvmConverter(), ProtobufConverter<Value>
 
-public actual object ListValueConverter : ProtobufConverter<ListValue> by ListValueJvmConverter
+public actual object ListValueConverter : ListValueJvmConverter(), ProtobufConverter<ListValue>

@@ -11,12 +11,15 @@ import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 import kr.jadekim.protobuf.util.asJavaType
 import kr.jadekim.protobuf.util.asKotlinType
 
-public object DoubleValueJvmConverter :
+public open class DoubleValueJvmConverter :
     ProtobufTypeMapper<DoubleValue, com.google.protobuf.DoubleValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.DoubleValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.DoubleValue> =
       com.google.protobuf.DoubleValue.parser()
+
+  override val default: com.google.protobuf.DoubleValue =
+      com.google.protobuf.DoubleValue.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.DoubleValue): DoubleValue = DoubleValue(
   	`value` = obj.getValue(),
@@ -29,12 +32,15 @@ public object DoubleValueJvmConverter :
   }
 }
 
-public object FloatValueJvmConverter :
+public open class FloatValueJvmConverter :
     ProtobufTypeMapper<FloatValue, com.google.protobuf.FloatValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.FloatValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.FloatValue> =
       com.google.protobuf.FloatValue.parser()
+
+  override val default: com.google.protobuf.FloatValue =
+      com.google.protobuf.FloatValue.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.FloatValue): FloatValue = FloatValue(
   	`value` = obj.getValue(),
@@ -47,12 +53,15 @@ public object FloatValueJvmConverter :
   }
 }
 
-public object Int64ValueJvmConverter :
+public open class Int64ValueJvmConverter :
     ProtobufTypeMapper<Int64Value, com.google.protobuf.Int64Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Int64Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Int64Value> =
       com.google.protobuf.Int64Value.parser()
+
+  override val default: com.google.protobuf.Int64Value =
+      com.google.protobuf.Int64Value.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.Int64Value): Int64Value = Int64Value(
   	`value` = obj.getValue(),
@@ -65,12 +74,15 @@ public object Int64ValueJvmConverter :
   }
 }
 
-public object UInt64ValueJvmConverter :
+public open class UInt64ValueJvmConverter :
     ProtobufTypeMapper<UInt64Value, com.google.protobuf.UInt64Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.UInt64Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.UInt64Value> =
       com.google.protobuf.UInt64Value.parser()
+
+  override val default: com.google.protobuf.UInt64Value =
+      com.google.protobuf.UInt64Value.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.UInt64Value): UInt64Value = UInt64Value(
   	`value` = obj.getValue().asKotlinType,
@@ -83,12 +95,15 @@ public object UInt64ValueJvmConverter :
   }
 }
 
-public object Int32ValueJvmConverter :
+public open class Int32ValueJvmConverter :
     ProtobufTypeMapper<Int32Value, com.google.protobuf.Int32Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Int32Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Int32Value> =
       com.google.protobuf.Int32Value.parser()
+
+  override val default: com.google.protobuf.Int32Value =
+      com.google.protobuf.Int32Value.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.Int32Value): Int32Value = Int32Value(
   	`value` = obj.getValue(),
@@ -101,12 +116,15 @@ public object Int32ValueJvmConverter :
   }
 }
 
-public object UInt32ValueJvmConverter :
+public open class UInt32ValueJvmConverter :
     ProtobufTypeMapper<UInt32Value, com.google.protobuf.UInt32Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.UInt32Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.UInt32Value> =
       com.google.protobuf.UInt32Value.parser()
+
+  override val default: com.google.protobuf.UInt32Value =
+      com.google.protobuf.UInt32Value.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.UInt32Value): UInt32Value = UInt32Value(
   	`value` = obj.getValue().asKotlinType,
@@ -119,11 +137,15 @@ public object UInt32ValueJvmConverter :
   }
 }
 
-public object BoolValueJvmConverter : ProtobufTypeMapper<BoolValue, com.google.protobuf.BoolValue> {
+public open class BoolValueJvmConverter :
+    ProtobufTypeMapper<BoolValue, com.google.protobuf.BoolValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.BoolValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.BoolValue> =
       com.google.protobuf.BoolValue.parser()
+
+  override val default: com.google.protobuf.BoolValue =
+      com.google.protobuf.BoolValue.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.BoolValue): BoolValue = BoolValue(
   	`value` = obj.getValue(),
@@ -136,12 +158,15 @@ public object BoolValueJvmConverter : ProtobufTypeMapper<BoolValue, com.google.p
   }
 }
 
-public object StringValueJvmConverter :
+public open class StringValueJvmConverter :
     ProtobufTypeMapper<StringValue, com.google.protobuf.StringValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.StringValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.StringValue> =
       com.google.protobuf.StringValue.parser()
+
+  override val default: com.google.protobuf.StringValue =
+      com.google.protobuf.StringValue.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.StringValue): StringValue = StringValue(
   	`value` = obj.getValue(),
@@ -154,12 +179,15 @@ public object StringValueJvmConverter :
   }
 }
 
-public object BytesValueJvmConverter :
+public open class BytesValueJvmConverter :
     ProtobufTypeMapper<BytesValue, com.google.protobuf.BytesValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.BytesValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.BytesValue> =
       com.google.protobuf.BytesValue.parser()
+
+  override val default: com.google.protobuf.BytesValue =
+      com.google.protobuf.BytesValue.getDefaultInstance()
 
   override fun convert(obj: com.google.protobuf.BytesValue): BytesValue = BytesValue(
   	`value` = obj.getValue().toByteArray(),

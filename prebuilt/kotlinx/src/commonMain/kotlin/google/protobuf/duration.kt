@@ -46,7 +46,7 @@ public data class Duration(
 
     override fun serialize(encoder: Encoder, `value`: Duration) {
       if (encoder is ProtobufConverterEncoder) {
-        encoder.encodeValue(DurationConverter.serialize(value))
+        encoder.serialize(DurationConverter, value)
         return
       }
       delegator.serialize(encoder, value)
@@ -54,7 +54,7 @@ public data class Duration(
 
     override fun deserialize(decoder: Decoder): Duration {
       if (decoder is ProtobufConverterDecoder) {
-        return DurationConverter.deserialize(decoder.decodeByteArray())
+        return decoder.deserialize(DurationConverter)
       }
       return delegator.deserialize(decoder)
     }
