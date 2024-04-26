@@ -49,7 +49,6 @@ configure(allprojects.filterNot {
                     val protobufVersion: String by project
 
                     implementation("com.google.protobuf:protobuf-java:$protobufVersion")
-                    implementation("com.google.protobuf:protobuf-java-util:$protobufVersion")
                 }
             }
         }

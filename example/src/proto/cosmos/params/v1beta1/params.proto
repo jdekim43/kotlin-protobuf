@@ -1,0 +1,19 @@
+syntax = "proto3";
+package cosmos.params.v1beta1;
+
+option go_package            = "cosmossdk.io/x/params/types/proposal";
+
+// ParameterChangeProposal defines a proposal to change one or more parameters.
+message ParameterChangeProposal {
+  string               title       = 1;
+  string               description = 2;
+  repeated ParamChange changes     = 3;
+}
+
+// ParamChange defines an individual parameter change, for use in
+// ParameterChangeProposal.
+message ParamChange {
+  string subspace = 1;
+  string key      = 2;
+  string value    = 3;
+}

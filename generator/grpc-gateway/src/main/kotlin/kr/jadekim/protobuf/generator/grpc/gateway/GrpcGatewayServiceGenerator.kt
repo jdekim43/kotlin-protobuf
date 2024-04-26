@@ -2,10 +2,7 @@ package kr.jadekim.protobuf.generator.grpc.gateway
 
 import com.google.api.AnnotationsProto
 import com.google.api.HttpRule
-import com.google.protobuf.DescriptorProtos
-import com.google.protobuf.DescriptorProtos.FileDescriptorProto
 import com.google.protobuf.Descriptors
-import com.google.protobuf.ExtensionRegistry
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.ktor.client.*
@@ -15,12 +12,20 @@ import kr.jadekim.protobuf.generator.grpc.gateway.util.extension.grpcGatewayClie
 import kr.jadekim.protobuf.generator.grpc.gateway.util.extension.grpcGatewayTypeName
 import kr.jadekim.protobuf.generator.grpc.gateway.util.extension.interfaceTypeName
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
-import kr.jadekim.protobuf.generator.util.extention.outputTypeName
-import kr.jadekim.protobuf.generator.util.extention.typeName
+import kr.jadekim.protobuf.generator.util.extention.*
 import kr.jadekim.protobuf.grpc.gateway.GrpcGatewayService
 import net.pearx.kasechange.toCamelCase
-import net.pearx.kasechange.toLowerSpaceCase
-import java.io.FileInputStream
+
+sealed class HttpRequestMeta(val method: HttpMethod, val path: String, val hasBody: Boolean) {
+    class GET(path: String) : HttpRequestMeta(HttpMethod.Get, path, false)
+    class PUT(path: String) : HttpRequestMeta(HttpMethod.Put, path, true)
+    class POST(path: String) : HttpRequestMeta(HttpMethod.Post, path, true)
+    class DELETE(path: String) : HttpRequestMeta(HttpMethod.Delete, path, false)
+    class PATCH(path: String) : HttpRequestMeta(HttpMethod.Patch, path, true)
+    class Custom(method: HttpMethod, path: String, hasBody: Boolean) : HttpRequestMeta(method, path, hasBody)
+
+    val memberName = MemberName("io.ktor.client.request", method.value.lowercase())
+}
 
 class GrpcGatewayServiceGenerator {
 
@@ -91,40 +96,83 @@ class GrpcGatewayServiceGenerator {
         }
 
         val rule = options.getExtension(AnnotationsProto.http) ?: return notSupport("Not defined http option")
-        val (methodName, pathRaw) = rule.toKtorMethodName()
-            ?: return notSupport("Not supported method (${options.hasExtension(AnnotationsProto.http)} ${options} ${rule.patternCase})")
+        val requestMeta = rule.toHttpRequestMeta()
+            ?: return notSupport("Not supported method (${rule.patternCase})")
 
-        val (path, pathParameterNames) = polishPath(pathRaw)
-        functionSpec.addStatement(
-            "val pathParameterNames = listOf<String>(%L)",
-            pathParameterNames.joinToString(",") { "\"$it\"" },
-        )
-        for (parameterName in pathParameterNames) {
-            functionSpec.addStatement("val %N = request.%N", parameterName, parameterName.toCamelCase(ProtobufWordSplitter))
+        val inputFields = inputType.flattenFields()
+        val (path, pathParameterNames) = polishPath(requestMeta.path)
+        val queryParameters = if (requestMeta.hasBody) emptyList() else {
+            inputFields.filter { it.flattenName() !in pathParameterNames }
+        }
+        val bodyExcludedFields = pathParameterNames + queryParameters.flattenNames()
+
+        functionSpec.appendVariables(pathParameterNames, bodyExcludedFields)
+        functionSpec.addStatement("return http.%M {", requestMeta.memberName)
+        functionSpec.appendUrlOption(path, queryParameters)
+
+        if (requestMeta.hasBody) {
+            functionSpec.appendBody()
         }
 
-        functionSpec.addStatement("return http.%M {", MemberName("io.ktor.client.request", methodName))
-        functionSpec.addStatement("\turl {")
-        functionSpec.addStatement("\t\t%M(%P)", MemberName("io.ktor.http", "path"), path)
-        functionSpec.addStatement("\t}")
-
-        functionSpec.addStatement(
-            "\tattributes.put(%M, pathParameterNames)",
-            MemberName("kr.jadekim.protobuf.grpc.gateway", "PATH_PARAMETER_NAMES")
-        )
+        functionSpec.appendAttributes()
         functionSpec.addStatement("}.%M()", MemberName("io.ktor.client.call", "body"))
 
         spec.addFunction(functionSpec.build())
     }
 
-    private fun HttpRule.toKtorMethodName(): Pair<String, String>? = when (patternCase) {
-        HttpRule.PatternCase.GET -> "get" to get
-        HttpRule.PatternCase.PUT -> "put" to put
-        HttpRule.PatternCase.POST -> "post" to post
-        HttpRule.PatternCase.DELETE -> "delete" to delete
-        HttpRule.PatternCase.PATCH -> "patch" to patch
+    private fun FunSpec.Builder.appendVariables(pathParameterNames: List<String>, bodyExcludedFields: List<String>) {
+        for (parameterName in pathParameterNames) {
+            addStatement(
+                "val %N = request.%N",
+                parameterName,
+                parameterName.toCamelCase(ProtobufWordSplitter)
+            )
+        }
+
+        addStatement(
+            "val bodyExcludedFields = listOf<String>(%L)",
+            bodyExcludedFields.joinToString(",") { "\"$it\"" },
+        )
+    }
+
+    private fun FunSpec.Builder.appendUrlOption(
+        path: String,
+        queryParameters: List<List<Descriptors.FieldDescriptor>>
+    ) {
+        addStatement("\turl {")
+        addStatement("\t\t%M(%P)", MemberName("io.ktor.http", "path"), path)
+
+        for (parameter in queryParameters) {
+            addStatement(
+                "\t\t%M(%S, request.%L)",
+                MemberName("io.ktor.client.request", "parameter"),
+                parameter.flattenName(),
+                parameter.flattenOutputTypeName(),
+            )
+        }
+
+        addStatement("\t}")
+    }
+
+    private fun FunSpec.Builder.appendBody() {
+        addStatement("%M(request)", MemberName("io.ktor.client.request", "setBody"))
+    }
+
+    private fun FunSpec.Builder.appendAttributes() {
+        addStatement(
+            "\tattributes.put(%M, bodyExcludedFields)",
+            MemberName("kr.jadekim.protobuf.grpc.gateway.ktor", "BODY_EXCLUDE_FIELDS")
+        )
+    }
+
+    private fun HttpRule.toHttpRequestMeta(): HttpRequestMeta? = when (patternCase) {
+        HttpRule.PatternCase.GET -> HttpRequestMeta.GET(get)
+        HttpRule.PatternCase.PUT -> HttpRequestMeta.PUT(put)
+        HttpRule.PatternCase.POST -> HttpRequestMeta.POST(post)
+        HttpRule.PatternCase.DELETE -> HttpRequestMeta.DELETE(delete)
+        HttpRule.PatternCase.PATCH -> HttpRequestMeta.PATCH(patch)
         HttpRule.PatternCase.CUSTOM -> if (HttpMethod.parse(custom.kind) in HttpMethod.DefaultMethods) {
-            custom.kind.toLowerSpaceCase() to custom.path
+            HttpRequestMeta.Custom(HttpMethod.parse(custom.kind), custom.path, false)
         } else null
 
         HttpRule.PatternCase.PATTERN_NOT_SET, null -> null
@@ -150,41 +198,4 @@ class GrpcGatewayServiceGenerator {
 
         return path to parameterNames
     }
-}
-
-fun loadProto(path: String, extensionRegistry: ExtensionRegistry = ExtensionRegistry.getEmptyRegistry()): FileDescriptorProto = FileInputStream(path).use {
-    DescriptorProtos.FileDescriptorSet.parseFrom(it).fileList.first()
-}
-
-fun main() {
-//    val httpProto = loadProto("/Users/jade/Work/my/kotlinx-protobuf/example/build/extracted-include-protos/main/google/api/http.proto")
-//    val descriptorProto = loadProto("/Users/jade/Work/my/kotlinx-protobuf/example/build/extracted-include-protos/main/google/protobuf/descriptor.proto")
-//    val annotationProto = loadProto("/Users/jade/Work/my/kotlinx-protobuf/example/build/extracted-include-protos/main/google/api/annotations.proto")
-
-//    val httpDescriptor = Descriptors.FileDescriptor.buildFrom(httpProto, emptyArray())
-//    val descriptorDescriptor = Descriptors.FileDescriptor.buildFrom(descriptorProto, emptyArray())
-//    val annotationDescriptor = Descriptors.FileDescriptor.buildFrom(annotationProto, arrayOf(httpDescriptor, descriptorDescriptor))
-
-//    val httpExtensionField = annotationDescriptor.findExtensionByName("http")
-//    val extensionRegistry = ExtensionRegistry.newInstance().apply {
-//        add(httpExtensionField)
-//    }
-
-    val testProto = loadProto("/Users/jade/Work/my/kotlinx-protobuf/example/src/proto/protobuf/example/test.proto")
-//    val testDescriptor = Descriptors.FileDescriptor.buildFrom(testProto, arrayOf(annotationDescriptor))
-
-
-//    val method = testDescriptor.services.find { it.name == "Messaging" }
-//        ?.findMethodByName("GetMessage")
-
-//    if (method == null) {
-//        println("Not found")
-//        return
-//    }
-
-//    println(method.name)
-//    println(method.options.unknownFields.asMap())
-//    println(method.options.hasField(httpExtensionField))
-
-    println("do")
 }

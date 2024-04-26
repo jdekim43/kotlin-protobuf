@@ -8,6 +8,7 @@ import kr.jadekim.protobuf.annotation.GeneratorVersion
 import kr.jadekim.protobuf.annotation.ProtobufIndex
 import kr.jadekim.protobuf.generator.BUILD_VERSION
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
+import net.pearx.kasechange.toCamelCase
 import net.pearx.kasechange.toPascalCase
 import kotlin.reflect.KClass
 
@@ -110,6 +111,33 @@ val Descriptors.OneofDescriptor.outputTypeName: ClassName
 
 val Descriptors.ServiceDescriptor.outputTypeName: ClassName
     get() = (this as Descriptors.GenericDescriptor).outputTypeName.peerClass(name.toPascalCase(ProtobufWordSplitter))
+
+fun Descriptors.Descriptor.flattenFields(): List<List<Descriptors.FieldDescriptor>> = realFields.flatMap { field ->
+    if (field.type == Descriptors.FieldDescriptor.Type.MESSAGE) {
+        field.messageType.flattenFields().map { listOf(field) + it }
+    } else {
+        listOf(listOf(field))
+    }
+}
+
+fun List<Descriptors.FieldDescriptor>.flattenName(): String = joinToString(".") { it.name }
+
+fun List<List<Descriptors.FieldDescriptor>>.flattenNames(): List<String> = map { it.flattenName() }
+
+fun List<Descriptors.FieldDescriptor>.flattenOutputTypeName(): String = buildString {
+        var previous: Descriptors.FieldDescriptor? = null
+        for (field in this@flattenOutputTypeName) {
+            if (previous != null) {
+                if (previous.isNullable) append('?')
+                append('.')
+            }
+            append(field.name.toCamelCase(ProtobufWordSplitter))
+
+            previous = field
+        }
+    }
+
+fun List<List<Descriptors.FieldDescriptor>>.flattenOutputTypeNames(): List<String> = map { it.flattenOutputTypeName() }
 
 val KClass<*>.typeName: ClassName
     get() = asTypeName()

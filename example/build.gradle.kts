@@ -29,6 +29,9 @@ dependencies {
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
 
     implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("ch.qos.logback:logback-classic:1.3.9")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
 }
@@ -82,11 +85,11 @@ protobuf {
 
             it.plugins {
                 id("kotlin-protobuf-kotlinx") {
-                    option("kotlin-protobuf.type_registry=protobuf.example.TypeRegistry")
-                    option("kotlin-protobuf.serializers_module=protobuf.example.SerializersModules")
+                    option("kotlin-protobuf.type_registry=TypeRegistry")
+                    option("kotlin-protobuf.serializers_module=SerializersModules")
                 }
                 id("kotlin-protobuf-converter-jvm") {
-                    option("kotlin-protobuf.jvm_type_registry=protobuf.example.JvmTypeRegistry")
+                    option("kotlin-protobuf.jvm_type_registry=JvmTypeRegistry")
                 }
 
                 id("grpc")

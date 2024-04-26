@@ -1,6 +1,3 @@
-import com.google.protobuf.TypeRegistry
-import com.google.protobuf.util.JsonFormat
-import google.protobuf.Any
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToByteArray
@@ -8,12 +5,11 @@ import kotlinx.serialization.encodeToString
 import kr.jadekim.protobuf.example.Example
 import kr.jadekim.protobuf.kotlinx.ProtobufFormat
 import kr.jadekim.protobuf.kotlinx.ProtobufJsonFormat
-import protobuf.example.JvmTypeRegistry
 import protobuf.example.SimpleMessage
 import protobuf.example.SimpleMessageConverter
+import protobuf.example.parse
 import protobuf.example.toAny
 import java.util.*
-import protobuf.example.parse
 
 fun main() {
     val message = SimpleMessage(

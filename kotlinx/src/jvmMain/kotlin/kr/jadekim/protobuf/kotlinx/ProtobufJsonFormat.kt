@@ -10,7 +10,7 @@ import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 
 class ProtobufJsonFormat(
-    types: Map<String, Descriptors.Descriptor>,
+    types: Map<String, Descriptors.Descriptor> = emptyMap(),
     override val serializersModule: SerializersModule = EmptySerializersModule(),
 ) : StringFormat {
 
