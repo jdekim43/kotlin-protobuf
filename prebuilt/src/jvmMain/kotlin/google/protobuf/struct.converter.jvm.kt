@@ -1,10 +1,11 @@
 // Transform from google/protobuf/struct.proto
-@file:GeneratorVersion(version = "0.4.0")
+@file:GeneratorVersion(version = "0.4.1")
 
 package google.protobuf
 
 import com.google.protobuf.Descriptors
 import com.google.protobuf.Parser
+import java.lang.IllegalArgumentException
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
@@ -35,13 +36,13 @@ public open class ValueJvmConverter : ProtobufTypeMapper<Value, com.google.proto
 
   override fun convert(obj: com.google.protobuf.Value): Value = Value(
   	kind = mapOf(
-  1 to { Value.KindOneOf.NullValue(NullValue.forNumber(obj.getNullValue().number)) },
-  2 to { Value.KindOneOf.NumberValue(obj.getNumberValue()) },
-  3 to { Value.KindOneOf.StringValue(obj.getStringValue()) },
-  4 to { Value.KindOneOf.BoolValue(obj.getBoolValue()) },
-  5 to { Value.KindOneOf.StructValue(StructConverter.convert(obj.getStructValue())) },
-  6 to { Value.KindOneOf.ListValue(ListValueConverter.convert(obj.getListValue())) },
-  ).getValue(obj.kindCase.number)(),
+  		1 to { Value.KindOneOf.NullValue(NullValue.forNumber(obj.getNullValue().number)) },
+  		2 to { Value.KindOneOf.NumberValue(obj.getNumberValue()) },
+  		3 to { Value.KindOneOf.StringValue(obj.getStringValue()) },
+  		4 to { Value.KindOneOf.BoolValue(obj.getBoolValue()) },
+  		5 to { Value.KindOneOf.StructValue(StructConverter.convert(obj.getStructValue())) },
+  		6 to { Value.KindOneOf.ListValue(ListValueConverter.convert(obj.getListValue())) },
+  	).getValue(obj.kindCase.number)(),
   )
 
   override fun convert(obj: Value): com.google.protobuf.Value {
@@ -56,6 +57,7 @@ public open class ValueJvmConverter : ProtobufTypeMapper<Value, com.google.proto
           builder.setStructValue(StructConverter.convert(obj.kind.value))
       is Value.KindOneOf.ListValue ->
           builder.setListValue(ListValueConverter.convert(obj.kind.value))
+      else -> throw IllegalArgumentException()
     }
     return builder.build()
   }

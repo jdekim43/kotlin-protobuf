@@ -118,11 +118,11 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
         for (field in fields) {
             val fieldTypeName = oneOfTypeName.nestedClass(field.outputOneOfItemTypeNameString)
             val (fieldCode, fieldArguments) = field.getCodeForToKotlin()
-            code.appendLine("${field.number} to { %T($fieldCode) },")
+            code.appendLine("\t\t${field.number} to { %T($fieldCode) },")
             arguments.add(fieldTypeName)
             arguments.addAll(fieldArguments)
         }
-        code.append(").getValue(obj.%N.number)()")
+        code.append("\t).getValue(obj.%N.number)()")
         arguments.add(outputVariableNameString + "Case")
 
         return code.toString() to arguments.toTypedArray()
@@ -264,6 +264,7 @@ class MessageMapperGenerator : MapperGenerator<Descriptors.Descriptor> {
                 )
             }
 
+            toKotlinTypeFunction.addStatement("else -> throw %T()", IllegalArgumentException::class)
             toKotlinTypeFunction.endControlFlow()
         }
 

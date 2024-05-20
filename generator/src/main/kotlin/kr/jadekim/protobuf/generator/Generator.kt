@@ -1,6 +1,5 @@
 package kr.jadekim.protobuf.generator
 
-import com.google.api.AnnotationsProto
 import com.google.protobuf.Descriptors
 import com.google.protobuf.ExtensionRegistry
 import com.google.protobuf.compiler.PluginProtos
@@ -8,21 +7,6 @@ import kr.jadekim.protobuf.generator.file.FileGenerator
 import kr.jadekim.protobuf.generator.util.extention.toResponse
 import java.io.IOException
 import java.io.InputStream
-import java.io.PipedInputStream
-import java.io.PipedOutputStream
-
-val PREBUILT_PROTO_FILES = listOf(
-    "google/protobuf/any.proto",
-    "google/protobuf/api.proto",
-    "google/protobuf/duration.proto",
-    "google/protobuf/empty.proto",
-    "google/protobuf/field_mask.proto",
-    "google/protobuf/source_context.proto",
-    "google/protobuf/struct.proto",
-    "google/protobuf/timestamp.proto",
-    "google/protobuf/type.proto",
-    "google/protobuf/wrappers.proto",
-)
 
 abstract class Generator {
 
@@ -69,19 +53,13 @@ abstract class Generator {
         val outputBuilder = PluginProtos.CodeGeneratorResponse.newBuilder()
             .setSupportedFeatures(PluginProtos.CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL_VALUE.toLong())
 
-        descriptors
-            .filter {
-                if (PREBUILT_PROTO_FILES.contains(it.key)) {
-                    if (!System.getProperty("kotlin-protobuf.include_prebuilt", "false").equals("true", true)) {
-                        return@filter false
-                    }
-                }
-
-                true
-            }
-            .flatMap { (_, descriptor) -> generators.map { it.generate(descriptor) } }
+        request.fileToGenerateList
+            .asSequence()
+            .map { descriptors[it] ?: throw IllegalStateException("Not found descriptor $it") }
+            .flatMap { descriptor -> generators.map { it.generate(descriptor) } }
             .filter { it.members.isNotEmpty() }
             .map { it.toResponse() }
+            .toList()
             .forEach(outputBuilder::addFile)
 
         onGenerate(request, outputBuilder)

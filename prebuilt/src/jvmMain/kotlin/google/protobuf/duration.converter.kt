@@ -1,5 +1,5 @@
 // Transform from google/protobuf/duration.proto
-@file:GeneratorVersion(version = "0.4.0")
+@file:GeneratorVersion(version = "0.4.1")
 
 package google.protobuf
 

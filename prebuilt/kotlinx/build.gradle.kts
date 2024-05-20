@@ -28,7 +28,6 @@ protobuf {
                     outputSubDir = "commonMain/kotlin"
 
                     option("kotlin-protobuf.prefix=type.googleapis.com")
-                    option("kotlin-protobuf.include_prebuilt=true")
                 }
             }
         }

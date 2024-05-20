@@ -22,6 +22,7 @@ Protocol Buffer generator for kotlin multiplatform or single platform.
 * Gradle Plugin
 * Utilities
   * ProtobufMessage.toAny : optimize toAny usage
+* Package based TypeRegistry
 * Add option infos of protobuf to generated files.
 * Improve kotlin type mapping
   * google.protobuf.Any to kotlin.Any
@@ -200,8 +201,10 @@ kotlin {
 ```
 
 ### Options
-* Include prebuilt files : `kotlin-protobuf.include_prebuilt=true`
 * Set prefix to type url : `kotlin-protobuf.prefix=[some_prefix]`
+* Generate TypeRegistry : `kotlin-protobuf.type_registry=[output class]`
+* Generate JvmTypeRegistry : `kotlin-protobuf.jvm_type_registry=[output class]`
+* Generate Kotlinx SerializersModules : `kotlin-protobuf.serializers_modules=[output class]`
 
 #### Note
 Option value can't have ','.
@@ -215,9 +218,6 @@ protobuf {
       it.plugins {
         id(...) {
           option("[option string]")
-          
-          //example
-          //option("kotlin-protobuf.include_prebuilt=true")
         }
       }
     }

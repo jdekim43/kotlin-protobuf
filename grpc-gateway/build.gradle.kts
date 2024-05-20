@@ -9,7 +9,7 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
 
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                api("io.ktor:ktor-client-core:$ktorVersion")
             }
         }
     }

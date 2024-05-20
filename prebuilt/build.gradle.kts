@@ -6,8 +6,6 @@ plugins {
     `java-library`
 }
 
-val protoFiles = File(projectDir, "src/proto")
-
 allprojects {
     apply {
         plugin("kotlin-multiplatform")
@@ -47,7 +45,7 @@ allprojects {
     sourceSets {
         main {
             proto {
-                srcDir(protoFiles)
+                srcDir(File(projectDir, "src/proto"))
             }
         }
     }
@@ -87,13 +85,11 @@ allprojects {
                         outputSubDir = "commonMain/kotlin"
 
                         option("kotlin-protobuf.prefix=type.googleapis.com")
-                        option("kotlin-protobuf.include_prebuilt=true")
                     }
                     id("kotlin-protobuf-converter-multiplatform-jvm") {
                         outputSubDir = "jvmMain/kotlin"
 
                         option("kotlin-protobuf.prefix=type.googleapis.com")
-                        option("kotlin-protobuf.include_prebuilt=true")
                     }
                 }
             }
@@ -146,7 +142,6 @@ protobuf {
                     outputSubDir = "commonMain/kotlin"
 
                     option("kotlin-protobuf.prefix=type.googleapis.com")
-                    option("kotlin-protobuf.include_prebuilt=true")
                 }
             }
         }
