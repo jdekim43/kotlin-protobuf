@@ -122,10 +122,11 @@ class GrpcGatewayServiceGenerator {
 
     private fun FunSpec.Builder.appendVariables(pathParameterNames: List<String>, bodyExcludedFields: List<String>) {
         for (parameterName in pathParameterNames) {
+            val parameterNames = parameterName.split('.')
             addStatement(
-                "val %N = request.%N",
-                parameterName,
-                parameterName.toCamelCase(ProtobufWordSplitter)
+                "val %N = request" + ".%N".repeat(parameterNames.size),
+                parameterName.replace('.', '_'),
+                *parameterNames.map { it.toCamelCase(ProtobufWordSplitter) }.toTypedArray()
             )
         }
 

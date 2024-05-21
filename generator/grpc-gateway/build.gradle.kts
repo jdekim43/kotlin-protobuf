@@ -19,7 +19,7 @@ dependencies {
 sourceSets {
     main {
         proto {
-//            srcDir(File(projectDir, "src/proto"))
+            srcDir(File(projectDir, "src/proto"))
         }
     }
 }
