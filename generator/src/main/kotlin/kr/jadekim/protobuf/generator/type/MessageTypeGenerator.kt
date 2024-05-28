@@ -84,7 +84,11 @@ class MessageTypeGenerator(
         realOneofs.forEach {
             val typeName = it.addTo(spec, imports)
             val fieldName = it.outputVariableNameString
-            constructor.addParameter(ParameterSpec.builder(fieldName, typeName).build())
+            constructor.addParameter(
+                ParameterSpec.builder(fieldName, typeName)
+                    .defaultValue("%T()", it.outputTypeName.nestedClass(it.fields.first().outputOneOfItemTypeNameString))
+                    .build()
+            )
             spec.addProperty(PropertySpec.builder(fieldName, typeName).initializer(fieldName).build())
         }
     }
@@ -117,7 +121,8 @@ class MessageTypeGenerator(
         oneOfSpec.addModifiers(KModifier.SEALED)
 
         for (field in fields) {
-            val itemSpec = TypeSpec.valueClassBuilder(field.outputOneOfItemTypeNameString)
+            val itemSpec = TypeSpec.classBuilder(field.outputOneOfItemTypeNameString)
+                .addModifiers(KModifier.VALUE)
             val itemConstructor = FunSpec.constructorBuilder()
 
             itemSpec.addAnnotation(JvmInline::class)

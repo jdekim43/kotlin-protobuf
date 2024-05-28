@@ -106,6 +106,7 @@ class GrpcGatewayServiceGenerator {
         }
         val bodyExcludedFields = pathParameterNames + queryParameters.flattenNames()
 
+        //todo: resolve path parameter name to field descriptors
         functionSpec.appendVariables(pathParameterNames, bodyExcludedFields)
         functionSpec.addStatement("return http.%M {", requestMeta.memberName)
         functionSpec.appendUrlOption(path, queryParameters)
@@ -121,14 +122,15 @@ class GrpcGatewayServiceGenerator {
     }
 
     private fun FunSpec.Builder.appendVariables(pathParameterNames: List<String>, bodyExcludedFields: List<String>) {
-        for (parameterName in pathParameterNames) {
-            val parameterNames = parameterName.split('.')
-            addStatement(
-                "val %N = request" + ".%N".repeat(parameterNames.size),
-                parameterName.replace('.', '_'),
-                *parameterNames.map { it.toCamelCase(ProtobufWordSplitter) }.toTypedArray()
-            )
-        }
+//        for (parameterName in pathParameterNames) {
+//            val names = parameterName.split('.')
+//            val camelizedNames = names.map { it.toCamelCase(ProtobufWordSplitter) }
+//            addStatement(
+//                "val %N = request" + "?.%N".repeat(names.size),
+//                parameterName.replace('.', '_'),
+//                *camelizedNames.toTypedArray(),
+//            )
+//        }
 
         addStatement(
             "val bodyExcludedFields = listOf<String>(%L)",
@@ -193,7 +195,9 @@ class GrpcGatewayServiceGenerator {
                 parameterName = parameterName.substring(0, delimiterIndex)
             }
 
-            path = path.replace(parameter.value, "\${$parameterName}")
+            val parameterVariable = "request." + parameterName.split('.')
+                .joinToString("?.") { it.toCamelCase(ProtobufWordSplitter) }
+            path = path.replace(parameter.value, "\${$parameterVariable}")
             parameterNames += parameterName
         }
 

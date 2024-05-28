@@ -18,6 +18,7 @@ kotlin {
             kotlin.srcDir(File(buildDir, "generated/source/proto/main/kotlin-protobuf-kotlinx"))
             kotlin.srcDir(File(buildDir, "generated/source/proto/main/kotlin-protobuf-converter-multiplatform"))
             kotlin.srcDir(File(buildDir, "generated/source/proto/main/kotlin-protobuf-grpc-multiplatform"))
+            kotlin.srcDir(File(buildDir, "generated/source/proto/main/kotlin-protobuf-grpc-gateway"))
 
             dependencies {
                 val kotlinxSerializationVersion: String by project
@@ -28,6 +29,7 @@ kotlin {
                 implementation(project(fullPath(":prebuilt:kotlinx")))
                 implementation(project(fullPath(":kotlinx")))
                 implementation(project(fullPath(":grpc")))
+                implementation(project(fullPath(":grpc-gateway")))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
             }
         }
@@ -101,6 +103,11 @@ protobuf {
             val targetProject = project(fullPath(":generator:grpc:multiplatform:jvm"))
             path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
         }
+
+        id("kotlin-protobuf-grpc-gateway") {
+            val targetProject = project(fullPath(":generator:grpc-gateway"))
+            path = "${targetProject.buildDir.absolutePath}/libs/${targetProject.name}-${targetProject.version}-jdk8.jar"
+        }
     }
 
     generateProtoTasks {
@@ -111,15 +118,23 @@ protobuf {
             it.dependsOn(fullPath(":generator:converter:multiplatform:jvm") + ":shadowJar")
             it.dependsOn(fullPath(":generator:grpc:multiplatform") + ":shadowJar")
             it.dependsOn(fullPath(":generator:grpc:multiplatform:jvm") + ":shadowJar")
+            it.dependsOn(fullPath(":generator:grpc-gateway") + ":shadowJar")
 
             it.plugins {
-                id("kotlin-protobuf-kotlinx")
+                id("kotlin-protobuf-kotlinx") {
+                    option("kotlin-protobuf.type_registry=TypeRegistry")
+                    option("kotlin-protobuf.serializers_module=SerializersModules")
+                }
                 id("kotlin-protobuf-converter-multiplatform")
-                id("kotlin-protobuf-converter-multiplatform-jvm")
+                id("kotlin-protobuf-converter-multiplatform-jvm") {
+                    option("kotlin-protobuf.jvm_type_registry=JvmTypeRegistry")
+                }
 
                 id("grpc")
                 id("kotlin-protobuf-grpc-multiplatform")
                 id("kotlin-protobuf-grpc-multiplatform-jvm")
+
+                id("kotlin-protobuf-grpc-gateway")
             }
         }
     }

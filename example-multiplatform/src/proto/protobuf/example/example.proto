@@ -83,6 +83,7 @@ message ExampleMessage {
   ExampleEnum test_enum = 29;
   NestedEnum test_nested_enum = 30;
   Nested test_nested = 31;
+  optional Nested test_nested_optional = 32;
 }
 
 message Empty {

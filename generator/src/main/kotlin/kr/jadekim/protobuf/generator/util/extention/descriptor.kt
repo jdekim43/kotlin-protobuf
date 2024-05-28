@@ -42,4 +42,4 @@ val Descriptors.FieldDescriptor.isOneOfField: Boolean
     get() = containingOneof != null
 
 val Descriptors.FieldDescriptor.isNullable: Boolean
-    get() = hasPresence() && !isOneOfField
+    get() = hasPresence() && containingOneof != null && containingOneof.isSynthetic
