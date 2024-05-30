@@ -7,13 +7,14 @@ import com.squareup.kotlinpoet.TypeSpec
 import kr.jadekim.protobuf.generator.ImportName
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
+import kr.jadekim.protobuf.type.ProtobufService
 import net.pearx.kasechange.toCamelCase
 
 class ServiceTypeGenerator : TypeGenerator<Descriptors.ServiceDescriptor> {
 
     override fun generate(descriptor: Descriptors.ServiceDescriptor): Pair<TypeSpec, Set<ImportName>> {
         val name = descriptor.outputTypeName
-        val spec = TypeSpec.interfaceBuilder(name)
+        val spec = TypeSpec.interfaceBuilder(name).addSuperinterface(ProtobufService::class)
         val imports = mutableSetOf<ImportName>()
 
         for (method in descriptor.methods) {

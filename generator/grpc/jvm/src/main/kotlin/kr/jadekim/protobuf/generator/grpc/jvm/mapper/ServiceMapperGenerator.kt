@@ -21,7 +21,7 @@ import kr.jadekim.protobuf.generator.type.applyTo
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
-import kr.jadekim.protobuf.grpc.ClientOption
+import kr.jadekim.protobuf.grpc.GrpcClientOption
 import net.pearx.kasechange.toCamelCase
 import net.pearx.kasechange.toPascalCase
 import kotlin.coroutines.CoroutineContext
@@ -145,11 +145,11 @@ class ServiceMapperGenerator(
             .addSuperinterface(interfaceTypeName)
             .primaryConstructor(
                 FunSpec.constructorBuilder()
-                    .addParameter("option", ClientOption::class)
+                    .addParameter("option", GrpcClientOption::class)
                     .build()
             )
             .addProperty(
-                PropertySpec.builder("option", ClientOption::class)
+                PropertySpec.builder("option", GrpcClientOption::class)
                     .addModifiers(KModifier.PRIVATE)
                     .initializer("option")
                     .build()
@@ -160,7 +160,7 @@ class ServiceMapperGenerator(
                     .addParameter("channel", Channel::class)
                     .addParameter("callOptions", CallOptions::class)
                     .returns(clientTypeName)
-                    .addStatement("return %T(%T(channel, callOptions))", clientTypeName, ClientOption::class)
+                    .addStatement("return %T(%T(channel, callOptions))", clientTypeName, GrpcClientOption::class)
                     .build()
             )
 

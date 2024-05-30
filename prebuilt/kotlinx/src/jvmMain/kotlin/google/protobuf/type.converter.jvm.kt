@@ -1,5 +1,5 @@
 // Transform from google/protobuf/type.proto
-@file:GeneratorVersion(version = "0.4.1")
+@file:GeneratorVersion(version = "0.5.1")
 
 package google.protobuf
 
@@ -31,10 +31,7 @@ public open class TypeJvmConverter : ProtobufTypeMapper<Type, com.google.protobu
     builder.addAllFields(obj.fields.map { FieldConverter.convert(it) })
     builder.addAllOneofs(obj.oneofs.map { it })
     builder.addAllOptions(obj.options.map { OptionConverter.convert(it) })
-    val value4 = obj.sourceContext
-    if (value4 != null) {
-      builder.setSourceContext(SourceContextConverter.convert(value4))
-    }
+    builder.setSourceContext(SourceContextConverter.convert(obj.sourceContext))
     builder.setSyntax(com.google.protobuf.Syntax.forNumber(obj.syntax.number))
     builder.setEdition(obj.edition)
     return builder.build()
@@ -98,10 +95,7 @@ public open class EnumJvmConverter : ProtobufTypeMapper<Enum, com.google.protobu
     builder.setName(obj.name)
     builder.addAllEnumvalue(obj.enumvalue.map { EnumValueConverter.convert(it) })
     builder.addAllOptions(obj.options.map { OptionConverter.convert(it) })
-    val value3 = obj.sourceContext
-    if (value3 != null) {
-      builder.setSourceContext(SourceContextConverter.convert(value3))
-    }
+    builder.setSourceContext(SourceContextConverter.convert(obj.sourceContext))
     builder.setSyntax(com.google.protobuf.Syntax.forNumber(obj.syntax.number))
     builder.setEdition(obj.edition)
     return builder.build()
@@ -148,10 +142,7 @@ public open class OptionJvmConverter : ProtobufTypeMapper<Option, com.google.pro
   override fun convert(obj: Option): com.google.protobuf.Option {
     val builder = com.google.protobuf.Option.newBuilder()
     builder.setName(obj.name)
-    val value1 = obj.`value`
-    if (value1 != null) {
-      builder.setValue(AnyConverter.convert(value1))
-    }
+    builder.setValue(AnyConverter.convert(obj.`value`))
     return builder.build()
   }
 }

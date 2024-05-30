@@ -21,7 +21,7 @@ fun main() {
     val serialized = protobuf.encodeToByteArray(message)
     val nativeSerialized = Example.SimpleMessage.newBuilder()
         .setTest(message.test)
-        .setTest2(message.test2.toInt())
+        .setTest2(message.test2?.toInt() ?: 0)
         .build()
         .toByteArray()
 
@@ -46,5 +46,5 @@ fun main() {
     val jsonDeserialized = json.decodeFromString<Test>(jsonSerialized)
     println(jsonSerialized)
     println(jsonDeserialized)
-    println(jsonDeserialized.unknown?.parse(SimpleMessageConverter))
+    println(jsonDeserialized.unknown.parse(SimpleMessageConverter))
 }

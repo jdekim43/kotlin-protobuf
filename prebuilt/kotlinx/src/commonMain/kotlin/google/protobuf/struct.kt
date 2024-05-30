@@ -1,5 +1,5 @@
 // Transform from google/protobuf/struct.proto
-@file:GeneratorVersion(version = "0.4.1")
+@file:GeneratorVersion(version = "0.5.1")
 
 package google.protobuf
 
@@ -84,7 +84,7 @@ public data class Struct(
 @Serializable(with = Value.KotlinxSerializer::class)
 @SerialName(value = Value.TYPE_URL)
 public data class Value(
-  public val kind: KindOneOf,
+  public val kind: KindOneOf = KindOneOf.NullValue(),
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.Value"

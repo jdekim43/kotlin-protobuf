@@ -4,7 +4,7 @@ kotlin {
             dependencies {
                 val kotlinxSerializationVersion: String by project
 
-                implementation(project(fullPath(":core")))
+                api(project(fullPath(":core")))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
             }

@@ -9,8 +9,8 @@ import kr.jadekim.protobuf.generator.grpc.util.extension.grpcServerTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.grpcTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.interfaceTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
-import kr.jadekim.protobuf.grpc.ClientOption
-import kr.jadekim.protobuf.grpc.GrpcService
+import kr.jadekim.protobuf.grpc.GrpcClientOption
+import kr.jadekim.protobuf.grpc.GrpcServiceFactory
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -28,7 +28,7 @@ class MultiplePlatformGenerator : PlatformGrpcGenerator {
         val clientTypeName = descriptor.writeClientTo(spec)
 
         spec.addSuperinterface(
-            GrpcService::class.typeName.parameterizedBy(
+            GrpcServiceFactory::class.typeName.parameterizedBy(
                 descriptor.interfaceTypeName,
                 clientTypeName,
             )
@@ -67,7 +67,7 @@ class MultiplePlatformGenerator : PlatformGrpcGenerator {
 
         clientSpec.primaryConstructor(
             FunSpec.constructorBuilder()
-                .addParameter("option", ClientOption::class)
+                .addParameter("option", GrpcClientOption::class)
                 .build()
         )
 

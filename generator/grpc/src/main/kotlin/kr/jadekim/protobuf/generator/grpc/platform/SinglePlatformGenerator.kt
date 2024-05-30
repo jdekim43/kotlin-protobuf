@@ -8,12 +8,9 @@ import kr.jadekim.protobuf.generator.grpc.util.extension.grpcClientTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.grpcServerTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.grpcTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.interfaceTypeName
-import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
-import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
-import kr.jadekim.protobuf.grpc.ClientOption
-import kr.jadekim.protobuf.grpc.GrpcService
-import net.pearx.kasechange.toCamelCase
+import kr.jadekim.protobuf.grpc.GrpcClientOption
+import kr.jadekim.protobuf.grpc.GrpcServiceFactory
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -35,7 +32,7 @@ class SinglePlatformGenerator(
         val clientTypeName = descriptor.writeClientTo(spec, platformTypeName)
 
         spec.addSuperinterface(
-            GrpcService::class.typeName.parameterizedBy(
+            GrpcServiceFactory::class.typeName.parameterizedBy(
                 descriptor.interfaceTypeName,
                 clientTypeName,
             )
@@ -94,7 +91,7 @@ class SinglePlatformGenerator(
         clientSpec.primaryConstructor(
             FunSpec.constructorBuilder()
                 .apply { if (isActual) addModifiers(KModifier.ACTUAL) }
-                .addParameter("option", ClientOption::class)
+                .addParameter("option", GrpcClientOption::class)
                 .build()
         )
 
@@ -102,7 +99,7 @@ class SinglePlatformGenerator(
 
         FunSpec.builder("createClient")
             .addModifiers(KModifier.OVERRIDE)
-            .addParameter("option", ClientOption::class)
+            .addParameter("option", GrpcClientOption::class)
             .returns(name)
             .addStatement("return %T(option)", name)
             .build()

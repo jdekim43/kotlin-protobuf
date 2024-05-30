@@ -34,6 +34,20 @@ fun TypeSpec.Builder.addDeprecatedAnnotation(
     )
 }
 
+fun FunSpec.Builder.addDeprecatedAnnotation(
+    message: String,
+    replaceWith: String = "",
+    level: DeprecationLevel = DeprecationLevel.WARNING,
+) {
+    addAnnotation(
+        AnnotationSpec.builder(Deprecated::class)
+            .addMember("message = %S", message)
+            .addMember("replaceWith = %T(%S)", ReplaceWith::class, replaceWith)
+            .addMember("level = %T.%N", DeprecationLevel::class, level.name)
+            .build()
+    )
+}
+
 fun PropertySpec.Builder.addDeprecatedAnnotation(
     message: String,
     replaceWith: String = "",

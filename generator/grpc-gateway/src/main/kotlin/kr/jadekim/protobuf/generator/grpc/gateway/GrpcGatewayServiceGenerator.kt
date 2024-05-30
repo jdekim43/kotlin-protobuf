@@ -13,7 +13,8 @@ import kr.jadekim.protobuf.generator.grpc.gateway.util.extension.grpcGatewayType
 import kr.jadekim.protobuf.generator.grpc.gateway.util.extension.interfaceTypeName
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import kr.jadekim.protobuf.generator.util.extention.*
-import kr.jadekim.protobuf.grpc.gateway.GrpcGatewayService
+import kr.jadekim.protobuf.grpc.gateway.GrpcGatewayClientOption
+import kr.jadekim.protobuf.grpc.gateway.GrpcGatewayServiceFactory
 import net.pearx.kasechange.toCamelCase
 
 sealed class HttpRequestMeta(val method: HttpMethod, val path: String, val hasBody: Boolean) {
@@ -36,7 +37,7 @@ class GrpcGatewayServiceGenerator {
         val clientTypeName = descriptor.writeClientTo(spec)
 
         spec.addSuperinterface(
-            GrpcGatewayService::class.typeName.parameterizedBy(
+            GrpcGatewayServiceFactory::class.typeName.parameterizedBy(
                 descriptor.interfaceTypeName,
                 clientTypeName,
             )
@@ -74,9 +75,9 @@ class GrpcGatewayServiceGenerator {
 
         FunSpec.builder("createClient")
             .addModifiers(KModifier.OVERRIDE)
-            .addParameter("http", HttpClient::class)
+            .addParameter("option", GrpcGatewayClientOption::class)
             .returns(name)
-            .addStatement("return %T(http)", name)
+            .addStatement("return %T(option.httpClient)", name)
             .build()
             .let(spec::addFunction)
 
@@ -92,6 +93,7 @@ class GrpcGatewayServiceGenerator {
 
         fun notSupport(message: String) {
             functionSpec.addStatement("throw %T(%S)", NotImplementedError::class, message)
+            functionSpec.addDeprecatedAnnotation(message, level = DeprecationLevel.ERROR)
             spec.addFunction(functionSpec.build())
         }
 

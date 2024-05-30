@@ -1,5 +1,5 @@
 // Transform from google/protobuf/descriptor.proto
-@file:GeneratorVersion(version = "0.4.1")
+@file:GeneratorVersion(version = "0.5.1")
 
 package google.protobuf
 
@@ -65,14 +65,8 @@ public open class FileDescriptorProtoJvmConverter :
 
   override fun convert(obj: FileDescriptorProto): DescriptorProtos.FileDescriptorProto {
     val builder = DescriptorProtos.FileDescriptorProto.newBuilder()
-    val value0 = obj.name
-    if (value0 != null) {
-      builder.setName(value0)
-    }
-    val value1 = obj.`package`
-    if (value1 != null) {
-      builder.setPackage(value1)
-    }
+    builder.setName(obj.name)
+    builder.setPackage(obj.`package`)
     builder.addAllDependency(obj.dependency.map { it })
     builder.addAllPublicDependency(obj.publicDependency.map { it })
     builder.addAllWeakDependency(obj.weakDependency.map { it })
@@ -80,22 +74,10 @@ public open class FileDescriptorProtoJvmConverter :
     builder.addAllEnumType(obj.enumType.map { EnumDescriptorProtoConverter.convert(it) })
     builder.addAllService(obj.service.map { ServiceDescriptorProtoConverter.convert(it) })
     builder.addAllExtension(obj.extension.map { FieldDescriptorProtoConverter.convert(it) })
-    val value9 = obj.options
-    if (value9 != null) {
-      builder.setOptions(FileOptionsConverter.convert(value9))
-    }
-    val value10 = obj.sourceCodeInfo
-    if (value10 != null) {
-      builder.setSourceCodeInfo(SourceCodeInfoConverter.convert(value10))
-    }
-    val value11 = obj.syntax
-    if (value11 != null) {
-      builder.setSyntax(value11)
-    }
-    val value12 = obj.edition
-    if (value12 != null) {
-      builder.setEdition(DescriptorProtos.Edition.forNumber(value12.number))
-    }
+    builder.setOptions(FileOptionsConverter.convert(obj.options))
+    builder.setSourceCodeInfo(SourceCodeInfoConverter.convert(obj.sourceCodeInfo))
+    builder.setSyntax(obj.syntax)
+    builder.setEdition(DescriptorProtos.Edition.forNumber(obj.edition.number))
     return builder.build()
   }
 }
@@ -127,10 +109,7 @@ public open class DescriptorProtoJvmConverter :
 
   override fun convert(obj: DescriptorProto): DescriptorProtos.DescriptorProto {
     val builder = DescriptorProtos.DescriptorProto.newBuilder()
-    val value0 = obj.name
-    if (value0 != null) {
-      builder.setName(value0)
-    }
+    builder.setName(obj.name)
     builder.addAllField(obj.`field`.map { FieldDescriptorProtoConverter.convert(it) })
     builder.addAllExtension(obj.extension.map { FieldDescriptorProtoConverter.convert(it) })
     builder.addAllNestedType(obj.nestedType.map { DescriptorProtoConverter.convert(it) })
@@ -138,10 +117,7 @@ public open class DescriptorProtoJvmConverter :
     builder.addAllExtensionRange(obj.extensionRange.map {
         DescriptorProtoConverter.ExtensionRangeConverter.convert(it) })
     builder.addAllOneofDecl(obj.oneofDecl.map { OneofDescriptorProtoConverter.convert(it) })
-    val value7 = obj.options
-    if (value7 != null) {
-      builder.setOptions(MessageOptionsConverter.convert(value7))
-    }
+    builder.setOptions(MessageOptionsConverter.convert(obj.options))
     builder.addAllReservedRange(obj.reservedRange.map {
         DescriptorProtoConverter.ReservedRangeConverter.convert(it) })
     builder.addAllReservedName(obj.reservedName.map { it })
@@ -170,18 +146,9 @@ public open class DescriptorProtoJvmConverter :
     override fun convert(obj: DescriptorProto.ExtensionRange):
         DescriptorProtos.DescriptorProto.ExtensionRange {
       val builder = DescriptorProtos.DescriptorProto.ExtensionRange.newBuilder()
-      val value0 = obj.start
-      if (value0 != null) {
-        builder.setStart(value0)
-      }
-      val value1 = obj.end
-      if (value1 != null) {
-        builder.setEnd(value1)
-      }
-      val value2 = obj.options
-      if (value2 != null) {
-        builder.setOptions(ExtensionRangeOptionsConverter.convert(value2))
-      }
+      builder.setStart(obj.start)
+      builder.setEnd(obj.end)
+      builder.setOptions(ExtensionRangeOptionsConverter.convert(obj.options))
       return builder.build()
     }
   }
@@ -207,14 +174,8 @@ public open class DescriptorProtoJvmConverter :
     override fun convert(obj: DescriptorProto.ReservedRange):
         DescriptorProtos.DescriptorProto.ReservedRange {
       val builder = DescriptorProtos.DescriptorProto.ReservedRange.newBuilder()
-      val value0 = obj.start
-      if (value0 != null) {
-        builder.setStart(value0)
-      }
-      val value1 = obj.end
-      if (value1 != null) {
-        builder.setEnd(value1)
-      }
+      builder.setStart(obj.start)
+      builder.setEnd(obj.end)
       return builder.build()
     }
   }
@@ -247,14 +208,8 @@ public open class ExtensionRangeOptionsJvmConverter :
         UninterpretedOptionConverter.convert(it) })
     builder.addAllDeclaration(obj.declaration.map {
         ExtensionRangeOptionsConverter.DeclarationConverter.convert(it) })
-    val value2 = obj.features
-    if (value2 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value2))
-    }
-    val value3 = obj.verification
-    if (value3 != null) {
-      builder.setVerification(DescriptorProtos.ExtensionRangeOptions.VerificationState.forNumber(value3.number))
-    }
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
+    builder.setVerification(DescriptorProtos.ExtensionRangeOptions.VerificationState.forNumber(obj.verification.number))
     return builder.build()
   }
 
@@ -282,26 +237,11 @@ public open class ExtensionRangeOptionsJvmConverter :
     override fun convert(obj: ExtensionRangeOptions.Declaration):
         DescriptorProtos.ExtensionRangeOptions.Declaration {
       val builder = DescriptorProtos.ExtensionRangeOptions.Declaration.newBuilder()
-      val value0 = obj.number
-      if (value0 != null) {
-        builder.setNumber(value0)
-      }
-      val value1 = obj.fullName
-      if (value1 != null) {
-        builder.setFullName(value1)
-      }
-      val value2 = obj.type
-      if (value2 != null) {
-        builder.setType(value2)
-      }
-      val value3 = obj.reserved
-      if (value3 != null) {
-        builder.setReserved(value3)
-      }
-      val value4 = obj.repeated
-      if (value4 != null) {
-        builder.setRepeated(value4)
-      }
+      builder.setNumber(obj.number)
+      builder.setFullName(obj.fullName)
+      builder.setType(obj.type)
+      builder.setReserved(obj.reserved)
+      builder.setRepeated(obj.repeated)
       return builder.build()
     }
   }
@@ -335,50 +275,17 @@ public open class FieldDescriptorProtoJvmConverter :
 
   override fun convert(obj: FieldDescriptorProto): DescriptorProtos.FieldDescriptorProto {
     val builder = DescriptorProtos.FieldDescriptorProto.newBuilder()
-    val value0 = obj.name
-    if (value0 != null) {
-      builder.setName(value0)
-    }
-    val value1 = obj.number
-    if (value1 != null) {
-      builder.setNumber(value1)
-    }
-    val value2 = obj.label
-    if (value2 != null) {
-      builder.setLabel(DescriptorProtos.FieldDescriptorProto.Label.forNumber(value2.number))
-    }
-    val value3 = obj.type
-    if (value3 != null) {
-      builder.setType(DescriptorProtos.FieldDescriptorProto.Type.forNumber(value3.number))
-    }
-    val value4 = obj.typeName
-    if (value4 != null) {
-      builder.setTypeName(value4)
-    }
-    val value5 = obj.extendee
-    if (value5 != null) {
-      builder.setExtendee(value5)
-    }
-    val value6 = obj.defaultValue
-    if (value6 != null) {
-      builder.setDefaultValue(value6)
-    }
-    val value7 = obj.oneofIndex
-    if (value7 != null) {
-      builder.setOneofIndex(value7)
-    }
-    val value8 = obj.jsonName
-    if (value8 != null) {
-      builder.setJsonName(value8)
-    }
-    val value9 = obj.options
-    if (value9 != null) {
-      builder.setOptions(FieldOptionsConverter.convert(value9))
-    }
-    val value10 = obj.proto3Optional
-    if (value10 != null) {
-      builder.setProto3Optional(value10)
-    }
+    builder.setName(obj.name)
+    builder.setNumber(obj.number)
+    builder.setLabel(DescriptorProtos.FieldDescriptorProto.Label.forNumber(obj.label.number))
+    builder.setType(DescriptorProtos.FieldDescriptorProto.Type.forNumber(obj.type.number))
+    builder.setTypeName(obj.typeName)
+    builder.setExtendee(obj.extendee)
+    builder.setDefaultValue(obj.defaultValue)
+    builder.setOneofIndex(obj.oneofIndex)
+    builder.setJsonName(obj.jsonName)
+    builder.setOptions(FieldOptionsConverter.convert(obj.options))
+    builder.setProto3Optional(obj.proto3Optional)
     return builder.build()
   }
 }
@@ -402,14 +309,8 @@ public open class OneofDescriptorProtoJvmConverter :
 
   override fun convert(obj: OneofDescriptorProto): DescriptorProtos.OneofDescriptorProto {
     val builder = DescriptorProtos.OneofDescriptorProto.newBuilder()
-    val value0 = obj.name
-    if (value0 != null) {
-      builder.setName(value0)
-    }
-    val value1 = obj.options
-    if (value1 != null) {
-      builder.setOptions(OneofOptionsConverter.convert(value1))
-    }
+    builder.setName(obj.name)
+    builder.setOptions(OneofOptionsConverter.convert(obj.options))
     return builder.build()
   }
 }
@@ -437,15 +338,9 @@ public open class EnumDescriptorProtoJvmConverter :
 
   override fun convert(obj: EnumDescriptorProto): DescriptorProtos.EnumDescriptorProto {
     val builder = DescriptorProtos.EnumDescriptorProto.newBuilder()
-    val value0 = obj.name
-    if (value0 != null) {
-      builder.setName(value0)
-    }
+    builder.setName(obj.name)
     builder.addAllValue(obj.`value`.map { EnumValueDescriptorProtoConverter.convert(it) })
-    val value2 = obj.options
-    if (value2 != null) {
-      builder.setOptions(EnumOptionsConverter.convert(value2))
-    }
+    builder.setOptions(EnumOptionsConverter.convert(obj.options))
     builder.addAllReservedRange(obj.reservedRange.map {
         EnumDescriptorProtoConverter.EnumReservedRangeConverter.convert(it) })
     builder.addAllReservedName(obj.reservedName.map { it })
@@ -473,14 +368,8 @@ public open class EnumDescriptorProtoJvmConverter :
     override fun convert(obj: EnumDescriptorProto.EnumReservedRange):
         DescriptorProtos.EnumDescriptorProto.EnumReservedRange {
       val builder = DescriptorProtos.EnumDescriptorProto.EnumReservedRange.newBuilder()
-      val value0 = obj.start
-      if (value0 != null) {
-        builder.setStart(value0)
-      }
-      val value1 = obj.end
-      if (value1 != null) {
-        builder.setEnd(value1)
-      }
+      builder.setStart(obj.start)
+      builder.setEnd(obj.end)
       return builder.build()
     }
   }
@@ -506,18 +395,9 @@ public open class EnumValueDescriptorProtoJvmConverter :
 
   override fun convert(obj: EnumValueDescriptorProto): DescriptorProtos.EnumValueDescriptorProto {
     val builder = DescriptorProtos.EnumValueDescriptorProto.newBuilder()
-    val value0 = obj.name
-    if (value0 != null) {
-      builder.setName(value0)
-    }
-    val value1 = obj.number
-    if (value1 != null) {
-      builder.setNumber(value1)
-    }
-    val value2 = obj.options
-    if (value2 != null) {
-      builder.setOptions(EnumValueOptionsConverter.convert(value2))
-    }
+    builder.setName(obj.name)
+    builder.setNumber(obj.number)
+    builder.setOptions(EnumValueOptionsConverter.convert(obj.options))
     return builder.build()
   }
 }
@@ -542,15 +422,9 @@ public open class ServiceDescriptorProtoJvmConverter :
 
   override fun convert(obj: ServiceDescriptorProto): DescriptorProtos.ServiceDescriptorProto {
     val builder = DescriptorProtos.ServiceDescriptorProto.newBuilder()
-    val value0 = obj.name
-    if (value0 != null) {
-      builder.setName(value0)
-    }
+    builder.setName(obj.name)
     builder.addAllMethod(obj.method.map { MethodDescriptorProtoConverter.convert(it) })
-    val value2 = obj.options
-    if (value2 != null) {
-      builder.setOptions(ServiceOptionsConverter.convert(value2))
-    }
+    builder.setOptions(ServiceOptionsConverter.convert(obj.options))
     return builder.build()
   }
 }
@@ -578,30 +452,12 @@ public open class MethodDescriptorProtoJvmConverter :
 
   override fun convert(obj: MethodDescriptorProto): DescriptorProtos.MethodDescriptorProto {
     val builder = DescriptorProtos.MethodDescriptorProto.newBuilder()
-    val value0 = obj.name
-    if (value0 != null) {
-      builder.setName(value0)
-    }
-    val value1 = obj.inputType
-    if (value1 != null) {
-      builder.setInputType(value1)
-    }
-    val value2 = obj.outputType
-    if (value2 != null) {
-      builder.setOutputType(value2)
-    }
-    val value3 = obj.options
-    if (value3 != null) {
-      builder.setOptions(MethodOptionsConverter.convert(value3))
-    }
-    val value4 = obj.clientStreaming
-    if (value4 != null) {
-      builder.setClientStreaming(value4)
-    }
-    val value5 = obj.serverStreaming
-    if (value5 != null) {
-      builder.setServerStreaming(value5)
-    }
+    builder.setName(obj.name)
+    builder.setInputType(obj.inputType)
+    builder.setOutputType(obj.outputType)
+    builder.setOptions(MethodOptionsConverter.convert(obj.options))
+    builder.setClientStreaming(obj.clientStreaming)
+    builder.setServerStreaming(obj.serverStreaming)
     return builder.build()
   }
 }
@@ -643,90 +499,27 @@ public open class FileOptionsJvmConverter :
 
   override fun convert(obj: FileOptions): DescriptorProtos.FileOptions {
     val builder = DescriptorProtos.FileOptions.newBuilder()
-    val value0 = obj.javaPackage
-    if (value0 != null) {
-      builder.setJavaPackage(value0)
-    }
-    val value1 = obj.javaOuterClassname
-    if (value1 != null) {
-      builder.setJavaOuterClassname(value1)
-    }
-    val value2 = obj.javaMultipleFiles
-    if (value2 != null) {
-      builder.setJavaMultipleFiles(value2)
-    }
-    val value3 = obj.javaGenerateEqualsAndHash
-    if (value3 != null) {
-      builder.setJavaGenerateEqualsAndHash(value3)
-    }
-    val value4 = obj.javaStringCheckUtf8
-    if (value4 != null) {
-      builder.setJavaStringCheckUtf8(value4)
-    }
-    val value5 = obj.optimizeFor
-    if (value5 != null) {
-      builder.setOptimizeFor(DescriptorProtos.FileOptions.OptimizeMode.forNumber(value5.number))
-    }
-    val value6 = obj.goPackage
-    if (value6 != null) {
-      builder.setGoPackage(value6)
-    }
-    val value7 = obj.ccGenericServices
-    if (value7 != null) {
-      builder.setCcGenericServices(value7)
-    }
-    val value8 = obj.javaGenericServices
-    if (value8 != null) {
-      builder.setJavaGenericServices(value8)
-    }
-    val value9 = obj.pyGenericServices
-    if (value9 != null) {
-      builder.setPyGenericServices(value9)
-    }
-    val value10 = obj.phpGenericServices
-    if (value10 != null) {
-      builder.setPhpGenericServices(value10)
-    }
-    val value11 = obj.deprecated
-    if (value11 != null) {
-      builder.setDeprecated(value11)
-    }
-    val value12 = obj.ccEnableArenas
-    if (value12 != null) {
-      builder.setCcEnableArenas(value12)
-    }
-    val value13 = obj.objcClassPrefix
-    if (value13 != null) {
-      builder.setObjcClassPrefix(value13)
-    }
-    val value14 = obj.csharpNamespace
-    if (value14 != null) {
-      builder.setCsharpNamespace(value14)
-    }
-    val value15 = obj.swiftPrefix
-    if (value15 != null) {
-      builder.setSwiftPrefix(value15)
-    }
-    val value16 = obj.phpClassPrefix
-    if (value16 != null) {
-      builder.setPhpClassPrefix(value16)
-    }
-    val value17 = obj.phpNamespace
-    if (value17 != null) {
-      builder.setPhpNamespace(value17)
-    }
-    val value18 = obj.phpMetadataNamespace
-    if (value18 != null) {
-      builder.setPhpMetadataNamespace(value18)
-    }
-    val value19 = obj.rubyPackage
-    if (value19 != null) {
-      builder.setRubyPackage(value19)
-    }
-    val value20 = obj.features
-    if (value20 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value20))
-    }
+    builder.setJavaPackage(obj.javaPackage)
+    builder.setJavaOuterClassname(obj.javaOuterClassname)
+    builder.setJavaMultipleFiles(obj.javaMultipleFiles)
+    builder.setJavaGenerateEqualsAndHash(obj.javaGenerateEqualsAndHash)
+    builder.setJavaStringCheckUtf8(obj.javaStringCheckUtf8)
+    builder.setOptimizeFor(DescriptorProtos.FileOptions.OptimizeMode.forNumber(obj.optimizeFor.number))
+    builder.setGoPackage(obj.goPackage)
+    builder.setCcGenericServices(obj.ccGenericServices)
+    builder.setJavaGenericServices(obj.javaGenericServices)
+    builder.setPyGenericServices(obj.pyGenericServices)
+    builder.setPhpGenericServices(obj.phpGenericServices)
+    builder.setDeprecated(obj.deprecated)
+    builder.setCcEnableArenas(obj.ccEnableArenas)
+    builder.setObjcClassPrefix(obj.objcClassPrefix)
+    builder.setCsharpNamespace(obj.csharpNamespace)
+    builder.setSwiftPrefix(obj.swiftPrefix)
+    builder.setPhpClassPrefix(obj.phpClassPrefix)
+    builder.setPhpNamespace(obj.phpNamespace)
+    builder.setPhpMetadataNamespace(obj.phpMetadataNamespace)
+    builder.setRubyPackage(obj.rubyPackage)
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
         UninterpretedOptionConverter.convert(it) })
     return builder.build()
@@ -756,30 +549,12 @@ public open class MessageOptionsJvmConverter :
 
   override fun convert(obj: MessageOptions): DescriptorProtos.MessageOptions {
     val builder = DescriptorProtos.MessageOptions.newBuilder()
-    val value0 = obj.messageSetWireFormat
-    if (value0 != null) {
-      builder.setMessageSetWireFormat(value0)
-    }
-    val value1 = obj.noStandardDescriptorAccessor
-    if (value1 != null) {
-      builder.setNoStandardDescriptorAccessor(value1)
-    }
-    val value2 = obj.deprecated
-    if (value2 != null) {
-      builder.setDeprecated(value2)
-    }
-    val value3 = obj.mapEntry
-    if (value3 != null) {
-      builder.setMapEntry(value3)
-    }
-    val value4 = obj.deprecatedLegacyJsonFieldConflicts
-    if (value4 != null) {
-      builder.setDeprecatedLegacyJsonFieldConflicts(value4)
-    }
-    val value5 = obj.features
-    if (value5 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value5))
-    }
+    builder.setMessageSetWireFormat(obj.messageSetWireFormat)
+    builder.setNoStandardDescriptorAccessor(obj.noStandardDescriptorAccessor)
+    builder.setDeprecated(obj.deprecated)
+    builder.setMapEntry(obj.mapEntry)
+    builder.setDeprecatedLegacyJsonFieldConflicts(obj.deprecatedLegacyJsonFieldConflicts)
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
         UninterpretedOptionConverter.convert(it) })
     return builder.build()
@@ -816,50 +591,20 @@ public open class FieldOptionsJvmConverter :
 
   override fun convert(obj: FieldOptions): DescriptorProtos.FieldOptions {
     val builder = DescriptorProtos.FieldOptions.newBuilder()
-    val value0 = obj.ctype
-    if (value0 != null) {
-      builder.setCtype(DescriptorProtos.FieldOptions.CType.forNumber(value0.number))
-    }
-    val value1 = obj.packed
-    if (value1 != null) {
-      builder.setPacked(value1)
-    }
-    val value2 = obj.jstype
-    if (value2 != null) {
-      builder.setJstype(DescriptorProtos.FieldOptions.JSType.forNumber(value2.number))
-    }
-    val value3 = obj.lazy
-    if (value3 != null) {
-      builder.setLazy(value3)
-    }
-    val value4 = obj.unverifiedLazy
-    if (value4 != null) {
-      builder.setUnverifiedLazy(value4)
-    }
-    val value5 = obj.deprecated
-    if (value5 != null) {
-      builder.setDeprecated(value5)
-    }
-    val value6 = obj.weak
-    if (value6 != null) {
-      builder.setWeak(value6)
-    }
-    val value7 = obj.debugRedact
-    if (value7 != null) {
-      builder.setDebugRedact(value7)
-    }
-    val value8 = obj.retention
-    if (value8 != null) {
-      builder.setRetention(DescriptorProtos.FieldOptions.OptionRetention.forNumber(value8.number))
-    }
+    builder.setCtype(DescriptorProtos.FieldOptions.CType.forNumber(obj.ctype.number))
+    builder.setPacked(obj.packed)
+    builder.setJstype(DescriptorProtos.FieldOptions.JSType.forNumber(obj.jstype.number))
+    builder.setLazy(obj.lazy)
+    builder.setUnverifiedLazy(obj.unverifiedLazy)
+    builder.setDeprecated(obj.deprecated)
+    builder.setWeak(obj.weak)
+    builder.setDebugRedact(obj.debugRedact)
+    builder.setRetention(DescriptorProtos.FieldOptions.OptionRetention.forNumber(obj.retention.number))
     builder.addAllTargets(obj.targets.map {
         DescriptorProtos.FieldOptions.OptionTargetType.forNumber(it.number) })
     builder.addAllEditionDefaults(obj.editionDefaults.map {
         FieldOptionsConverter.EditionDefaultConverter.convert(it) })
-    val value11 = obj.features
-    if (value11 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value11))
-    }
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
         UninterpretedOptionConverter.convert(it) })
     return builder.build()
@@ -886,14 +631,8 @@ public open class FieldOptionsJvmConverter :
     override fun convert(obj: FieldOptions.EditionDefault):
         DescriptorProtos.FieldOptions.EditionDefault {
       val builder = DescriptorProtos.FieldOptions.EditionDefault.newBuilder()
-      val value0 = obj.edition
-      if (value0 != null) {
-        builder.setEdition(DescriptorProtos.Edition.forNumber(value0.number))
-      }
-      val value1 = obj.`value`
-      if (value1 != null) {
-        builder.setValue(value1)
-      }
+      builder.setEdition(DescriptorProtos.Edition.forNumber(obj.edition.number))
+      builder.setValue(obj.`value`)
       return builder.build()
     }
   }
@@ -917,10 +656,7 @@ public open class OneofOptionsJvmConverter :
 
   override fun convert(obj: OneofOptions): DescriptorProtos.OneofOptions {
     val builder = DescriptorProtos.OneofOptions.newBuilder()
-    val value0 = obj.features
-    if (value0 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value0))
-    }
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
         UninterpretedOptionConverter.convert(it) })
     return builder.build()
@@ -947,22 +683,10 @@ public open class EnumOptionsJvmConverter :
 
   override fun convert(obj: EnumOptions): DescriptorProtos.EnumOptions {
     val builder = DescriptorProtos.EnumOptions.newBuilder()
-    val value0 = obj.allowAlias
-    if (value0 != null) {
-      builder.setAllowAlias(value0)
-    }
-    val value1 = obj.deprecated
-    if (value1 != null) {
-      builder.setDeprecated(value1)
-    }
-    val value2 = obj.deprecatedLegacyJsonFieldConflicts
-    if (value2 != null) {
-      builder.setDeprecatedLegacyJsonFieldConflicts(value2)
-    }
-    val value3 = obj.features
-    if (value3 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value3))
-    }
+    builder.setAllowAlias(obj.allowAlias)
+    builder.setDeprecated(obj.deprecated)
+    builder.setDeprecatedLegacyJsonFieldConflicts(obj.deprecatedLegacyJsonFieldConflicts)
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
         UninterpretedOptionConverter.convert(it) })
     return builder.build()
@@ -990,18 +714,9 @@ public open class EnumValueOptionsJvmConverter :
 
   override fun convert(obj: EnumValueOptions): DescriptorProtos.EnumValueOptions {
     val builder = DescriptorProtos.EnumValueOptions.newBuilder()
-    val value0 = obj.deprecated
-    if (value0 != null) {
-      builder.setDeprecated(value0)
-    }
-    val value1 = obj.features
-    if (value1 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value1))
-    }
-    val value2 = obj.debugRedact
-    if (value2 != null) {
-      builder.setDebugRedact(value2)
-    }
+    builder.setDeprecated(obj.deprecated)
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
+    builder.setDebugRedact(obj.debugRedact)
     builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
         UninterpretedOptionConverter.convert(it) })
     return builder.build()
@@ -1027,14 +742,8 @@ public open class ServiceOptionsJvmConverter :
 
   override fun convert(obj: ServiceOptions): DescriptorProtos.ServiceOptions {
     val builder = DescriptorProtos.ServiceOptions.newBuilder()
-    val value0 = obj.features
-    if (value0 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value0))
-    }
-    val value1 = obj.deprecated
-    if (value1 != null) {
-      builder.setDeprecated(value1)
-    }
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
+    builder.setDeprecated(obj.deprecated)
     builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
         UninterpretedOptionConverter.convert(it) })
     return builder.build()
@@ -1061,18 +770,9 @@ public open class MethodOptionsJvmConverter :
 
   override fun convert(obj: MethodOptions): DescriptorProtos.MethodOptions {
     val builder = DescriptorProtos.MethodOptions.newBuilder()
-    val value0 = obj.deprecated
-    if (value0 != null) {
-      builder.setDeprecated(value0)
-    }
-    val value1 = obj.idempotencyLevel
-    if (value1 != null) {
-      builder.setIdempotencyLevel(DescriptorProtos.MethodOptions.IdempotencyLevel.forNumber(value1.number))
-    }
-    val value2 = obj.features
-    if (value2 != null) {
-      builder.setFeatures(FeatureSetConverter.convert(value2))
-    }
+    builder.setDeprecated(obj.deprecated)
+    builder.setIdempotencyLevel(DescriptorProtos.MethodOptions.IdempotencyLevel.forNumber(obj.idempotencyLevel.number))
+    builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
         UninterpretedOptionConverter.convert(it) })
     return builder.build()
@@ -1104,30 +804,12 @@ public open class UninterpretedOptionJvmConverter :
   override fun convert(obj: UninterpretedOption): DescriptorProtos.UninterpretedOption {
     val builder = DescriptorProtos.UninterpretedOption.newBuilder()
     builder.addAllName(obj.name.map { UninterpretedOptionConverter.NamePartConverter.convert(it) })
-    val value1 = obj.identifierValue
-    if (value1 != null) {
-      builder.setIdentifierValue(value1)
-    }
-    val value2 = obj.positiveIntValue
-    if (value2 != null) {
-      builder.setPositiveIntValue(value2.asJavaType)
-    }
-    val value3 = obj.negativeIntValue
-    if (value3 != null) {
-      builder.setNegativeIntValue(value3)
-    }
-    val value4 = obj.doubleValue
-    if (value4 != null) {
-      builder.setDoubleValue(value4)
-    }
-    val value5 = obj.stringValue
-    if (value5 != null) {
-      builder.setStringValue(ByteString.copyFrom(value5))
-    }
-    val value6 = obj.aggregateValue
-    if (value6 != null) {
-      builder.setAggregateValue(value6)
-    }
+    builder.setIdentifierValue(obj.identifierValue)
+    builder.setPositiveIntValue(obj.positiveIntValue.asJavaType)
+    builder.setNegativeIntValue(obj.negativeIntValue)
+    builder.setDoubleValue(obj.doubleValue)
+    builder.setStringValue(ByteString.copyFrom(obj.stringValue))
+    builder.setAggregateValue(obj.aggregateValue)
     return builder.build()
   }
 
@@ -1152,14 +834,8 @@ public open class UninterpretedOptionJvmConverter :
     override fun convert(obj: UninterpretedOption.NamePart):
         DescriptorProtos.UninterpretedOption.NamePart {
       val builder = DescriptorProtos.UninterpretedOption.NamePart.newBuilder()
-      val value0 = obj.namePart
-      if (value0 != null) {
-        builder.setNamePart(value0)
-      }
-      val value1 = obj.isExtension
-      if (value1 != null) {
-        builder.setIsExtension(value1)
-      }
+      builder.setNamePart(obj.namePart)
+      builder.setIsExtension(obj.isExtension)
       return builder.build()
     }
   }
@@ -1186,30 +862,12 @@ public open class FeatureSetJvmConverter :
 
   override fun convert(obj: FeatureSet): DescriptorProtos.FeatureSet {
     val builder = DescriptorProtos.FeatureSet.newBuilder()
-    val value0 = obj.fieldPresence
-    if (value0 != null) {
-      builder.setFieldPresence(DescriptorProtos.FeatureSet.FieldPresence.forNumber(value0.number))
-    }
-    val value1 = obj.enumType
-    if (value1 != null) {
-      builder.setEnumType(DescriptorProtos.FeatureSet.EnumType.forNumber(value1.number))
-    }
-    val value2 = obj.repeatedFieldEncoding
-    if (value2 != null) {
-      builder.setRepeatedFieldEncoding(DescriptorProtos.FeatureSet.RepeatedFieldEncoding.forNumber(value2.number))
-    }
-    val value3 = obj.utf8Validation
-    if (value3 != null) {
-      builder.setUtf8Validation(DescriptorProtos.FeatureSet.Utf8Validation.forNumber(value3.number))
-    }
-    val value4 = obj.messageEncoding
-    if (value4 != null) {
-      builder.setMessageEncoding(DescriptorProtos.FeatureSet.MessageEncoding.forNumber(value4.number))
-    }
-    val value5 = obj.jsonFormat
-    if (value5 != null) {
-      builder.setJsonFormat(DescriptorProtos.FeatureSet.JsonFormat.forNumber(value5.number))
-    }
+    builder.setFieldPresence(DescriptorProtos.FeatureSet.FieldPresence.forNumber(obj.fieldPresence.number))
+    builder.setEnumType(DescriptorProtos.FeatureSet.EnumType.forNumber(obj.enumType.number))
+    builder.setRepeatedFieldEncoding(DescriptorProtos.FeatureSet.RepeatedFieldEncoding.forNumber(obj.repeatedFieldEncoding.number))
+    builder.setUtf8Validation(DescriptorProtos.FeatureSet.Utf8Validation.forNumber(obj.utf8Validation.number))
+    builder.setMessageEncoding(DescriptorProtos.FeatureSet.MessageEncoding.forNumber(obj.messageEncoding.number))
+    builder.setJsonFormat(DescriptorProtos.FeatureSet.JsonFormat.forNumber(obj.jsonFormat.number))
     return builder.build()
   }
 }
@@ -1237,14 +895,8 @@ public open class FeatureSetDefaultsJvmConverter :
     val builder = DescriptorProtos.FeatureSetDefaults.newBuilder()
     builder.addAllDefaults(obj.defaults.map {
         FeatureSetDefaultsConverter.FeatureSetEditionDefaultConverter.convert(it) })
-    val value1 = obj.minimumEdition
-    if (value1 != null) {
-      builder.setMinimumEdition(DescriptorProtos.Edition.forNumber(value1.number))
-    }
-    val value2 = obj.maximumEdition
-    if (value2 != null) {
-      builder.setMaximumEdition(DescriptorProtos.Edition.forNumber(value2.number))
-    }
+    builder.setMinimumEdition(DescriptorProtos.Edition.forNumber(obj.minimumEdition.number))
+    builder.setMaximumEdition(DescriptorProtos.Edition.forNumber(obj.maximumEdition.number))
     return builder.build()
   }
 
@@ -1269,14 +921,8 @@ public open class FeatureSetDefaultsJvmConverter :
     override fun convert(obj: FeatureSetDefaults.FeatureSetEditionDefault):
         DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault {
       val builder = DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault.newBuilder()
-      val value0 = obj.edition
-      if (value0 != null) {
-        builder.setEdition(DescriptorProtos.Edition.forNumber(value0.number))
-      }
-      val value1 = obj.features
-      if (value1 != null) {
-        builder.setFeatures(FeatureSetConverter.convert(value1))
-      }
+      builder.setEdition(DescriptorProtos.Edition.forNumber(obj.edition.number))
+      builder.setFeatures(FeatureSetConverter.convert(obj.features))
       return builder.build()
     }
   }
@@ -1327,14 +973,8 @@ public open class SourceCodeInfoJvmConverter :
       val builder = DescriptorProtos.SourceCodeInfo.Location.newBuilder()
       builder.addAllPath(obj.path.map { it })
       builder.addAllSpan(obj.span.map { it })
-      val value2 = obj.leadingComments
-      if (value2 != null) {
-        builder.setLeadingComments(value2)
-      }
-      val value3 = obj.trailingComments
-      if (value3 != null) {
-        builder.setTrailingComments(value3)
-      }
+      builder.setLeadingComments(obj.leadingComments)
+      builder.setTrailingComments(obj.trailingComments)
       builder.addAllLeadingDetachedComments(obj.leadingDetachedComments.map { it })
       return builder.build()
     }
@@ -1390,22 +1030,10 @@ public open class GeneratedCodeInfoJvmConverter :
         DescriptorProtos.GeneratedCodeInfo.Annotation {
       val builder = DescriptorProtos.GeneratedCodeInfo.Annotation.newBuilder()
       builder.addAllPath(obj.path.map { it })
-      val value1 = obj.sourceFile
-      if (value1 != null) {
-        builder.setSourceFile(value1)
-      }
-      val value2 = obj.begin
-      if (value2 != null) {
-        builder.setBegin(value2)
-      }
-      val value3 = obj.end
-      if (value3 != null) {
-        builder.setEnd(value3)
-      }
-      val value4 = obj.semantic
-      if (value4 != null) {
-        builder.setSemantic(DescriptorProtos.GeneratedCodeInfo.Annotation.Semantic.forNumber(value4.number))
-      }
+      builder.setSourceFile(obj.sourceFile)
+      builder.setBegin(obj.begin)
+      builder.setEnd(obj.end)
+      builder.setSemantic(DescriptorProtos.GeneratedCodeInfo.Annotation.Semantic.forNumber(obj.semantic.number))
       return builder.build()
     }
   }

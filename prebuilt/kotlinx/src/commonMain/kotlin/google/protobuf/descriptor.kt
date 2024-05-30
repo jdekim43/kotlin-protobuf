@@ -1,5 +1,5 @@
 // Transform from google/protobuf/descriptor.proto
-@file:GeneratorVersion(version = "0.4.1")
+@file:GeneratorVersion(version = "0.5.1")
 
 package google.protobuf
 
@@ -14,6 +14,7 @@ import kotlin.OptIn
 import kotlin.ReplaceWith
 import kotlin.String
 import kotlin.ULong
+import kotlin.byteArrayOf
 import kotlin.collections.List
 import kotlin.collections.emptyList
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -110,9 +111,9 @@ public data class FileDescriptorSet(
 @SerialName(value = FileDescriptorProto.TYPE_URL)
 public data class FileDescriptorProto(
   @ProtobufIndex(index = 1)
-  public val name: String? = null,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val `package`: String? = null,
+  public val `package`: String = "",
   @ProtobufIndex(index = 3)
   public val dependency: List<String> = emptyList(),
   @ProtobufIndex(index = 10)
@@ -128,13 +129,13 @@ public data class FileDescriptorProto(
   @ProtobufIndex(index = 7)
   public val extension: List<FieldDescriptorProto> = emptyList(),
   @ProtobufIndex(index = 8)
-  public val options: FileOptions? = null,
+  public val options: FileOptions = FileOptions(),
   @ProtobufIndex(index = 9)
-  public val sourceCodeInfo: SourceCodeInfo? = null,
+  public val sourceCodeInfo: SourceCodeInfo = SourceCodeInfo(),
   @ProtobufIndex(index = 12)
-  public val syntax: String? = null,
+  public val syntax: String = "",
   @ProtobufIndex(index = 14)
-  public val edition: Edition? = null,
+  public val edition: Edition = Edition.values()[0],
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.FileDescriptorProto"
@@ -171,7 +172,7 @@ public data class FileDescriptorProto(
 @SerialName(value = DescriptorProto.TYPE_URL)
 public data class DescriptorProto(
   @ProtobufIndex(index = 1)
-  public val name: String? = null,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
   public val `field`: List<FieldDescriptorProto> = emptyList(),
   @ProtobufIndex(index = 6)
@@ -185,7 +186,7 @@ public data class DescriptorProto(
   @ProtobufIndex(index = 8)
   public val oneofDecl: List<OneofDescriptorProto> = emptyList(),
   @ProtobufIndex(index = 7)
-  public val options: MessageOptions? = null,
+  public val options: MessageOptions = MessageOptions(),
   @ProtobufIndex(index = 9)
   public val reservedRange: List<ReservedRange> = emptyList(),
   @ProtobufIndex(index = 10)
@@ -200,11 +201,11 @@ public data class DescriptorProto(
   @SerialName(value = ExtensionRange.TYPE_URL)
   public data class ExtensionRange(
     @ProtobufIndex(index = 1)
-    public val start: Int? = null,
+    public val start: Int = 0,
     @ProtobufIndex(index = 2)
-    public val end: Int? = null,
+    public val end: Int = 0,
     @ProtobufIndex(index = 3)
-    public val options: ExtensionRangeOptions? = null,
+    public val options: ExtensionRangeOptions = ExtensionRangeOptions(),
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =
@@ -242,9 +243,9 @@ public data class DescriptorProto(
   @SerialName(value = ReservedRange.TYPE_URL)
   public data class ReservedRange(
     @ProtobufIndex(index = 1)
-    public val start: Int? = null,
+    public val start: Int = 0,
     @ProtobufIndex(index = 2)
-    public val end: Int? = null,
+    public val end: Int = 0,
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =
@@ -312,9 +313,9 @@ public data class ExtensionRangeOptions(
   @ProtobufIndex(index = 2)
   public val declaration: List<Declaration> = emptyList(),
   @ProtobufIndex(index = 50)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 3)
-  public val verification: VerificationState? = null,
+  public val verification: VerificationState = VerificationState.values()[0],
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.ExtensionRangeOptions"
@@ -342,15 +343,15 @@ public data class ExtensionRangeOptions(
   @SerialName(value = Declaration.TYPE_URL)
   public data class Declaration(
     @ProtobufIndex(index = 1)
-    public val number: Int? = null,
+    public val number: Int = 0,
     @ProtobufIndex(index = 2)
-    public val fullName: String? = null,
+    public val fullName: String = "",
     @ProtobufIndex(index = 3)
-    public val type: String? = null,
+    public val type: String = "",
     @ProtobufIndex(index = 5)
-    public val reserved: Boolean? = null,
+    public val reserved: Boolean = false,
     @ProtobufIndex(index = 6)
-    public val repeated: Boolean? = null,
+    public val repeated: Boolean = false,
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =
@@ -414,27 +415,27 @@ public data class ExtensionRangeOptions(
 @SerialName(value = FieldDescriptorProto.TYPE_URL)
 public data class FieldDescriptorProto(
   @ProtobufIndex(index = 1)
-  public val name: String? = null,
+  public val name: String = "",
   @ProtobufIndex(index = 3)
-  public val number: Int? = null,
+  public val number: Int = 0,
   @ProtobufIndex(index = 4)
-  public val label: Label? = null,
+  public val label: Label = Label.values()[0],
   @ProtobufIndex(index = 5)
-  public val type: Type? = null,
+  public val type: Type = Type.values()[0],
   @ProtobufIndex(index = 6)
-  public val typeName: String? = null,
+  public val typeName: String = "",
   @ProtobufIndex(index = 2)
-  public val extendee: String? = null,
+  public val extendee: String = "",
   @ProtobufIndex(index = 7)
-  public val defaultValue: String? = null,
+  public val defaultValue: String = "",
   @ProtobufIndex(index = 9)
-  public val oneofIndex: Int? = null,
+  public val oneofIndex: Int = 0,
   @ProtobufIndex(index = 10)
-  public val jsonName: String? = null,
+  public val jsonName: String = "",
   @ProtobufIndex(index = 8)
-  public val options: FieldOptions? = null,
+  public val options: FieldOptions = FieldOptions(),
   @ProtobufIndex(index = 17)
-  public val proto3Optional: Boolean? = null,
+  public val proto3Optional: Boolean = false,
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.FieldDescriptorProto"
@@ -539,9 +540,9 @@ public data class FieldDescriptorProto(
 @SerialName(value = OneofDescriptorProto.TYPE_URL)
 public data class OneofDescriptorProto(
   @ProtobufIndex(index = 1)
-  public val name: String? = null,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val options: OneofOptions? = null,
+  public val options: OneofOptions = OneofOptions(),
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.OneofDescriptorProto"
@@ -578,11 +579,11 @@ public data class OneofDescriptorProto(
 @SerialName(value = EnumDescriptorProto.TYPE_URL)
 public data class EnumDescriptorProto(
   @ProtobufIndex(index = 1)
-  public val name: String? = null,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
   public val `value`: List<EnumValueDescriptorProto> = emptyList(),
   @ProtobufIndex(index = 3)
-  public val options: EnumOptions? = null,
+  public val options: EnumOptions = EnumOptions(),
   @ProtobufIndex(index = 4)
   public val reservedRange: List<EnumReservedRange> = emptyList(),
   @ProtobufIndex(index = 5)
@@ -597,9 +598,9 @@ public data class EnumDescriptorProto(
   @SerialName(value = EnumReservedRange.TYPE_URL)
   public data class EnumReservedRange(
     @ProtobufIndex(index = 1)
-    public val start: Int? = null,
+    public val start: Int = 0,
     @ProtobufIndex(index = 2)
-    public val end: Int? = null,
+    public val end: Int = 0,
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =
@@ -663,11 +664,11 @@ public data class EnumDescriptorProto(
 @SerialName(value = EnumValueDescriptorProto.TYPE_URL)
 public data class EnumValueDescriptorProto(
   @ProtobufIndex(index = 1)
-  public val name: String? = null,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val number: Int? = null,
+  public val number: Int = 0,
   @ProtobufIndex(index = 3)
-  public val options: EnumValueOptions? = null,
+  public val options: EnumValueOptions = EnumValueOptions(),
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String =
@@ -705,11 +706,11 @@ public data class EnumValueDescriptorProto(
 @SerialName(value = ServiceDescriptorProto.TYPE_URL)
 public data class ServiceDescriptorProto(
   @ProtobufIndex(index = 1)
-  public val name: String? = null,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
   public val method: List<MethodDescriptorProto> = emptyList(),
   @ProtobufIndex(index = 3)
-  public val options: ServiceOptions? = null,
+  public val options: ServiceOptions = ServiceOptions(),
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.ServiceDescriptorProto"
@@ -746,17 +747,17 @@ public data class ServiceDescriptorProto(
 @SerialName(value = MethodDescriptorProto.TYPE_URL)
 public data class MethodDescriptorProto(
   @ProtobufIndex(index = 1)
-  public val name: String? = null,
+  public val name: String = "",
   @ProtobufIndex(index = 2)
-  public val inputType: String? = null,
+  public val inputType: String = "",
   @ProtobufIndex(index = 3)
-  public val outputType: String? = null,
+  public val outputType: String = "",
   @ProtobufIndex(index = 4)
-  public val options: MethodOptions? = null,
+  public val options: MethodOptions = MethodOptions(),
   @ProtobufIndex(index = 5)
-  public val clientStreaming: Boolean? = null,
+  public val clientStreaming: Boolean = false,
   @ProtobufIndex(index = 6)
-  public val serverStreaming: Boolean? = null,
+  public val serverStreaming: Boolean = false,
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.MethodDescriptorProto"
@@ -793,50 +794,50 @@ public data class MethodDescriptorProto(
 @SerialName(value = FileOptions.TYPE_URL)
 public data class FileOptions(
   @ProtobufIndex(index = 1)
-  public val javaPackage: String? = null,
+  public val javaPackage: String = "",
   @ProtobufIndex(index = 8)
-  public val javaOuterClassname: String? = null,
+  public val javaOuterClassname: String = "",
   @ProtobufIndex(index = 10)
-  public val javaMultipleFiles: Boolean? = null,
+  public val javaMultipleFiles: Boolean = false,
   @Deprecated(
     message = "",
     replaceWith = ReplaceWith(""),
     level = DeprecationLevel.WARNING,
   )
   @ProtobufIndex(index = 20)
-  public val javaGenerateEqualsAndHash: Boolean? = null,
+  public val javaGenerateEqualsAndHash: Boolean = false,
   @ProtobufIndex(index = 27)
-  public val javaStringCheckUtf8: Boolean? = null,
+  public val javaStringCheckUtf8: Boolean = false,
   @ProtobufIndex(index = 9)
-  public val optimizeFor: OptimizeMode? = null,
+  public val optimizeFor: OptimizeMode = OptimizeMode.values()[0],
   @ProtobufIndex(index = 11)
-  public val goPackage: String? = null,
+  public val goPackage: String = "",
   @ProtobufIndex(index = 16)
-  public val ccGenericServices: Boolean? = null,
+  public val ccGenericServices: Boolean = false,
   @ProtobufIndex(index = 17)
-  public val javaGenericServices: Boolean? = null,
+  public val javaGenericServices: Boolean = false,
   @ProtobufIndex(index = 18)
-  public val pyGenericServices: Boolean? = null,
+  public val pyGenericServices: Boolean = false,
   @ProtobufIndex(index = 23)
-  public val deprecated: Boolean? = null,
+  public val deprecated: Boolean = false,
   @ProtobufIndex(index = 31)
-  public val ccEnableArenas: Boolean? = null,
+  public val ccEnableArenas: Boolean = false,
   @ProtobufIndex(index = 36)
-  public val objcClassPrefix: String? = null,
+  public val objcClassPrefix: String = "",
   @ProtobufIndex(index = 37)
-  public val csharpNamespace: String? = null,
+  public val csharpNamespace: String = "",
   @ProtobufIndex(index = 39)
-  public val swiftPrefix: String? = null,
+  public val swiftPrefix: String = "",
   @ProtobufIndex(index = 40)
-  public val phpClassPrefix: String? = null,
+  public val phpClassPrefix: String = "",
   @ProtobufIndex(index = 41)
-  public val phpNamespace: String? = null,
+  public val phpNamespace: String = "",
   @ProtobufIndex(index = 44)
-  public val phpMetadataNamespace: String? = null,
+  public val phpMetadataNamespace: String = "",
   @ProtobufIndex(index = 45)
-  public val rubyPackage: String? = null,
+  public val rubyPackage: String = "",
   @ProtobufIndex(index = 50)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 999)
   public val uninterpretedOption: List<UninterpretedOption> = emptyList(),
 ) : TypeProtobufMessage {
@@ -894,22 +895,22 @@ public data class FileOptions(
 @SerialName(value = MessageOptions.TYPE_URL)
 public data class MessageOptions(
   @ProtobufIndex(index = 1)
-  public val messageSetWireFormat: Boolean? = null,
+  public val messageSetWireFormat: Boolean = false,
   @ProtobufIndex(index = 2)
-  public val noStandardDescriptorAccessor: Boolean? = null,
+  public val noStandardDescriptorAccessor: Boolean = false,
   @ProtobufIndex(index = 3)
-  public val deprecated: Boolean? = null,
+  public val deprecated: Boolean = false,
   @ProtobufIndex(index = 7)
-  public val mapEntry: Boolean? = null,
+  public val mapEntry: Boolean = false,
   @Deprecated(
     message = "",
     replaceWith = ReplaceWith(""),
     level = DeprecationLevel.WARNING,
   )
   @ProtobufIndex(index = 11)
-  public val deprecatedLegacyJsonFieldConflicts: Boolean? = null,
+  public val deprecatedLegacyJsonFieldConflicts: Boolean = false,
   @ProtobufIndex(index = 12)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 999)
   public val uninterpretedOption: List<UninterpretedOption> = emptyList(),
 ) : TypeProtobufMessage {
@@ -948,31 +949,31 @@ public data class MessageOptions(
 @SerialName(value = FieldOptions.TYPE_URL)
 public data class FieldOptions(
   @ProtobufIndex(index = 1)
-  public val ctype: CType? = null,
+  public val ctype: CType = CType.values()[0],
   @ProtobufIndex(index = 2)
-  public val packed: Boolean? = null,
+  public val packed: Boolean = false,
   @ProtobufIndex(index = 6)
-  public val jstype: JSType? = null,
+  public val jstype: JSType = JSType.values()[0],
   @ProtobufIndex(index = 5)
-  public val lazy: Boolean? = null,
+  public val lazy: Boolean = false,
   @ProtobufIndex(index = 15)
-  public val unverifiedLazy: Boolean? = null,
+  public val unverifiedLazy: Boolean = false,
   @ProtobufIndex(index = 3)
-  public val deprecated: Boolean? = null,
+  public val deprecated: Boolean = false,
   @ProtobufIndex(index = 10)
-  public val weak: Boolean? = null,
+  public val weak: Boolean = false,
   @ProtobufIndex(index = 16)
-  public val debugRedact: Boolean? = null,
+  public val debugRedact: Boolean = false,
   @ProtobufIndex(index = 17)
-  public val retention: OptionRetention? = null,
+  public val retention: OptionRetention = OptionRetention.values()[0],
   @ProtobufIndex(index = 19)
   public val targets: List<OptionTargetType> = emptyList(),
   @ProtobufIndex(index = 20)
   public val editionDefaults: List<EditionDefault> = emptyList(),
   @ProtobufIndex(index = 21)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 22)
-  public val featureSupport: FeatureSupport? = null,
+  public val featureSupport: FeatureSupport = FeatureSupport(),
   @ProtobufIndex(index = 999)
   public val uninterpretedOption: List<UninterpretedOption> = emptyList(),
 ) : TypeProtobufMessage {
@@ -1075,9 +1076,9 @@ public data class FieldOptions(
   @SerialName(value = EditionDefault.TYPE_URL)
   public data class EditionDefault(
     @ProtobufIndex(index = 3)
-    public val edition: Edition? = null,
+    public val edition: Edition = Edition.values()[0],
     @ProtobufIndex(index = 2)
-    public val `value`: String? = null,
+    public val `value`: String = "",
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =
@@ -1115,13 +1116,13 @@ public data class FieldOptions(
   @SerialName(value = FeatureSupport.TYPE_URL)
   public data class FeatureSupport(
     @ProtobufIndex(index = 1)
-    public val editionIntroduced: Edition? = null,
+    public val editionIntroduced: Edition = Edition.values()[0],
     @ProtobufIndex(index = 2)
-    public val editionDeprecated: Edition? = null,
+    public val editionDeprecated: Edition = Edition.values()[0],
     @ProtobufIndex(index = 3)
-    public val deprecationWarning: String? = null,
+    public val deprecationWarning: String = "",
     @ProtobufIndex(index = 4)
-    public val editionRemoved: Edition? = null,
+    public val editionRemoved: Edition = Edition.values()[0],
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =
@@ -1185,7 +1186,7 @@ public data class FieldOptions(
 @SerialName(value = OneofOptions.TYPE_URL)
 public data class OneofOptions(
   @ProtobufIndex(index = 1)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 999)
   public val uninterpretedOption: List<UninterpretedOption> = emptyList(),
 ) : TypeProtobufMessage {
@@ -1224,18 +1225,18 @@ public data class OneofOptions(
 @SerialName(value = EnumOptions.TYPE_URL)
 public data class EnumOptions(
   @ProtobufIndex(index = 2)
-  public val allowAlias: Boolean? = null,
+  public val allowAlias: Boolean = false,
   @ProtobufIndex(index = 3)
-  public val deprecated: Boolean? = null,
+  public val deprecated: Boolean = false,
   @Deprecated(
     message = "",
     replaceWith = ReplaceWith(""),
     level = DeprecationLevel.WARNING,
   )
   @ProtobufIndex(index = 6)
-  public val deprecatedLegacyJsonFieldConflicts: Boolean? = null,
+  public val deprecatedLegacyJsonFieldConflicts: Boolean = false,
   @ProtobufIndex(index = 7)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 999)
   public val uninterpretedOption: List<UninterpretedOption> = emptyList(),
 ) : TypeProtobufMessage {
@@ -1274,11 +1275,11 @@ public data class EnumOptions(
 @SerialName(value = EnumValueOptions.TYPE_URL)
 public data class EnumValueOptions(
   @ProtobufIndex(index = 1)
-  public val deprecated: Boolean? = null,
+  public val deprecated: Boolean = false,
   @ProtobufIndex(index = 2)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 3)
-  public val debugRedact: Boolean? = null,
+  public val debugRedact: Boolean = false,
   @ProtobufIndex(index = 999)
   public val uninterpretedOption: List<UninterpretedOption> = emptyList(),
 ) : TypeProtobufMessage {
@@ -1317,9 +1318,9 @@ public data class EnumValueOptions(
 @SerialName(value = ServiceOptions.TYPE_URL)
 public data class ServiceOptions(
   @ProtobufIndex(index = 34)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 33)
-  public val deprecated: Boolean? = null,
+  public val deprecated: Boolean = false,
   @ProtobufIndex(index = 999)
   public val uninterpretedOption: List<UninterpretedOption> = emptyList(),
 ) : TypeProtobufMessage {
@@ -1358,11 +1359,11 @@ public data class ServiceOptions(
 @SerialName(value = MethodOptions.TYPE_URL)
 public data class MethodOptions(
   @ProtobufIndex(index = 33)
-  public val deprecated: Boolean? = null,
+  public val deprecated: Boolean = false,
   @ProtobufIndex(index = 34)
-  public val idempotencyLevel: IdempotencyLevel? = null,
+  public val idempotencyLevel: IdempotencyLevel = IdempotencyLevel.values()[0],
   @ProtobufIndex(index = 35)
-  public val features: FeatureSet? = null,
+  public val features: FeatureSet = FeatureSet(),
   @ProtobufIndex(index = 999)
   public val uninterpretedOption: List<UninterpretedOption> = emptyList(),
 ) : TypeProtobufMessage {
@@ -1422,17 +1423,17 @@ public data class UninterpretedOption(
   @ProtobufIndex(index = 2)
   public val name: List<NamePart> = emptyList(),
   @ProtobufIndex(index = 3)
-  public val identifierValue: String? = null,
+  public val identifierValue: String = "",
   @ProtobufIndex(index = 4)
-  public val positiveIntValue: ULong? = null,
+  public val positiveIntValue: ULong = 0uL,
   @ProtobufIndex(index = 5)
-  public val negativeIntValue: Long? = null,
+  public val negativeIntValue: Long = 0L,
   @ProtobufIndex(index = 6)
-  public val doubleValue: Double? = null,
+  public val doubleValue: Double = 0.0,
   @ProtobufIndex(index = 7)
-  public val stringValue: ByteArray? = null,
+  public val stringValue: ByteArray = byteArrayOf(),
   @ProtobufIndex(index = 8)
-  public val aggregateValue: String? = null,
+  public val aggregateValue: String = "",
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.UninterpretedOption"
@@ -1443,9 +1444,9 @@ public data class UninterpretedOption(
   @SerialName(value = NamePart.TYPE_URL)
   public data class NamePart(
     @ProtobufIndex(index = 1)
-    public val namePart: String? = null,
+    public val namePart: String = "",
     @ProtobufIndex(index = 2)
-    public val isExtension: Boolean? = null,
+    public val isExtension: Boolean = false,
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =
@@ -1509,17 +1510,17 @@ public data class UninterpretedOption(
 @SerialName(value = FeatureSet.TYPE_URL)
 public data class FeatureSet(
   @ProtobufIndex(index = 1)
-  public val fieldPresence: FieldPresence? = null,
+  public val fieldPresence: FieldPresence = FieldPresence.values()[0],
   @ProtobufIndex(index = 2)
-  public val enumType: EnumType? = null,
+  public val enumType: EnumType = EnumType.values()[0],
   @ProtobufIndex(index = 3)
-  public val repeatedFieldEncoding: RepeatedFieldEncoding? = null,
+  public val repeatedFieldEncoding: RepeatedFieldEncoding = RepeatedFieldEncoding.values()[0],
   @ProtobufIndex(index = 4)
-  public val utf8Validation: Utf8Validation? = null,
+  public val utf8Validation: Utf8Validation = Utf8Validation.values()[0],
   @ProtobufIndex(index = 5)
-  public val messageEncoding: MessageEncoding? = null,
+  public val messageEncoding: MessageEncoding = MessageEncoding.values()[0],
   @ProtobufIndex(index = 6)
-  public val jsonFormat: JsonFormat? = null,
+  public val jsonFormat: JsonFormat = JsonFormat.values()[0],
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.FeatureSet"
@@ -1674,9 +1675,9 @@ public data class FeatureSetDefaults(
   @ProtobufIndex(index = 1)
   public val defaults: List<FeatureSetEditionDefault> = emptyList(),
   @ProtobufIndex(index = 4)
-  public val minimumEdition: Edition? = null,
+  public val minimumEdition: Edition = Edition.values()[0],
   @ProtobufIndex(index = 5)
-  public val maximumEdition: Edition? = null,
+  public val maximumEdition: Edition = Edition.values()[0],
 ) : TypeProtobufMessage {
   public companion object {
     public const val TYPE_URL: String = "type.googleapis.com/google.protobuf.FeatureSetDefaults"
@@ -1687,11 +1688,11 @@ public data class FeatureSetDefaults(
   @SerialName(value = FeatureSetEditionDefault.TYPE_URL)
   public data class FeatureSetEditionDefault(
     @ProtobufIndex(index = 3)
-    public val edition: Edition? = null,
+    public val edition: Edition = Edition.values()[0],
     @ProtobufIndex(index = 4)
-    public val overridableFeatures: FeatureSet? = null,
+    public val overridableFeatures: FeatureSet = FeatureSet(),
     @ProtobufIndex(index = 5)
-    public val fixedFeatures: FeatureSet? = null,
+    public val fixedFeatures: FeatureSet = FeatureSet(),
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =
@@ -1770,9 +1771,9 @@ public data class SourceCodeInfo(
     @ProtobufIndex(index = 2)
     public val span: List<Int> = emptyList(),
     @ProtobufIndex(index = 3)
-    public val leadingComments: String? = null,
+    public val leadingComments: String = "",
     @ProtobufIndex(index = 4)
-    public val trailingComments: String? = null,
+    public val trailingComments: String = "",
     @ProtobufIndex(index = 6)
     public val leadingDetachedComments: List<String> = emptyList(),
   ) : TypeProtobufMessage {
@@ -1851,13 +1852,13 @@ public data class GeneratedCodeInfo(
     @ProtobufIndex(index = 1)
     public val path: List<Int> = emptyList(),
     @ProtobufIndex(index = 2)
-    public val sourceFile: String? = null,
+    public val sourceFile: String = "",
     @ProtobufIndex(index = 3)
-    public val begin: Int? = null,
+    public val begin: Int = 0,
     @ProtobufIndex(index = 4)
-    public val end: Int? = null,
+    public val end: Int = 0,
     @ProtobufIndex(index = 5)
-    public val semantic: Semantic? = null,
+    public val semantic: Semantic = Semantic.values()[0],
   ) : TypeProtobufMessage {
     public companion object {
       public const val TYPE_URL: String =

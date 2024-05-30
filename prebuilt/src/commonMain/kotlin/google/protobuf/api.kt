@@ -1,5 +1,5 @@
 // Transform from google/protobuf/api.proto
-@file:GeneratorVersion(version = "0.4.1")
+@file:GeneratorVersion(version = "0.5.1")
 
 package google.protobuf
 
@@ -23,7 +23,7 @@ public data class Api(
   @ProtobufIndex(index = 4)
   public val version: String = "",
   @ProtobufIndex(index = 5)
-  public val sourceContext: SourceContext? = null,
+  public val sourceContext: SourceContext = SourceContext(),
   @ProtobufIndex(index = 6)
   public val mixins: List<Mixin> = emptyList(),
   @ProtobufIndex(index = 7)
