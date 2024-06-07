@@ -148,11 +148,14 @@ class GrpcGatewayServiceGenerator {
         addStatement("\t\t%M(%P)", MemberName("io.ktor.http", "path"), path)
 
         for (parameter in queryParameters) {
+            val (toStringCode, toStringParameter) = parameter.last().getToStringCode()
+
             addStatement(
-                "\t\t%M(%S, request.%L)",
+                "\t\t%M(%S, request.%L.$toStringCode)",
                 MemberName("io.ktor.client.request", "parameter"),
                 parameter.flattenName(),
                 parameter.flattenOutputTypeName(),
+                *toStringParameter,
             )
         }
 

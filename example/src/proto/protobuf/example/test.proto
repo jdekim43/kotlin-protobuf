@@ -32,4 +32,5 @@ message GetMessageRequest {
   string message_id = 1;
   string user_id = 2;
   Test test = 3;
+  bytes byte = 4;
 }

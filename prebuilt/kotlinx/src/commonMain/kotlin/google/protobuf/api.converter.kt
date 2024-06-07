@@ -1,5 +1,5 @@
 // Transform from google/protobuf/api.proto
-@file:GeneratorVersion(version = "0.5.1")
+@file:GeneratorVersion(version = "0.5.2")
 
 package google.protobuf
 

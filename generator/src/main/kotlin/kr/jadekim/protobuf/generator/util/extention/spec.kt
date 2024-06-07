@@ -10,6 +10,7 @@ import kr.jadekim.protobuf.generator.BUILD_VERSION
 import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
 import net.pearx.kasechange.toCamelCase
 import net.pearx.kasechange.toPascalCase
+import kotlin.io.encoding.Base64
 import kotlin.reflect.KClass
 
 fun TypeSpec.Builder.addNumberAnnotation(number: Int) {
@@ -127,7 +128,7 @@ val Descriptors.ServiceDescriptor.outputTypeName: ClassName
     get() = (this as Descriptors.GenericDescriptor).outputTypeName.peerClass(name.toPascalCase(ProtobufWordSplitter))
 
 fun Descriptors.Descriptor.flattenFields(): List<List<Descriptors.FieldDescriptor>> = realFields.flatMap { field ->
-    if (field.type == Descriptors.FieldDescriptor.Type.MESSAGE) {
+    if (field.type == Descriptors.FieldDescriptor.Type.MESSAGE || field.type == Descriptors.FieldDescriptor.Type.GROUP) {
         field.messageType.flattenFields().map { listOf(field) + it }
     } else {
         listOf(listOf(field))
@@ -150,6 +151,28 @@ fun List<Descriptors.FieldDescriptor>.flattenOutputTypeName(): String = buildStr
             previous = field
         }
     }
+
+fun Descriptors.FieldDescriptor.getToStringCode(): Pair<String, Array<Any>> = when(type) {
+    Descriptors.FieldDescriptor.Type.BYTES -> "%M()" to arrayOf(MemberName("io.ktor.util", "encodeBase64", true))
+    Descriptors.FieldDescriptor.Type.ENUM -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.DOUBLE -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.FLOAT -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.INT64 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.UINT64 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.INT32 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.FIXED64 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.FIXED32 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.BOOL -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.STRING -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.UINT32 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.SFIXED32 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.SFIXED64 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.SINT32 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.SINT64 -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.GROUP -> "toString()" to emptyArray()
+    Descriptors.FieldDescriptor.Type.MESSAGE -> "toString()" to emptyArray()
+    null -> throw NullPointerException()
+}
 
 fun List<List<Descriptors.FieldDescriptor>>.flattenOutputTypeNames(): List<String> = map { it.flattenOutputTypeName() }
 

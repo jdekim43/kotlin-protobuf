@@ -10,14 +10,14 @@ fun GrpcGatewayClientOption(
     url: String,
     engine: HttpClientEngine,
     format: ProtobufJsonFormat = ProtobufJsonFormat(),
-    configure: HttpClientConfig<*>.() -> Unit,
+    configure: HttpClientConfig<*>.() -> Unit = {},
 ) = GrpcGatewayClientOption(DefaultHttpClient(url, engine, format, configure))
 
 private fun DefaultHttpClient(
     url: String,
     engine: HttpClientEngine,
     protobufFormat: ProtobufJsonFormat = ProtobufJsonFormat(),
-    configure: HttpClientConfig<*>.() -> Unit,
+    configure: HttpClientConfig<*>.() -> Unit = {},
 ): HttpClient = HttpClient(engine) {
     expectSuccess = true
 
