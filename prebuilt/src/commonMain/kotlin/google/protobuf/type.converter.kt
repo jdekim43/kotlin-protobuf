@@ -1,5 +1,5 @@
 // Transform from google/protobuf/type.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -46,8 +46,7 @@ public val Enum.Companion.converter: EnumConverter
 
 public expect object EnumValueConverter : ProtobufConverter<EnumValue>
 
-public fun EnumValue.toAny(): Any = Any(EnumValue.TYPE_URL, with(EnumValueConverter) { toByteArray()
-    })
+public fun EnumValue.toAny(): Any = Any(EnumValue.TYPE_URL, with(EnumValueConverter) { toByteArray() })
 
 public fun Any.parse(converter: ProtobufConverter<EnumValue> = EnumValueConverter): EnumValue {
   if (typeUrl != EnumValue.TYPE_URL) throw IllegalStateException("Please check the type_url")

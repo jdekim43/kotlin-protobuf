@@ -1,5 +1,5 @@
 // Transform from google/protobuf/type.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -102,8 +102,7 @@ public open class EnumJvmConverter : ProtobufTypeMapper<Enum, com.google.protobu
   }
 }
 
-public open class EnumValueJvmConverter :
-    ProtobufTypeMapper<EnumValue, com.google.protobuf.EnumValue> {
+public open class EnumValueJvmConverter : ProtobufTypeMapper<EnumValue, com.google.protobuf.EnumValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.EnumValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.EnumValue> =

@@ -1,5 +1,5 @@
 // Transform from google/protobuf/field_mask.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 

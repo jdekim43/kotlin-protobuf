@@ -1,5 +1,5 @@
 // Transform from google/protobuf/source_context.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -8,8 +8,7 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public open class SourceContextJvmConverter :
-    ProtobufTypeMapper<SourceContext, com.google.protobuf.SourceContext> {
+public open class SourceContextJvmConverter : ProtobufTypeMapper<SourceContext, com.google.protobuf.SourceContext> {
   override val descriptor: Descriptors.Descriptor =
       com.google.protobuf.SourceContext.getDescriptor()
 

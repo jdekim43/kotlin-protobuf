@@ -1,5 +1,5 @@
 // Transform from google/protobuf/struct.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -48,23 +48,19 @@ public open class ValueJvmConverter : ProtobufTypeMapper<Value, com.google.proto
   override fun convert(obj: Value): com.google.protobuf.Value {
     val builder = com.google.protobuf.Value.newBuilder()
     when (obj.kind) {
-      is Value.KindOneOf.NullValue ->
-          builder.setNullValue(com.google.protobuf.NullValue.forNumber(obj.kind.value.number))
+      is Value.KindOneOf.NullValue -> builder.setNullValue(com.google.protobuf.NullValue.forNumber(obj.kind.value.number))
       is Value.KindOneOf.NumberValue -> builder.setNumberValue(obj.kind.value)
       is Value.KindOneOf.StringValue -> builder.setStringValue(obj.kind.value)
       is Value.KindOneOf.BoolValue -> builder.setBoolValue(obj.kind.value)
-      is Value.KindOneOf.StructValue ->
-          builder.setStructValue(StructConverter.convert(obj.kind.value))
-      is Value.KindOneOf.ListValue ->
-          builder.setListValue(ListValueConverter.convert(obj.kind.value))
+      is Value.KindOneOf.StructValue -> builder.setStructValue(StructConverter.convert(obj.kind.value))
+      is Value.KindOneOf.ListValue -> builder.setListValue(ListValueConverter.convert(obj.kind.value))
       else -> throw IllegalArgumentException()
     }
     return builder.build()
   }
 }
 
-public open class ListValueJvmConverter :
-    ProtobufTypeMapper<ListValue, com.google.protobuf.ListValue> {
+public open class ListValueJvmConverter : ProtobufTypeMapper<ListValue, com.google.protobuf.ListValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.ListValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.ListValue> =

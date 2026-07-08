@@ -1,5 +1,5 @@
 // Transform from google/protobuf/struct.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -34,8 +34,7 @@ public val Value.Companion.converter: ValueConverter
 
 public expect object ListValueConverter : ProtobufConverter<ListValue>
 
-public fun ListValue.toAny(): Any = Any(ListValue.TYPE_URL, with(ListValueConverter) { toByteArray()
-    })
+public fun ListValue.toAny(): Any = Any(ListValue.TYPE_URL, with(ListValueConverter) { toByteArray() })
 
 public fun Any.parse(converter: ProtobufConverter<ListValue> = ListValueConverter): ListValue {
   if (typeUrl != ListValue.TYPE_URL) throw IllegalStateException("Please check the type_url")

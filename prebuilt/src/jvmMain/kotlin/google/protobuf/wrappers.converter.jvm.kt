@@ -1,5 +1,5 @@
 // Transform from google/protobuf/wrappers.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -11,8 +11,7 @@ import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 import kr.jadekim.protobuf.util.asJavaType
 import kr.jadekim.protobuf.util.asKotlinType
 
-public open class DoubleValueJvmConverter :
-    ProtobufTypeMapper<DoubleValue, com.google.protobuf.DoubleValue> {
+public open class DoubleValueJvmConverter : ProtobufTypeMapper<DoubleValue, com.google.protobuf.DoubleValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.DoubleValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.DoubleValue> =
@@ -32,8 +31,7 @@ public open class DoubleValueJvmConverter :
   }
 }
 
-public open class FloatValueJvmConverter :
-    ProtobufTypeMapper<FloatValue, com.google.protobuf.FloatValue> {
+public open class FloatValueJvmConverter : ProtobufTypeMapper<FloatValue, com.google.protobuf.FloatValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.FloatValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.FloatValue> =
@@ -53,8 +51,7 @@ public open class FloatValueJvmConverter :
   }
 }
 
-public open class Int64ValueJvmConverter :
-    ProtobufTypeMapper<Int64Value, com.google.protobuf.Int64Value> {
+public open class Int64ValueJvmConverter : ProtobufTypeMapper<Int64Value, com.google.protobuf.Int64Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Int64Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Int64Value> =
@@ -74,8 +71,7 @@ public open class Int64ValueJvmConverter :
   }
 }
 
-public open class UInt64ValueJvmConverter :
-    ProtobufTypeMapper<UInt64Value, com.google.protobuf.UInt64Value> {
+public open class UInt64ValueJvmConverter : ProtobufTypeMapper<UInt64Value, com.google.protobuf.UInt64Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.UInt64Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.UInt64Value> =
@@ -95,8 +91,7 @@ public open class UInt64ValueJvmConverter :
   }
 }
 
-public open class Int32ValueJvmConverter :
-    ProtobufTypeMapper<Int32Value, com.google.protobuf.Int32Value> {
+public open class Int32ValueJvmConverter : ProtobufTypeMapper<Int32Value, com.google.protobuf.Int32Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Int32Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Int32Value> =
@@ -116,8 +111,7 @@ public open class Int32ValueJvmConverter :
   }
 }
 
-public open class UInt32ValueJvmConverter :
-    ProtobufTypeMapper<UInt32Value, com.google.protobuf.UInt32Value> {
+public open class UInt32ValueJvmConverter : ProtobufTypeMapper<UInt32Value, com.google.protobuf.UInt32Value> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.UInt32Value.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.UInt32Value> =
@@ -137,8 +131,7 @@ public open class UInt32ValueJvmConverter :
   }
 }
 
-public open class BoolValueJvmConverter :
-    ProtobufTypeMapper<BoolValue, com.google.protobuf.BoolValue> {
+public open class BoolValueJvmConverter : ProtobufTypeMapper<BoolValue, com.google.protobuf.BoolValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.BoolValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.BoolValue> =
@@ -158,8 +151,7 @@ public open class BoolValueJvmConverter :
   }
 }
 
-public open class StringValueJvmConverter :
-    ProtobufTypeMapper<StringValue, com.google.protobuf.StringValue> {
+public open class StringValueJvmConverter : ProtobufTypeMapper<StringValue, com.google.protobuf.StringValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.StringValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.StringValue> =
@@ -179,8 +171,7 @@ public open class StringValueJvmConverter :
   }
 }
 
-public open class BytesValueJvmConverter :
-    ProtobufTypeMapper<BytesValue, com.google.protobuf.BytesValue> {
+public open class BytesValueJvmConverter : ProtobufTypeMapper<BytesValue, com.google.protobuf.BytesValue> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.BytesValue.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.BytesValue> =

@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform") version "1.9.24"
+    kotlin("multiplatform") version "2.0.21"
     id("org.jetbrains.dokka") version "1.9.20"
     id("maven-publish")
     id("signing")
@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = "kr.jadekim"
-    version = "0.5.2"
+    version = "0.6.0"
 
     repositories {
         mavenCentral()
@@ -33,9 +33,8 @@ configure(allprojects.filterNot {
     }
 
     kotlin {
-        jvm {
-            jvmToolchain(8)
-        }
+        jvmToolchain(8)
+        jvm()
 
         sourceSets {
             val commonMain by getting {
@@ -124,6 +123,11 @@ configure(allprojects.filterNot { it.name.startsWith("kotlin-protobuf-example") 
 
     signing {
         sign(publishing.publications)
+    }
+
+    val signingTasks = tasks.withType<Sign>()
+    tasks.withType<AbstractPublishToMaven>().configureEach {
+        mustRunAfter(signingTasks)
     }
 }
 

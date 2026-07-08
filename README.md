@@ -42,8 +42,8 @@ Protocol Buffer generator for kotlin multiplatform or single platform.
 #### build.gradle.kts
 ```
 plugins {
-    kotlin("jvm") version "1.9.23"
-    kotlin("plugin.serialization") version "1.9.23" //optional
+    kotlin("jvm") version "2.0.21"
+    kotlin("plugin.serialization") version "2.0.21" //optional
     id("com.google.protobuf") version "0.9.4"
 }
 
@@ -107,8 +107,8 @@ dependencies {
 #### build.gradle.kts
 ```
 plugins {
-    kotlin("multiplatform") version "1.9.23"
-    kotlin("plugin.serialization") version "1.9.23" //optional
+    kotlin("multiplatform") version "2.0.21"
+    kotlin("plugin.serialization") version "2.0.21" //optional
     id("com.google.protobuf") version "0.9.4"
     `java-library`
 }

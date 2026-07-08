@@ -8,9 +8,12 @@ import kr.jadekim.protobuf.generator.grpc.util.extension.grpcClientTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.grpcServerTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.grpcTypeName
 import kr.jadekim.protobuf.generator.grpc.util.extension.interfaceTypeName
+import kr.jadekim.protobuf.generator.util.ProtobufWordSplitter
+import kr.jadekim.protobuf.generator.util.extention.outputTypeName
 import kr.jadekim.protobuf.generator.util.extention.typeName
 import kr.jadekim.protobuf.grpc.GrpcClientOption
 import kr.jadekim.protobuf.grpc.GrpcServiceFactory
+import net.pearx.kasechange.toCamelCase
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -53,6 +56,18 @@ class MultiplePlatformGenerator : PlatformGrpcGenerator {
                 .build(),
         )
 
+        for (method in methods) {
+            val functionName = method.name.toCamelCase(ProtobufWordSplitter)
+
+            serverSpec.addFunction(
+                FunSpec.builder(functionName)
+                    .addModifiers(KModifier.SUSPEND, KModifier.OVERRIDE)
+                    .addParameter("request", method.inputType.outputTypeName)
+                    .returns(method.outputType.outputTypeName)
+                    .build()
+            )
+        }
+
         spec.addType(serverSpec.build())
 
         return name
@@ -70,6 +85,18 @@ class MultiplePlatformGenerator : PlatformGrpcGenerator {
                 .addParameter("option", GrpcClientOption::class)
                 .build()
         )
+
+        for (method in methods) {
+            val functionName = method.name.toCamelCase(ProtobufWordSplitter)
+
+            clientSpec.addFunction(
+                FunSpec.builder(functionName)
+                    .addModifiers(KModifier.SUSPEND, KModifier.OVERRIDE)
+                    .addParameter("request", method.inputType.outputTypeName)
+                    .returns(method.outputType.outputTypeName)
+                    .build()
+            )
+        }
 
         spec.addType(clientSpec.build())
 

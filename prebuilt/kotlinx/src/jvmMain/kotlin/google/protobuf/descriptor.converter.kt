@@ -1,5 +1,5 @@
 // Transform from google/protobuf/descriptor.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -14,19 +14,16 @@ public actual object FileDescriptorProtoConverter : FileDescriptorProtoJvmConver
 
 public actual object DescriptorProtoConverter : DescriptorProtoJvmConverter(),
     ProtobufConverter<DescriptorProto> {
-  public actual object ExtensionRangeConverter :
-      DescriptorProtoJvmConverter.ExtensionRangeJvmConverter(),
+  public actual object ExtensionRangeConverter : DescriptorProtoJvmConverter.ExtensionRangeJvmConverter(),
       ProtobufConverter<DescriptorProto.ExtensionRange>
 
-  public actual object ReservedRangeConverter :
-      DescriptorProtoJvmConverter.ReservedRangeJvmConverter(),
+  public actual object ReservedRangeConverter : DescriptorProtoJvmConverter.ReservedRangeJvmConverter(),
       ProtobufConverter<DescriptorProto.ReservedRange>
 }
 
 public actual object ExtensionRangeOptionsConverter : ExtensionRangeOptionsJvmConverter(),
     ProtobufConverter<ExtensionRangeOptions> {
-  public actual object DeclarationConverter :
-      ExtensionRangeOptionsJvmConverter.DeclarationJvmConverter(),
+  public actual object DeclarationConverter : ExtensionRangeOptionsJvmConverter.DeclarationJvmConverter(),
       ProtobufConverter<ExtensionRangeOptions.Declaration>
 }
 
@@ -38,8 +35,7 @@ public actual object OneofDescriptorProtoConverter : OneofDescriptorProtoJvmConv
 
 public actual object EnumDescriptorProtoConverter : EnumDescriptorProtoJvmConverter(),
     ProtobufConverter<EnumDescriptorProto> {
-  public actual object EnumReservedRangeConverter :
-      EnumDescriptorProtoJvmConverter.EnumReservedRangeJvmConverter(),
+  public actual object EnumReservedRangeConverter : EnumDescriptorProtoJvmConverter.EnumReservedRangeJvmConverter(),
       ProtobufConverter<EnumDescriptorProto.EnumReservedRange>
 }
 
@@ -60,12 +56,10 @@ public actual object MessageOptionsConverter : MessageOptionsJvmConverter(),
 
 public actual object FieldOptionsConverter : FieldOptionsJvmConverter(),
     ProtobufConverter<FieldOptions> {
-  public actual object EditionDefaultConverter :
-      FieldOptionsJvmConverter.EditionDefaultJvmConverter(),
+  public actual object EditionDefaultConverter : FieldOptionsJvmConverter.EditionDefaultJvmConverter(),
       ProtobufConverter<FieldOptions.EditionDefault>
 
-  public actual object FeatureSupportConverter :
-      FieldOptionsJvmConverter.FeatureSupportJvmConverter(),
+  public actual object FeatureSupportConverter : FieldOptionsJvmConverter.FeatureSupportJvmConverter(),
       ProtobufConverter<FieldOptions.FeatureSupport>
 }
 
@@ -94,8 +88,7 @@ public actual object FeatureSetConverter : FeatureSetJvmConverter(), ProtobufCon
 
 public actual object FeatureSetDefaultsConverter : FeatureSetDefaultsJvmConverter(),
     ProtobufConverter<FeatureSetDefaults> {
-  public actual object FeatureSetEditionDefaultConverter :
-      FeatureSetDefaultsJvmConverter.FeatureSetEditionDefaultJvmConverter(),
+  public actual object FeatureSetEditionDefaultConverter : FeatureSetDefaultsJvmConverter.FeatureSetEditionDefaultJvmConverter(),
       ProtobufConverter<FeatureSetDefaults.FeatureSetEditionDefault>
 }
 

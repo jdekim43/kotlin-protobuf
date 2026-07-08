@@ -14,9 +14,9 @@ allprojects {
     }
 
     kotlin {
+        jvmToolchain(8)
         jvm {
             withJava()
-            jvmToolchain(8)
         }
 
         sourceSets {

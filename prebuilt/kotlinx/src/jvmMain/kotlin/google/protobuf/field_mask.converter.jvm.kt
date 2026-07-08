@@ -1,5 +1,5 @@
 // Transform from google/protobuf/field_mask.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -8,8 +8,7 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public open class FieldMaskJvmConverter :
-    ProtobufTypeMapper<FieldMask, com.google.protobuf.FieldMask> {
+public open class FieldMaskJvmConverter : ProtobufTypeMapper<FieldMask, com.google.protobuf.FieldMask> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.FieldMask.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.FieldMask> =

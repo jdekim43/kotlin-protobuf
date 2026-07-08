@@ -1,5 +1,5 @@
 // Transform from google/protobuf/timestamp.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -8,8 +8,7 @@ import com.google.protobuf.Parser
 import kr.jadekim.protobuf.`annotation`.GeneratorVersion
 import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 
-public open class TimestampJvmConverter :
-    ProtobufTypeMapper<Timestamp, com.google.protobuf.Timestamp> {
+public open class TimestampJvmConverter : ProtobufTypeMapper<Timestamp, com.google.protobuf.Timestamp> {
   override val descriptor: Descriptors.Descriptor = com.google.protobuf.Timestamp.getDescriptor()
 
   override val parser: Parser<com.google.protobuf.Timestamp> =

@@ -1,5 +1,5 @@
 // Transform from google/protobuf/descriptor.proto
-@file:GeneratorVersion(version = "0.5.2")
+@file:GeneratorVersion(version = "0.6.0")
 
 package google.protobuf
 
@@ -12,8 +12,7 @@ import kr.jadekim.protobuf.converter.mapper.ProtobufTypeMapper
 import kr.jadekim.protobuf.util.asJavaType
 import kr.jadekim.protobuf.util.asKotlinType
 
-public open class FileDescriptorSetJvmConverter :
-    ProtobufTypeMapper<FileDescriptorSet, DescriptorProtos.FileDescriptorSet> {
+public open class FileDescriptorSetJvmConverter : ProtobufTypeMapper<FileDescriptorSet, DescriptorProtos.FileDescriptorSet> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.FileDescriptorSet.getDescriptor()
 
@@ -23,8 +22,7 @@ public open class FileDescriptorSetJvmConverter :
   override val default: DescriptorProtos.FileDescriptorSet =
       DescriptorProtos.FileDescriptorSet.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.FileDescriptorSet): FileDescriptorSet =
-      FileDescriptorSet(
+  override fun convert(obj: DescriptorProtos.FileDescriptorSet): FileDescriptorSet = FileDescriptorSet(
   	`file` = obj.getFileList().map { FileDescriptorProtoConverter.convert(it) },
   )
 
@@ -35,8 +33,7 @@ public open class FileDescriptorSetJvmConverter :
   }
 }
 
-public open class FileDescriptorProtoJvmConverter :
-    ProtobufTypeMapper<FileDescriptorProto, DescriptorProtos.FileDescriptorProto> {
+public open class FileDescriptorProtoJvmConverter : ProtobufTypeMapper<FileDescriptorProto, DescriptorProtos.FileDescriptorProto> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.FileDescriptorProto.getDescriptor()
 
@@ -46,8 +43,7 @@ public open class FileDescriptorProtoJvmConverter :
   override val default: DescriptorProtos.FileDescriptorProto =
       DescriptorProtos.FileDescriptorProto.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.FileDescriptorProto): FileDescriptorProto =
-      FileDescriptorProto(
+  override fun convert(obj: DescriptorProtos.FileDescriptorProto): FileDescriptorProto = FileDescriptorProto(
   	name = obj.getName(),
   	`package` = obj.getPackage(),
   	dependency = obj.getDependencyList().map { it },
@@ -82,8 +78,7 @@ public open class FileDescriptorProtoJvmConverter :
   }
 }
 
-public open class DescriptorProtoJvmConverter :
-    ProtobufTypeMapper<DescriptorProto, DescriptorProtos.DescriptorProto> {
+public open class DescriptorProtoJvmConverter : ProtobufTypeMapper<DescriptorProto, DescriptorProtos.DescriptorProto> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.DescriptorProto.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.DescriptorProto> =
@@ -98,12 +93,10 @@ public open class DescriptorProtoJvmConverter :
   	extension = obj.getExtensionList().map { FieldDescriptorProtoConverter.convert(it) },
   	nestedType = obj.getNestedTypeList().map { DescriptorProtoConverter.convert(it) },
   	enumType = obj.getEnumTypeList().map { EnumDescriptorProtoConverter.convert(it) },
-  	extensionRange = obj.getExtensionRangeList().map {
-      DescriptorProtoConverter.ExtensionRangeConverter.convert(it) },
+  	extensionRange = obj.getExtensionRangeList().map { DescriptorProtoConverter.ExtensionRangeConverter.convert(it) },
   	oneofDecl = obj.getOneofDeclList().map { OneofDescriptorProtoConverter.convert(it) },
   	options = MessageOptionsConverter.convert(obj.getOptions()),
-  	reservedRange = obj.getReservedRangeList().map {
-      DescriptorProtoConverter.ReservedRangeConverter.convert(it) },
+  	reservedRange = obj.getReservedRangeList().map { DescriptorProtoConverter.ReservedRangeConverter.convert(it) },
   	reservedName = obj.getReservedNameList().map { it },
   )
 
@@ -114,19 +107,15 @@ public open class DescriptorProtoJvmConverter :
     builder.addAllExtension(obj.extension.map { FieldDescriptorProtoConverter.convert(it) })
     builder.addAllNestedType(obj.nestedType.map { DescriptorProtoConverter.convert(it) })
     builder.addAllEnumType(obj.enumType.map { EnumDescriptorProtoConverter.convert(it) })
-    builder.addAllExtensionRange(obj.extensionRange.map {
-        DescriptorProtoConverter.ExtensionRangeConverter.convert(it) })
+    builder.addAllExtensionRange(obj.extensionRange.map { DescriptorProtoConverter.ExtensionRangeConverter.convert(it) })
     builder.addAllOneofDecl(obj.oneofDecl.map { OneofDescriptorProtoConverter.convert(it) })
     builder.setOptions(MessageOptionsConverter.convert(obj.options))
-    builder.addAllReservedRange(obj.reservedRange.map {
-        DescriptorProtoConverter.ReservedRangeConverter.convert(it) })
+    builder.addAllReservedRange(obj.reservedRange.map { DescriptorProtoConverter.ReservedRangeConverter.convert(it) })
     builder.addAllReservedName(obj.reservedName.map { it })
     return builder.build()
   }
 
-  public open class ExtensionRangeJvmConverter :
-      ProtobufTypeMapper<DescriptorProto.ExtensionRange, DescriptorProtos.DescriptorProto.ExtensionRange>
-      {
+  public open class ExtensionRangeJvmConverter : ProtobufTypeMapper<DescriptorProto.ExtensionRange, DescriptorProtos.DescriptorProto.ExtensionRange> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.DescriptorProto.ExtensionRange.getDescriptor()
 
@@ -136,15 +125,13 @@ public open class DescriptorProtoJvmConverter :
     override val default: DescriptorProtos.DescriptorProto.ExtensionRange =
         DescriptorProtos.DescriptorProto.ExtensionRange.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.DescriptorProto.ExtensionRange):
-        DescriptorProto.ExtensionRange = DescriptorProto.ExtensionRange(
+    override fun convert(obj: DescriptorProtos.DescriptorProto.ExtensionRange): DescriptorProto.ExtensionRange = DescriptorProto.ExtensionRange(
     	start = obj.getStart(),
     	end = obj.getEnd(),
     	options = ExtensionRangeOptionsConverter.convert(obj.getOptions()),
     )
 
-    override fun convert(obj: DescriptorProto.ExtensionRange):
-        DescriptorProtos.DescriptorProto.ExtensionRange {
+    override fun convert(obj: DescriptorProto.ExtensionRange): DescriptorProtos.DescriptorProto.ExtensionRange {
       val builder = DescriptorProtos.DescriptorProto.ExtensionRange.newBuilder()
       builder.setStart(obj.start)
       builder.setEnd(obj.end)
@@ -153,9 +140,7 @@ public open class DescriptorProtoJvmConverter :
     }
   }
 
-  public open class ReservedRangeJvmConverter :
-      ProtobufTypeMapper<DescriptorProto.ReservedRange, DescriptorProtos.DescriptorProto.ReservedRange>
-      {
+  public open class ReservedRangeJvmConverter : ProtobufTypeMapper<DescriptorProto.ReservedRange, DescriptorProtos.DescriptorProto.ReservedRange> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.DescriptorProto.ReservedRange.getDescriptor()
 
@@ -165,14 +150,12 @@ public open class DescriptorProtoJvmConverter :
     override val default: DescriptorProtos.DescriptorProto.ReservedRange =
         DescriptorProtos.DescriptorProto.ReservedRange.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.DescriptorProto.ReservedRange):
-        DescriptorProto.ReservedRange = DescriptorProto.ReservedRange(
+    override fun convert(obj: DescriptorProtos.DescriptorProto.ReservedRange): DescriptorProto.ReservedRange = DescriptorProto.ReservedRange(
     	start = obj.getStart(),
     	end = obj.getEnd(),
     )
 
-    override fun convert(obj: DescriptorProto.ReservedRange):
-        DescriptorProtos.DescriptorProto.ReservedRange {
+    override fun convert(obj: DescriptorProto.ReservedRange): DescriptorProtos.DescriptorProto.ReservedRange {
       val builder = DescriptorProtos.DescriptorProto.ReservedRange.newBuilder()
       builder.setStart(obj.start)
       builder.setEnd(obj.end)
@@ -181,8 +164,7 @@ public open class DescriptorProtoJvmConverter :
   }
 }
 
-public open class ExtensionRangeOptionsJvmConverter :
-    ProtobufTypeMapper<ExtensionRangeOptions, DescriptorProtos.ExtensionRangeOptions> {
+public open class ExtensionRangeOptionsJvmConverter : ProtobufTypeMapper<ExtensionRangeOptions, DescriptorProtos.ExtensionRangeOptions> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.ExtensionRangeOptions.getDescriptor()
 
@@ -192,30 +174,23 @@ public open class ExtensionRangeOptionsJvmConverter :
   override val default: DescriptorProtos.ExtensionRangeOptions =
       DescriptorProtos.ExtensionRangeOptions.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.ExtensionRangeOptions): ExtensionRangeOptions =
-      ExtensionRangeOptions(
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
-  	declaration = obj.getDeclarationList().map {
-      ExtensionRangeOptionsConverter.DeclarationConverter.convert(it) },
+  override fun convert(obj: DescriptorProtos.ExtensionRangeOptions): ExtensionRangeOptions = ExtensionRangeOptions(
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
+  	declaration = obj.getDeclarationList().map { ExtensionRangeOptionsConverter.DeclarationConverter.convert(it) },
   	features = FeatureSetConverter.convert(obj.getFeatures()),
   	verification = ExtensionRangeOptions.VerificationState.forNumber(obj.getVerification().number),
   )
 
   override fun convert(obj: ExtensionRangeOptions): DescriptorProtos.ExtensionRangeOptions {
     val builder = DescriptorProtos.ExtensionRangeOptions.newBuilder()
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
-    builder.addAllDeclaration(obj.declaration.map {
-        ExtensionRangeOptionsConverter.DeclarationConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
+    builder.addAllDeclaration(obj.declaration.map { ExtensionRangeOptionsConverter.DeclarationConverter.convert(it) })
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.setVerification(DescriptorProtos.ExtensionRangeOptions.VerificationState.forNumber(obj.verification.number))
     return builder.build()
   }
 
-  public open class DeclarationJvmConverter :
-      ProtobufTypeMapper<ExtensionRangeOptions.Declaration, DescriptorProtos.ExtensionRangeOptions.Declaration>
-      {
+  public open class DeclarationJvmConverter : ProtobufTypeMapper<ExtensionRangeOptions.Declaration, DescriptorProtos.ExtensionRangeOptions.Declaration> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.ExtensionRangeOptions.Declaration.getDescriptor()
 
@@ -225,8 +200,7 @@ public open class ExtensionRangeOptionsJvmConverter :
     override val default: DescriptorProtos.ExtensionRangeOptions.Declaration =
         DescriptorProtos.ExtensionRangeOptions.Declaration.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.ExtensionRangeOptions.Declaration):
-        ExtensionRangeOptions.Declaration = ExtensionRangeOptions.Declaration(
+    override fun convert(obj: DescriptorProtos.ExtensionRangeOptions.Declaration): ExtensionRangeOptions.Declaration = ExtensionRangeOptions.Declaration(
     	number = obj.getNumber(),
     	fullName = obj.getFullName(),
     	type = obj.getType(),
@@ -234,8 +208,7 @@ public open class ExtensionRangeOptionsJvmConverter :
     	repeated = obj.getRepeated(),
     )
 
-    override fun convert(obj: ExtensionRangeOptions.Declaration):
-        DescriptorProtos.ExtensionRangeOptions.Declaration {
+    override fun convert(obj: ExtensionRangeOptions.Declaration): DescriptorProtos.ExtensionRangeOptions.Declaration {
       val builder = DescriptorProtos.ExtensionRangeOptions.Declaration.newBuilder()
       builder.setNumber(obj.number)
       builder.setFullName(obj.fullName)
@@ -247,8 +220,7 @@ public open class ExtensionRangeOptionsJvmConverter :
   }
 }
 
-public open class FieldDescriptorProtoJvmConverter :
-    ProtobufTypeMapper<FieldDescriptorProto, DescriptorProtos.FieldDescriptorProto> {
+public open class FieldDescriptorProtoJvmConverter : ProtobufTypeMapper<FieldDescriptorProto, DescriptorProtos.FieldDescriptorProto> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.FieldDescriptorProto.getDescriptor()
 
@@ -258,8 +230,7 @@ public open class FieldDescriptorProtoJvmConverter :
   override val default: DescriptorProtos.FieldDescriptorProto =
       DescriptorProtos.FieldDescriptorProto.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.FieldDescriptorProto): FieldDescriptorProto =
-      FieldDescriptorProto(
+  override fun convert(obj: DescriptorProtos.FieldDescriptorProto): FieldDescriptorProto = FieldDescriptorProto(
   	name = obj.getName(),
   	number = obj.getNumber(),
   	label = FieldDescriptorProto.Label.forNumber(obj.getLabel().number),
@@ -290,8 +261,7 @@ public open class FieldDescriptorProtoJvmConverter :
   }
 }
 
-public open class OneofDescriptorProtoJvmConverter :
-    ProtobufTypeMapper<OneofDescriptorProto, DescriptorProtos.OneofDescriptorProto> {
+public open class OneofDescriptorProtoJvmConverter : ProtobufTypeMapper<OneofDescriptorProto, DescriptorProtos.OneofDescriptorProto> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.OneofDescriptorProto.getDescriptor()
 
@@ -301,8 +271,7 @@ public open class OneofDescriptorProtoJvmConverter :
   override val default: DescriptorProtos.OneofDescriptorProto =
       DescriptorProtos.OneofDescriptorProto.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.OneofDescriptorProto): OneofDescriptorProto =
-      OneofDescriptorProto(
+  override fun convert(obj: DescriptorProtos.OneofDescriptorProto): OneofDescriptorProto = OneofDescriptorProto(
   	name = obj.getName(),
   	options = OneofOptionsConverter.convert(obj.getOptions()),
   )
@@ -315,8 +284,7 @@ public open class OneofDescriptorProtoJvmConverter :
   }
 }
 
-public open class EnumDescriptorProtoJvmConverter :
-    ProtobufTypeMapper<EnumDescriptorProto, DescriptorProtos.EnumDescriptorProto> {
+public open class EnumDescriptorProtoJvmConverter : ProtobufTypeMapper<EnumDescriptorProto, DescriptorProtos.EnumDescriptorProto> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.EnumDescriptorProto.getDescriptor()
 
@@ -326,13 +294,11 @@ public open class EnumDescriptorProtoJvmConverter :
   override val default: DescriptorProtos.EnumDescriptorProto =
       DescriptorProtos.EnumDescriptorProto.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.EnumDescriptorProto): EnumDescriptorProto =
-      EnumDescriptorProto(
+  override fun convert(obj: DescriptorProtos.EnumDescriptorProto): EnumDescriptorProto = EnumDescriptorProto(
   	name = obj.getName(),
   	`value` = obj.getValueList().map { EnumValueDescriptorProtoConverter.convert(it) },
   	options = EnumOptionsConverter.convert(obj.getOptions()),
-  	reservedRange = obj.getReservedRangeList().map {
-      EnumDescriptorProtoConverter.EnumReservedRangeConverter.convert(it) },
+  	reservedRange = obj.getReservedRangeList().map { EnumDescriptorProtoConverter.EnumReservedRangeConverter.convert(it) },
   	reservedName = obj.getReservedNameList().map { it },
   )
 
@@ -341,15 +307,12 @@ public open class EnumDescriptorProtoJvmConverter :
     builder.setName(obj.name)
     builder.addAllValue(obj.`value`.map { EnumValueDescriptorProtoConverter.convert(it) })
     builder.setOptions(EnumOptionsConverter.convert(obj.options))
-    builder.addAllReservedRange(obj.reservedRange.map {
-        EnumDescriptorProtoConverter.EnumReservedRangeConverter.convert(it) })
+    builder.addAllReservedRange(obj.reservedRange.map { EnumDescriptorProtoConverter.EnumReservedRangeConverter.convert(it) })
     builder.addAllReservedName(obj.reservedName.map { it })
     return builder.build()
   }
 
-  public open class EnumReservedRangeJvmConverter :
-      ProtobufTypeMapper<EnumDescriptorProto.EnumReservedRange, DescriptorProtos.EnumDescriptorProto.EnumReservedRange>
-      {
+  public open class EnumReservedRangeJvmConverter : ProtobufTypeMapper<EnumDescriptorProto.EnumReservedRange, DescriptorProtos.EnumDescriptorProto.EnumReservedRange> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.EnumDescriptorProto.EnumReservedRange.getDescriptor()
 
@@ -359,14 +322,12 @@ public open class EnumDescriptorProtoJvmConverter :
     override val default: DescriptorProtos.EnumDescriptorProto.EnumReservedRange =
         DescriptorProtos.EnumDescriptorProto.EnumReservedRange.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.EnumDescriptorProto.EnumReservedRange):
-        EnumDescriptorProto.EnumReservedRange = EnumDescriptorProto.EnumReservedRange(
+    override fun convert(obj: DescriptorProtos.EnumDescriptorProto.EnumReservedRange): EnumDescriptorProto.EnumReservedRange = EnumDescriptorProto.EnumReservedRange(
     	start = obj.getStart(),
     	end = obj.getEnd(),
     )
 
-    override fun convert(obj: EnumDescriptorProto.EnumReservedRange):
-        DescriptorProtos.EnumDescriptorProto.EnumReservedRange {
+    override fun convert(obj: EnumDescriptorProto.EnumReservedRange): DescriptorProtos.EnumDescriptorProto.EnumReservedRange {
       val builder = DescriptorProtos.EnumDescriptorProto.EnumReservedRange.newBuilder()
       builder.setStart(obj.start)
       builder.setEnd(obj.end)
@@ -375,8 +336,7 @@ public open class EnumDescriptorProtoJvmConverter :
   }
 }
 
-public open class EnumValueDescriptorProtoJvmConverter :
-    ProtobufTypeMapper<EnumValueDescriptorProto, DescriptorProtos.EnumValueDescriptorProto> {
+public open class EnumValueDescriptorProtoJvmConverter : ProtobufTypeMapper<EnumValueDescriptorProto, DescriptorProtos.EnumValueDescriptorProto> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.EnumValueDescriptorProto.getDescriptor()
 
@@ -386,8 +346,7 @@ public open class EnumValueDescriptorProtoJvmConverter :
   override val default: DescriptorProtos.EnumValueDescriptorProto =
       DescriptorProtos.EnumValueDescriptorProto.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.EnumValueDescriptorProto): EnumValueDescriptorProto =
-      EnumValueDescriptorProto(
+  override fun convert(obj: DescriptorProtos.EnumValueDescriptorProto): EnumValueDescriptorProto = EnumValueDescriptorProto(
   	name = obj.getName(),
   	number = obj.getNumber(),
   	options = EnumValueOptionsConverter.convert(obj.getOptions()),
@@ -402,8 +361,7 @@ public open class EnumValueDescriptorProtoJvmConverter :
   }
 }
 
-public open class ServiceDescriptorProtoJvmConverter :
-    ProtobufTypeMapper<ServiceDescriptorProto, DescriptorProtos.ServiceDescriptorProto> {
+public open class ServiceDescriptorProtoJvmConverter : ProtobufTypeMapper<ServiceDescriptorProto, DescriptorProtos.ServiceDescriptorProto> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.ServiceDescriptorProto.getDescriptor()
 
@@ -413,8 +371,7 @@ public open class ServiceDescriptorProtoJvmConverter :
   override val default: DescriptorProtos.ServiceDescriptorProto =
       DescriptorProtos.ServiceDescriptorProto.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.ServiceDescriptorProto): ServiceDescriptorProto =
-      ServiceDescriptorProto(
+  override fun convert(obj: DescriptorProtos.ServiceDescriptorProto): ServiceDescriptorProto = ServiceDescriptorProto(
   	name = obj.getName(),
   	method = obj.getMethodList().map { MethodDescriptorProtoConverter.convert(it) },
   	options = ServiceOptionsConverter.convert(obj.getOptions()),
@@ -429,8 +386,7 @@ public open class ServiceDescriptorProtoJvmConverter :
   }
 }
 
-public open class MethodDescriptorProtoJvmConverter :
-    ProtobufTypeMapper<MethodDescriptorProto, DescriptorProtos.MethodDescriptorProto> {
+public open class MethodDescriptorProtoJvmConverter : ProtobufTypeMapper<MethodDescriptorProto, DescriptorProtos.MethodDescriptorProto> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.MethodDescriptorProto.getDescriptor()
 
@@ -440,8 +396,7 @@ public open class MethodDescriptorProtoJvmConverter :
   override val default: DescriptorProtos.MethodDescriptorProto =
       DescriptorProtos.MethodDescriptorProto.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.MethodDescriptorProto): MethodDescriptorProto =
-      MethodDescriptorProto(
+  override fun convert(obj: DescriptorProtos.MethodDescriptorProto): MethodDescriptorProto = MethodDescriptorProto(
   	name = obj.getName(),
   	inputType = obj.getInputType(),
   	outputType = obj.getOutputType(),
@@ -462,8 +417,7 @@ public open class MethodDescriptorProtoJvmConverter :
   }
 }
 
-public open class FileOptionsJvmConverter :
-    ProtobufTypeMapper<FileOptions, DescriptorProtos.FileOptions> {
+public open class FileOptionsJvmConverter : ProtobufTypeMapper<FileOptions, DescriptorProtos.FileOptions> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.FileOptions.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.FileOptions> = DescriptorProtos.FileOptions.parser()
@@ -492,8 +446,7 @@ public open class FileOptionsJvmConverter :
   	phpMetadataNamespace = obj.getPhpMetadataNamespace(),
   	rubyPackage = obj.getRubyPackage(),
   	features = FeatureSetConverter.convert(obj.getFeatures()),
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
   )
 
   override fun convert(obj: FileOptions): DescriptorProtos.FileOptions {
@@ -518,14 +471,12 @@ public open class FileOptionsJvmConverter :
     builder.setPhpMetadataNamespace(obj.phpMetadataNamespace)
     builder.setRubyPackage(obj.rubyPackage)
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
     return builder.build()
   }
 }
 
-public open class MessageOptionsJvmConverter :
-    ProtobufTypeMapper<MessageOptions, DescriptorProtos.MessageOptions> {
+public open class MessageOptionsJvmConverter : ProtobufTypeMapper<MessageOptions, DescriptorProtos.MessageOptions> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.MessageOptions.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.MessageOptions> =
@@ -541,8 +492,7 @@ public open class MessageOptionsJvmConverter :
   	mapEntry = obj.getMapEntry(),
   	deprecatedLegacyJsonFieldConflicts = obj.getDeprecatedLegacyJsonFieldConflicts(),
   	features = FeatureSetConverter.convert(obj.getFeatures()),
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
   )
 
   override fun convert(obj: MessageOptions): DescriptorProtos.MessageOptions {
@@ -553,14 +503,12 @@ public open class MessageOptionsJvmConverter :
     builder.setMapEntry(obj.mapEntry)
     builder.setDeprecatedLegacyJsonFieldConflicts(obj.deprecatedLegacyJsonFieldConflicts)
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
     return builder.build()
   }
 }
 
-public open class FieldOptionsJvmConverter :
-    ProtobufTypeMapper<FieldOptions, DescriptorProtos.FieldOptions> {
+public open class FieldOptionsJvmConverter : ProtobufTypeMapper<FieldOptions, DescriptorProtos.FieldOptions> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.FieldOptions.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.FieldOptions> =
@@ -580,12 +528,10 @@ public open class FieldOptionsJvmConverter :
   	debugRedact = obj.getDebugRedact(),
   	retention = FieldOptions.OptionRetention.forNumber(obj.getRetention().number),
   	targets = obj.getTargetsList().map { FieldOptions.OptionTargetType.forNumber(it.number) },
-  	editionDefaults = obj.getEditionDefaultsList().map {
-      FieldOptionsConverter.EditionDefaultConverter.convert(it) },
+  	editionDefaults = obj.getEditionDefaultsList().map { FieldOptionsConverter.EditionDefaultConverter.convert(it) },
   	features = FeatureSetConverter.convert(obj.getFeatures()),
   	featureSupport = FieldOptionsConverter.FeatureSupportConverter.convert(obj.getFeatureSupport()),
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
   )
 
   override fun convert(obj: FieldOptions): DescriptorProtos.FieldOptions {
@@ -599,20 +545,15 @@ public open class FieldOptionsJvmConverter :
     builder.setWeak(obj.weak)
     builder.setDebugRedact(obj.debugRedact)
     builder.setRetention(DescriptorProtos.FieldOptions.OptionRetention.forNumber(obj.retention.number))
-    builder.addAllTargets(obj.targets.map {
-        DescriptorProtos.FieldOptions.OptionTargetType.forNumber(it.number) })
-    builder.addAllEditionDefaults(obj.editionDefaults.map {
-        FieldOptionsConverter.EditionDefaultConverter.convert(it) })
+    builder.addAllTargets(obj.targets.map { DescriptorProtos.FieldOptions.OptionTargetType.forNumber(it.number) })
+    builder.addAllEditionDefaults(obj.editionDefaults.map { FieldOptionsConverter.EditionDefaultConverter.convert(it) })
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.setFeatureSupport(FieldOptionsConverter.FeatureSupportConverter.convert(obj.featureSupport))
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
     return builder.build()
   }
 
-  public open class EditionDefaultJvmConverter :
-      ProtobufTypeMapper<FieldOptions.EditionDefault, DescriptorProtos.FieldOptions.EditionDefault>
-      {
+  public open class EditionDefaultJvmConverter : ProtobufTypeMapper<FieldOptions.EditionDefault, DescriptorProtos.FieldOptions.EditionDefault> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.FieldOptions.EditionDefault.getDescriptor()
 
@@ -622,14 +563,12 @@ public open class FieldOptionsJvmConverter :
     override val default: DescriptorProtos.FieldOptions.EditionDefault =
         DescriptorProtos.FieldOptions.EditionDefault.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.FieldOptions.EditionDefault):
-        FieldOptions.EditionDefault = FieldOptions.EditionDefault(
+    override fun convert(obj: DescriptorProtos.FieldOptions.EditionDefault): FieldOptions.EditionDefault = FieldOptions.EditionDefault(
     	edition = Edition.forNumber(obj.getEdition().number),
     	`value` = obj.getValue(),
     )
 
-    override fun convert(obj: FieldOptions.EditionDefault):
-        DescriptorProtos.FieldOptions.EditionDefault {
+    override fun convert(obj: FieldOptions.EditionDefault): DescriptorProtos.FieldOptions.EditionDefault {
       val builder = DescriptorProtos.FieldOptions.EditionDefault.newBuilder()
       builder.setEdition(DescriptorProtos.Edition.forNumber(obj.edition.number))
       builder.setValue(obj.`value`)
@@ -637,9 +576,7 @@ public open class FieldOptionsJvmConverter :
     }
   }
 
-  public open class FeatureSupportJvmConverter :
-      ProtobufTypeMapper<FieldOptions.FeatureSupport, DescriptorProtos.FieldOptions.FeatureSupport>
-      {
+  public open class FeatureSupportJvmConverter : ProtobufTypeMapper<FieldOptions.FeatureSupport, DescriptorProtos.FieldOptions.FeatureSupport> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.FieldOptions.FeatureSupport.getDescriptor()
 
@@ -649,16 +586,14 @@ public open class FieldOptionsJvmConverter :
     override val default: DescriptorProtos.FieldOptions.FeatureSupport =
         DescriptorProtos.FieldOptions.FeatureSupport.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.FieldOptions.FeatureSupport):
-        FieldOptions.FeatureSupport = FieldOptions.FeatureSupport(
+    override fun convert(obj: DescriptorProtos.FieldOptions.FeatureSupport): FieldOptions.FeatureSupport = FieldOptions.FeatureSupport(
     	editionIntroduced = Edition.forNumber(obj.getEditionIntroduced().number),
     	editionDeprecated = Edition.forNumber(obj.getEditionDeprecated().number),
     	deprecationWarning = obj.getDeprecationWarning(),
     	editionRemoved = Edition.forNumber(obj.getEditionRemoved().number),
     )
 
-    override fun convert(obj: FieldOptions.FeatureSupport):
-        DescriptorProtos.FieldOptions.FeatureSupport {
+    override fun convert(obj: FieldOptions.FeatureSupport): DescriptorProtos.FieldOptions.FeatureSupport {
       val builder = DescriptorProtos.FieldOptions.FeatureSupport.newBuilder()
       builder.setEditionIntroduced(DescriptorProtos.Edition.forNumber(obj.editionIntroduced.number))
       builder.setEditionDeprecated(DescriptorProtos.Edition.forNumber(obj.editionDeprecated.number))
@@ -669,8 +604,7 @@ public open class FieldOptionsJvmConverter :
   }
 }
 
-public open class OneofOptionsJvmConverter :
-    ProtobufTypeMapper<OneofOptions, DescriptorProtos.OneofOptions> {
+public open class OneofOptionsJvmConverter : ProtobufTypeMapper<OneofOptions, DescriptorProtos.OneofOptions> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.OneofOptions.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.OneofOptions> =
@@ -681,21 +615,18 @@ public open class OneofOptionsJvmConverter :
 
   override fun convert(obj: DescriptorProtos.OneofOptions): OneofOptions = OneofOptions(
   	features = FeatureSetConverter.convert(obj.getFeatures()),
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
   )
 
   override fun convert(obj: OneofOptions): DescriptorProtos.OneofOptions {
     val builder = DescriptorProtos.OneofOptions.newBuilder()
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
     return builder.build()
   }
 }
 
-public open class EnumOptionsJvmConverter :
-    ProtobufTypeMapper<EnumOptions, DescriptorProtos.EnumOptions> {
+public open class EnumOptionsJvmConverter : ProtobufTypeMapper<EnumOptions, DescriptorProtos.EnumOptions> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.EnumOptions.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.EnumOptions> = DescriptorProtos.EnumOptions.parser()
@@ -708,8 +639,7 @@ public open class EnumOptionsJvmConverter :
   	deprecated = obj.getDeprecated(),
   	deprecatedLegacyJsonFieldConflicts = obj.getDeprecatedLegacyJsonFieldConflicts(),
   	features = FeatureSetConverter.convert(obj.getFeatures()),
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
   )
 
   override fun convert(obj: EnumOptions): DescriptorProtos.EnumOptions {
@@ -718,14 +648,12 @@ public open class EnumOptionsJvmConverter :
     builder.setDeprecated(obj.deprecated)
     builder.setDeprecatedLegacyJsonFieldConflicts(obj.deprecatedLegacyJsonFieldConflicts)
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
     return builder.build()
   }
 }
 
-public open class EnumValueOptionsJvmConverter :
-    ProtobufTypeMapper<EnumValueOptions, DescriptorProtos.EnumValueOptions> {
+public open class EnumValueOptionsJvmConverter : ProtobufTypeMapper<EnumValueOptions, DescriptorProtos.EnumValueOptions> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.EnumValueOptions.getDescriptor()
 
@@ -739,8 +667,7 @@ public open class EnumValueOptionsJvmConverter :
   	deprecated = obj.getDeprecated(),
   	features = FeatureSetConverter.convert(obj.getFeatures()),
   	debugRedact = obj.getDebugRedact(),
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
   )
 
   override fun convert(obj: EnumValueOptions): DescriptorProtos.EnumValueOptions {
@@ -748,14 +675,12 @@ public open class EnumValueOptionsJvmConverter :
     builder.setDeprecated(obj.deprecated)
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.setDebugRedact(obj.debugRedact)
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
     return builder.build()
   }
 }
 
-public open class ServiceOptionsJvmConverter :
-    ProtobufTypeMapper<ServiceOptions, DescriptorProtos.ServiceOptions> {
+public open class ServiceOptionsJvmConverter : ProtobufTypeMapper<ServiceOptions, DescriptorProtos.ServiceOptions> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.ServiceOptions.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.ServiceOptions> =
@@ -767,22 +692,19 @@ public open class ServiceOptionsJvmConverter :
   override fun convert(obj: DescriptorProtos.ServiceOptions): ServiceOptions = ServiceOptions(
   	features = FeatureSetConverter.convert(obj.getFeatures()),
   	deprecated = obj.getDeprecated(),
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
   )
 
   override fun convert(obj: ServiceOptions): DescriptorProtos.ServiceOptions {
     val builder = DescriptorProtos.ServiceOptions.newBuilder()
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
     builder.setDeprecated(obj.deprecated)
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
     return builder.build()
   }
 }
 
-public open class MethodOptionsJvmConverter :
-    ProtobufTypeMapper<MethodOptions, DescriptorProtos.MethodOptions> {
+public open class MethodOptionsJvmConverter : ProtobufTypeMapper<MethodOptions, DescriptorProtos.MethodOptions> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.MethodOptions.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.MethodOptions> =
@@ -795,8 +717,7 @@ public open class MethodOptionsJvmConverter :
   	deprecated = obj.getDeprecated(),
   	idempotencyLevel = MethodOptions.IdempotencyLevel.forNumber(obj.getIdempotencyLevel().number),
   	features = FeatureSetConverter.convert(obj.getFeatures()),
-  	uninterpretedOption = obj.getUninterpretedOptionList().map {
-      UninterpretedOptionConverter.convert(it) },
+  	uninterpretedOption = obj.getUninterpretedOptionList().map { UninterpretedOptionConverter.convert(it) },
   )
 
   override fun convert(obj: MethodOptions): DescriptorProtos.MethodOptions {
@@ -804,14 +725,12 @@ public open class MethodOptionsJvmConverter :
     builder.setDeprecated(obj.deprecated)
     builder.setIdempotencyLevel(DescriptorProtos.MethodOptions.IdempotencyLevel.forNumber(obj.idempotencyLevel.number))
     builder.setFeatures(FeatureSetConverter.convert(obj.features))
-    builder.addAllUninterpretedOption(obj.uninterpretedOption.map {
-        UninterpretedOptionConverter.convert(it) })
+    builder.addAllUninterpretedOption(obj.uninterpretedOption.map { UninterpretedOptionConverter.convert(it) })
     return builder.build()
   }
 }
 
-public open class UninterpretedOptionJvmConverter :
-    ProtobufTypeMapper<UninterpretedOption, DescriptorProtos.UninterpretedOption> {
+public open class UninterpretedOptionJvmConverter : ProtobufTypeMapper<UninterpretedOption, DescriptorProtos.UninterpretedOption> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.UninterpretedOption.getDescriptor()
 
@@ -821,8 +740,7 @@ public open class UninterpretedOptionJvmConverter :
   override val default: DescriptorProtos.UninterpretedOption =
       DescriptorProtos.UninterpretedOption.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.UninterpretedOption): UninterpretedOption =
-      UninterpretedOption(
+  override fun convert(obj: DescriptorProtos.UninterpretedOption): UninterpretedOption = UninterpretedOption(
   	name = obj.getNameList().map { UninterpretedOptionConverter.NamePartConverter.convert(it) },
   	identifierValue = obj.getIdentifierValue(),
   	positiveIntValue = obj.getPositiveIntValue().asKotlinType,
@@ -844,9 +762,7 @@ public open class UninterpretedOptionJvmConverter :
     return builder.build()
   }
 
-  public open class NamePartJvmConverter :
-      ProtobufTypeMapper<UninterpretedOption.NamePart, DescriptorProtos.UninterpretedOption.NamePart>
-      {
+  public open class NamePartJvmConverter : ProtobufTypeMapper<UninterpretedOption.NamePart, DescriptorProtos.UninterpretedOption.NamePart> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.UninterpretedOption.NamePart.getDescriptor()
 
@@ -856,14 +772,12 @@ public open class UninterpretedOptionJvmConverter :
     override val default: DescriptorProtos.UninterpretedOption.NamePart =
         DescriptorProtos.UninterpretedOption.NamePart.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.UninterpretedOption.NamePart):
-        UninterpretedOption.NamePart = UninterpretedOption.NamePart(
+    override fun convert(obj: DescriptorProtos.UninterpretedOption.NamePart): UninterpretedOption.NamePart = UninterpretedOption.NamePart(
     	namePart = obj.getNamePart(),
     	isExtension = obj.getIsExtension(),
     )
 
-    override fun convert(obj: UninterpretedOption.NamePart):
-        DescriptorProtos.UninterpretedOption.NamePart {
+    override fun convert(obj: UninterpretedOption.NamePart): DescriptorProtos.UninterpretedOption.NamePart {
       val builder = DescriptorProtos.UninterpretedOption.NamePart.newBuilder()
       builder.setNamePart(obj.namePart)
       builder.setIsExtension(obj.isExtension)
@@ -872,8 +786,7 @@ public open class UninterpretedOptionJvmConverter :
   }
 }
 
-public open class FeatureSetJvmConverter :
-    ProtobufTypeMapper<FeatureSet, DescriptorProtos.FeatureSet> {
+public open class FeatureSetJvmConverter : ProtobufTypeMapper<FeatureSet, DescriptorProtos.FeatureSet> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.FeatureSet.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.FeatureSet> = DescriptorProtos.FeatureSet.parser()
@@ -884,8 +797,7 @@ public open class FeatureSetJvmConverter :
   override fun convert(obj: DescriptorProtos.FeatureSet): FeatureSet = FeatureSet(
   	fieldPresence = FeatureSet.FieldPresence.forNumber(obj.getFieldPresence().number),
   	enumType = FeatureSet.EnumType.forNumber(obj.getEnumType().number),
-  	repeatedFieldEncoding =
-      FeatureSet.RepeatedFieldEncoding.forNumber(obj.getRepeatedFieldEncoding().number),
+  	repeatedFieldEncoding = FeatureSet.RepeatedFieldEncoding.forNumber(obj.getRepeatedFieldEncoding().number),
   	utf8Validation = FeatureSet.Utf8Validation.forNumber(obj.getUtf8Validation().number),
   	messageEncoding = FeatureSet.MessageEncoding.forNumber(obj.getMessageEncoding().number),
   	jsonFormat = FeatureSet.JsonFormat.forNumber(obj.getJsonFormat().number),
@@ -903,8 +815,7 @@ public open class FeatureSetJvmConverter :
   }
 }
 
-public open class FeatureSetDefaultsJvmConverter :
-    ProtobufTypeMapper<FeatureSetDefaults, DescriptorProtos.FeatureSetDefaults> {
+public open class FeatureSetDefaultsJvmConverter : ProtobufTypeMapper<FeatureSetDefaults, DescriptorProtos.FeatureSetDefaults> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.FeatureSetDefaults.getDescriptor()
 
@@ -914,26 +825,21 @@ public open class FeatureSetDefaultsJvmConverter :
   override val default: DescriptorProtos.FeatureSetDefaults =
       DescriptorProtos.FeatureSetDefaults.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.FeatureSetDefaults): FeatureSetDefaults =
-      FeatureSetDefaults(
-  	defaults = obj.getDefaultsList().map {
-      FeatureSetDefaultsConverter.FeatureSetEditionDefaultConverter.convert(it) },
+  override fun convert(obj: DescriptorProtos.FeatureSetDefaults): FeatureSetDefaults = FeatureSetDefaults(
+  	defaults = obj.getDefaultsList().map { FeatureSetDefaultsConverter.FeatureSetEditionDefaultConverter.convert(it) },
   	minimumEdition = Edition.forNumber(obj.getMinimumEdition().number),
   	maximumEdition = Edition.forNumber(obj.getMaximumEdition().number),
   )
 
   override fun convert(obj: FeatureSetDefaults): DescriptorProtos.FeatureSetDefaults {
     val builder = DescriptorProtos.FeatureSetDefaults.newBuilder()
-    builder.addAllDefaults(obj.defaults.map {
-        FeatureSetDefaultsConverter.FeatureSetEditionDefaultConverter.convert(it) })
+    builder.addAllDefaults(obj.defaults.map { FeatureSetDefaultsConverter.FeatureSetEditionDefaultConverter.convert(it) })
     builder.setMinimumEdition(DescriptorProtos.Edition.forNumber(obj.minimumEdition.number))
     builder.setMaximumEdition(DescriptorProtos.Edition.forNumber(obj.maximumEdition.number))
     return builder.build()
   }
 
-  public open class FeatureSetEditionDefaultJvmConverter :
-      ProtobufTypeMapper<FeatureSetDefaults.FeatureSetEditionDefault, DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault>
-      {
+  public open class FeatureSetEditionDefaultJvmConverter : ProtobufTypeMapper<FeatureSetDefaults.FeatureSetEditionDefault, DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault.getDescriptor()
 
@@ -943,15 +849,13 @@ public open class FeatureSetDefaultsJvmConverter :
     override val default: DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault =
         DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault):
-        FeatureSetDefaults.FeatureSetEditionDefault = FeatureSetDefaults.FeatureSetEditionDefault(
+    override fun convert(obj: DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault): FeatureSetDefaults.FeatureSetEditionDefault = FeatureSetDefaults.FeatureSetEditionDefault(
     	edition = Edition.forNumber(obj.getEdition().number),
     	overridableFeatures = FeatureSetConverter.convert(obj.getOverridableFeatures()),
     	fixedFeatures = FeatureSetConverter.convert(obj.getFixedFeatures()),
     )
 
-    override fun convert(obj: FeatureSetDefaults.FeatureSetEditionDefault):
-        DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault {
+    override fun convert(obj: FeatureSetDefaults.FeatureSetEditionDefault): DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault {
       val builder = DescriptorProtos.FeatureSetDefaults.FeatureSetEditionDefault.newBuilder()
       builder.setEdition(DescriptorProtos.Edition.forNumber(obj.edition.number))
       builder.setOverridableFeatures(FeatureSetConverter.convert(obj.overridableFeatures))
@@ -961,8 +865,7 @@ public open class FeatureSetDefaultsJvmConverter :
   }
 }
 
-public open class SourceCodeInfoJvmConverter :
-    ProtobufTypeMapper<SourceCodeInfo, DescriptorProtos.SourceCodeInfo> {
+public open class SourceCodeInfoJvmConverter : ProtobufTypeMapper<SourceCodeInfo, DescriptorProtos.SourceCodeInfo> {
   override val descriptor: Descriptors.Descriptor = DescriptorProtos.SourceCodeInfo.getDescriptor()
 
   override val parser: Parser<DescriptorProtos.SourceCodeInfo> =
@@ -977,13 +880,11 @@ public open class SourceCodeInfoJvmConverter :
 
   override fun convert(obj: SourceCodeInfo): DescriptorProtos.SourceCodeInfo {
     val builder = DescriptorProtos.SourceCodeInfo.newBuilder()
-    builder.addAllLocation(obj.location.map { SourceCodeInfoConverter.LocationConverter.convert(it)
-        })
+    builder.addAllLocation(obj.location.map { SourceCodeInfoConverter.LocationConverter.convert(it) })
     return builder.build()
   }
 
-  public open class LocationJvmConverter :
-      ProtobufTypeMapper<SourceCodeInfo.Location, DescriptorProtos.SourceCodeInfo.Location> {
+  public open class LocationJvmConverter : ProtobufTypeMapper<SourceCodeInfo.Location, DescriptorProtos.SourceCodeInfo.Location> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.SourceCodeInfo.Location.getDescriptor()
 
@@ -993,8 +894,7 @@ public open class SourceCodeInfoJvmConverter :
     override val default: DescriptorProtos.SourceCodeInfo.Location =
         DescriptorProtos.SourceCodeInfo.Location.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.SourceCodeInfo.Location): SourceCodeInfo.Location =
-        SourceCodeInfo.Location(
+    override fun convert(obj: DescriptorProtos.SourceCodeInfo.Location): SourceCodeInfo.Location = SourceCodeInfo.Location(
     	path = obj.getPathList().map { it },
     	span = obj.getSpanList().map { it },
     	leadingComments = obj.getLeadingComments(),
@@ -1014,8 +914,7 @@ public open class SourceCodeInfoJvmConverter :
   }
 }
 
-public open class GeneratedCodeInfoJvmConverter :
-    ProtobufTypeMapper<GeneratedCodeInfo, DescriptorProtos.GeneratedCodeInfo> {
+public open class GeneratedCodeInfoJvmConverter : ProtobufTypeMapper<GeneratedCodeInfo, DescriptorProtos.GeneratedCodeInfo> {
   override val descriptor: Descriptors.Descriptor =
       DescriptorProtos.GeneratedCodeInfo.getDescriptor()
 
@@ -1025,22 +924,17 @@ public open class GeneratedCodeInfoJvmConverter :
   override val default: DescriptorProtos.GeneratedCodeInfo =
       DescriptorProtos.GeneratedCodeInfo.getDefaultInstance()
 
-  override fun convert(obj: DescriptorProtos.GeneratedCodeInfo): GeneratedCodeInfo =
-      GeneratedCodeInfo(
-  	`annotation` = obj.getAnnotationList().map {
-      GeneratedCodeInfoConverter.AnnotationConverter.convert(it) },
+  override fun convert(obj: DescriptorProtos.GeneratedCodeInfo): GeneratedCodeInfo = GeneratedCodeInfo(
+  	`annotation` = obj.getAnnotationList().map { GeneratedCodeInfoConverter.AnnotationConverter.convert(it) },
   )
 
   override fun convert(obj: GeneratedCodeInfo): DescriptorProtos.GeneratedCodeInfo {
     val builder = DescriptorProtos.GeneratedCodeInfo.newBuilder()
-    builder.addAllAnnotation(obj.`annotation`.map {
-        GeneratedCodeInfoConverter.AnnotationConverter.convert(it) })
+    builder.addAllAnnotation(obj.`annotation`.map { GeneratedCodeInfoConverter.AnnotationConverter.convert(it) })
     return builder.build()
   }
 
-  public open class AnnotationJvmConverter :
-      ProtobufTypeMapper<GeneratedCodeInfo.Annotation, DescriptorProtos.GeneratedCodeInfo.Annotation>
-      {
+  public open class AnnotationJvmConverter : ProtobufTypeMapper<GeneratedCodeInfo.Annotation, DescriptorProtos.GeneratedCodeInfo.Annotation> {
     override val descriptor: Descriptors.Descriptor =
         DescriptorProtos.GeneratedCodeInfo.Annotation.getDescriptor()
 
@@ -1050,8 +944,7 @@ public open class GeneratedCodeInfoJvmConverter :
     override val default: DescriptorProtos.GeneratedCodeInfo.Annotation =
         DescriptorProtos.GeneratedCodeInfo.Annotation.getDefaultInstance()
 
-    override fun convert(obj: DescriptorProtos.GeneratedCodeInfo.Annotation):
-        GeneratedCodeInfo.Annotation = GeneratedCodeInfo.Annotation(
+    override fun convert(obj: DescriptorProtos.GeneratedCodeInfo.Annotation): GeneratedCodeInfo.Annotation = GeneratedCodeInfo.Annotation(
     	path = obj.getPathList().map { it },
     	sourceFile = obj.getSourceFile(),
     	begin = obj.getBegin(),
@@ -1059,8 +952,7 @@ public open class GeneratedCodeInfoJvmConverter :
     	semantic = GeneratedCodeInfo.Annotation.Semantic.forNumber(obj.getSemantic().number),
     )
 
-    override fun convert(obj: GeneratedCodeInfo.Annotation):
-        DescriptorProtos.GeneratedCodeInfo.Annotation {
+    override fun convert(obj: GeneratedCodeInfo.Annotation): DescriptorProtos.GeneratedCodeInfo.Annotation {
       val builder = DescriptorProtos.GeneratedCodeInfo.Annotation.newBuilder()
       builder.addAllPath(obj.path.map { it })
       builder.setSourceFile(obj.sourceFile)
