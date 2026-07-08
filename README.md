@@ -59,20 +59,20 @@ protobuf {
     plugins {
         //If you want without kotlinx-serialization.
         //id("kotlin-protobuf-kotlin") {
-        //    artifact = "kr.jadekim:kotlin-protobuf-generator:$kotlinProtobufVersion"
+        //    artifact = "kr.jadekim:kotlin-protobuf-generator:$kotlinProtobufVersion:jdk8@jar"
         //}
         id("kotlin-protobuf-kotlinx") {
-            artifact = "kr.jadekim:kotlin-protobuf-generator-kotlinx:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-kotlinx:$kotlinProtobufVersion:jdk8@jar"
         }
         id("kotlin-protobuf-converter-jvm") {
-            artifact = "kr.jadekim:kotlin-protobuf-generator-converter-jvm:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-converter-jvm:$kotlinProtobufVersion:jdk8@jar"
         }
         
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
         id("kotlin-protobuf-grpc-jvm") {
-            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-jvm:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-jvm:$kotlinProtobufVersion:jdk8@jar"
         }
     }
     
@@ -125,26 +125,26 @@ protobuf {
     plugins {
         //If you want without kotlinx-serialization.
         //id("kotlin-protobuf-kotlin") {
-        //    artifact = "kr.jadekim:kotlin-protobuf-generator:$kotlinProtobufVersion"
+        //    artifact = "kr.jadekim:kotlin-protobuf-generator:$kotlinProtobufVersion:jdk8@jar"
         //}
         id("kotlin-protobuf-kotlinx") {
-            artifact = "kr.jadekim:kotlin-protobuf-generator-kotlinx:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-kotlinx:$kotlinProtobufVersion:jdk8@jar"
         }
         id("kotlin-protobuf-converter-multiplatform") {
-            artifact = "kr.jadekim:kotlin-protobuf-generator-multiplatform:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-multiplatform:$kotlinProtobufVersion:jdk8@jar"
         }
         id("kotlin-protobuf-converter-multiplatform-jvm") {
-            artifact = "kr.jadekim:kotlin-protobuf-generator-multiplatform-jvm:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-multiplatform-jvm:$kotlinProtobufVersion:jdk8@jar"
         }
         
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
         id("kotlin-protobuf-grpc-multiplatform") {
-            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-multiplatform:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-multiplatform:$kotlinProtobufVersion:jdk8@jar"
         }
         id("kotlin-protobuf-grpc-multiplatform-jvm") {
-            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-multiplatform-jvm:$kotlinProtobufVersion"
+            artifact = "kr.jadekim:kotlin-protobuf-generator-grpc-multiplatform-jvm:$kotlinProtobufVersion:jdk8@jar"
         }
     }
     
