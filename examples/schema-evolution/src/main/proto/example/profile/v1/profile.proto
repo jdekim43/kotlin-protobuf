@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package example.profile.v1;
+
+// The schema as it shipped. Everything the v2 file does to it is a change somebody has to make to a
+// message that is already in production, in a queue, and in a database column.
+message Profile {
+  string id = 1;
+
+  string display_name = 2;
+
+  // Turns out to belong with the rest of the contact details. v2 moves it and reserves the number.
+  string email = 3;
+
+  repeated string tags = 4;
+
+  Tier tier = 5;
+
+  // Not enough room. v2 widens it to uint64, which is a change the wire format allows.
+  uint32 credits = 6;
+}
+
+enum Tier {
+  TIER_UNSPECIFIED = 0;
+  TIER_FREE = 1;
+  TIER_PRO = 2;
+}

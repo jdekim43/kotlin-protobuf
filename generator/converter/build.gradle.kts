@@ -1,9 +1,7 @@
-subprojects {
-    dependencies {
-        api(project(fullPath(":generator:converter")))
-    }
+plugins {
+    id("convention.protobuf-generator")
 }
 
 dependencies {
-    implementation(project(fullPath(":prebuilt")))
+    api(project(":kotlinx-protobuf-generator"))
 }

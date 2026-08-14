@@ -1,19 +1,19 @@
 plugins {
-    id("com.google.protobuf") version "0.9.4"
+    id("convention.protobuf-generator")
+    id("convention.publish")
+    alias(libs.plugins.protobuf)
 }
 
 application {
-    mainClass.set("kr.jadekim.protobuf.generator.grpc.gateway.GrpcGatewayGeneratorKt")
+    mainClass.set("kim.jade.kotlinx.protobuf.generator.grpc.gateway.GrpcGatewayGeneratorKt")
 }
 
 dependencies {
-    val grpcVersion: String by project
-    val ktorVersion: String by project
+    api(project(":kotlinx-protobuf-generator"))
+    api(project(":kotlinx-protobuf-grpc-gateway"))
 
-    implementation(project(fullPath(":grpc-gateway")))
-
-    implementation("io.grpc:grpc-protobuf:$grpcVersion")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation(libs.grpc.protobuf)
+    implementation(kt.ktor.client.core)
 }
 
 sourceSets {
@@ -26,9 +26,13 @@ sourceSets {
 
 protobuf {
     protoc {
-        val protobufVersion: String by project
+        val protoc = extensions.getByType<VersionCatalogsExtension>().named("libs")
+            .findLibrary("protobuf-compiler").get().get()
 
-        artifact = "com.google.protobuf:protoc:$protobufVersion"
+        artifact = "${protoc.group}:${protoc.name}:${protoc.version}"
+
+//        val protobufVersion: String = extensions.getByType<VersionCatalogsExtension>().named("libs").findVersion("protobuf").get().preferredVersion
+//        artifact = "com.google.protobuf:protoc:$protobufVersion"
     }
 }
 

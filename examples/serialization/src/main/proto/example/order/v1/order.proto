@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package example.order.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// An order, as it is put on a queue and read back by whoever picks it up.
+//
+// This file is the contract. Nothing about the shape of an order is written down in Kotlin — the data
+// class, its defaults, its equals and its codec are all generated from what is here, so a field added
+// below cannot be forgotten in the code that reads it.
+message Order {
+  // Assigned by the ordering service; unique for the lifetime of the shop.
+  string id = 1;
+
+  string customer_id = 2;
+
+  Status status = 3;
+
+  // At least one, though protobuf has no way to say so — `repeated` is the empty list when absent.
+  repeated LineItem items = 4;
+
+  // `optional` in proto3 means explicit presence: "no coupon" and "a coupon that is the empty string"
+  // are different facts, and this field is the one that can tell them apart.
+  optional string coupon_code = 5;
+
+  // Free-form annotations added by whichever service touched the order last.
+  map<string, string> labels = 6;
+
+  google.protobuf.Timestamp placed_at = 7;
+
+  // The key the payment processor deduplicates on. Bytes rather than a string: it is a hash, not text.
+  bytes idempotency_key = 8;
+
+  // Money in the smallest currency unit, never a float. uint64 because an order total is never negative.
+  uint64 total_cents = 9;
+
+  // Exactly one of these, and possibly neither — an order being drafted has chosen no fulfilment yet.
+  oneof fulfilment {
+    Shipping shipping = 10;
+    Pickup pickup = 11;
+  }
+}
+
+message LineItem {
+  string sku = 1;
+  uint32 quantity = 2;
+  uint64 unit_price_cents = 3;
+}
+
+message Shipping {
+  string address = 1;
+  string carrier = 2;
+}
+
+message Pickup {
+  string store_id = 1;
+  google.protobuf.Timestamp ready_at = 2;
+}
+
+// The first value is number 0 and is the one an unset field decodes to, which is why every protobuf
+// enum starts with an UNSPECIFIED member rather than with a meaningful state.
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_PLACED = 1;
+  STATUS_PAID = 2;
+  STATUS_SHIPPED = 3;
+  STATUS_CANCELLED = 4;
+}

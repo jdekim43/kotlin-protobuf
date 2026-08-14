@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GRADLE_ARGS: --no-daemon --stacktrace
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 8 because convention.kotlin-jvm and convention.kotlin-multiplatform both declare jvmToolchain(8).
+      # The runner image happens to preinstall a JDK 8 today, but the images drop old JDKs as they age, so
+      # the toolchain the build actually compiles against is requested here rather than assumed. setup-java
+      # records every version it installs in ~/.m2/toolchains.xml, which Gradle reads when resolving a
+      # toolchain; the last entry also becomes JAVA_HOME, so Gradle itself keeps running on 21.
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            17
+            21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
+
+      # Builds the whole composite, including :kotlinx-protobuf-wkt, which generates its own sources with
+      # this repository's plugin — so a generator change that stops producing compiling code fails here.
+      - name: Build the root project
+        run: ./gradlew build $GRADLE_ARGS
+
+      # Publishes every module locally first, which the TestKit builds resolve by coordinate.
+      - name: Check the Gradle plugin
+        run: ./gradlew checkGradlePlugin $GRADLE_ARGS
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            **/build/reports/tests
+            **/build/test-results
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,7 +1,12 @@
+plugins {
+    id("convention.protobuf-generator")
+    id("convention.publish")
+}
+
 application {
-    mainClass.set("kr.jadekim.protobuf.generator.converter.multiplatform.jvm.MultiplatformJvmConverterGeneratorKt")
+    mainClass.set("kim.jade.kotlinx.protobuf.generator.converter.multiplatform.jvm.MultiplatformJvmConverterGeneratorKt")
 }
 
 dependencies {
-    api(project(fullPath(":generator:converter:jvm")))
+    api(project(":kotlinx-protobuf-generator-converter-jvm"))
 }

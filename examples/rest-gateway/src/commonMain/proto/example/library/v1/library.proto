@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package example.library.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+// One service definition, two surfaces. gRPC gets the methods; the `google.api.http` options say what
+// the same methods look like over HTTP, and a gateway — grpc-gateway, Envoy's transcoder, ESPv2 — is
+// configured from nothing but these annotations. `grpcGateway()` reads them too, so the Kotlin client
+// and the deployed gateway are following the same document rather than agreeing by convention.
+service Library {
+
+  // GET /v1/shelves/{shelf}/books/{book}
+  //
+  // Both fields are bound by the path, so there is nothing left to send: no body, no query parameters.
+  rpc GetBook(GetBookRequest) returns (Book) {
+    option (google.api.http) = {
+      get: "/v1/shelves/{shelf}/books/{book}"
+    };
+  }
+
+  // GET /v1/shelves/{shelf}/books?page_size=…&tag=…
+  //
+  // `shelf` goes into the path; every other field of the request becomes a query parameter, because the
+  // binding declares no body. The parameters carry the field's proto name, so a hand-written server has
+  // to read `page_size` rather than the `pageSize` that protobuf's JSON mapping would use in a body.
+  rpc ListBooks(ListBooksRequest) returns (ListBooksResponse) {
+    option (google.api.http) = {
+      get: "/v1/shelves/{shelf}/books"
+    };
+  }
+
+  // POST /v1/shelves/{shelf}/books, with the book as the request body.
+  //
+  // `body: "book"` sends that field alone rather than the whole message — the shape a REST API usually
+  // wants, where the URL says where the resource goes and the body is the resource.
+  //
+  // The additional binding is a second route onto the same RPC. It cannot also be the interface's method,
+  // so the generator puts it beside it as `createBookBinding2`.
+  rpc CreateBook(CreateBookRequest) returns (Book) {
+    option (google.api.http) = {
+      post: "/v1/shelves/{shelf}/books"
+      body: "book"
+      additional_bindings {
+        post: "/v1/books"
+        body: "*"
+      }
+    };
+  }
+
+  // DELETE /v1/shelves/{shelf}/books/{book}
+  //
+  // google.protobuf.Empty is protobuf's "no meaningful response", and JSON-maps to `{}`.
+  rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/shelves/{shelf}/books/{book}"
+    };
+  }
+}
+
+message Book {
+  string id = 1;
+  string title = 2;
+  string author = 3;
+  uint32 year = 4;
+}
+
+message GetBookRequest {
+  string shelf = 1;
+  string book = 2;
+}
+
+message ListBooksRequest {
+  string shelf = 1;
+  uint32 page_size = 2;
+  // Repeated scalars map onto repeated query parameters: ?tag=a&tag=b.
+  repeated string tag = 3;
+}
+
+message ListBooksResponse {
+  repeated Book books = 1;
+  string next_page_token = 2;
+}
+
+message CreateBookRequest {
+  string shelf = 1;
+  Book book = 2;
+}
+
+message DeleteBookRequest {
+  string shelf = 1;
+  string book = 2;
+}

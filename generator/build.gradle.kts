@@ -1,103 +1,54 @@
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
 
 plugins {
-    kotlin("jvm")
-    id("application")
-    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
-}
-
-allprojects {
-    apply {
-        plugin("org.jetbrains.kotlin.jvm")
-    }
-
-    kotlin {
-        jvmToolchain(8)
-    }
-
-    dependencies {
-        implementation(project(fullPath(":core")))
-
-//        implementation(kotlin("reflect"))
-    }
-}
-
-subprojects {
-    dependencies {
-        implementation(project(fullPath(":generator")))
-    }
-}
-
-configure(allprojects.filterNot { it.name == "kotlin-protobuf-generator-converter" || it.name == "kotlin-protobuf-generator-grpc" }) {
-    apply {
-        plugin("org.gradle.application")
-        plugin("com.github.johnrengelman.shadow")
-    }
-
-    tasks.getByName<Jar>("shadowJar") {
-        archiveClassifier.set("jdk8")
-    }
-
-    publishing {
-        publications {
-            create<MavenPublication>("artifacts") {
-                groupId = project.group.toString()
-                artifactId = project.name
-                version = project.version.toString()
-
-                artifact(tasks.getByName("shadowJar"))
-            }
-        }
-    }
+    id("convention.protobuf-generator")
+    id("convention.publish")
 }
 
 application {
-    mainClass.set("kr.jadekim.protobuf.generator.KotlinGeneratorKt")
+    mainClass.set("kim.jade.kotlinx.protobuf.generator.KotlinGeneratorKt")
 }
 
 dependencies {
-    val protobufVersion: String by project
-    val kotlinPoetVersion: String by project
-    val kasechangeVersion: String by project
-    val grpcVersion: String by project
-    val grpcKotlinVersion: String by project
+    api(project(":kotlinx-protobuf-core"))
+    api(libs.protobuf.java)
 
-    api("com.google.protobuf:protobuf-java:$protobufVersion")
-    api("com.squareup:kotlinpoet:$kotlinPoetVersion")
-
-    api("net.pearx.kasechange:kasechange:$kasechangeVersion")
-
-    implementation("io.grpc:grpc-protobuf:$grpcVersion")
-    implementation("io.grpc:grpc-stub:$grpcVersion")
-    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
-}
-
-val generatedDirectory = File(buildDir, "/generated/source/main/kotlin")
-
-sourceSets {
-    main {
-        java {
-            srcDir(generatedDirectory)
-        }
-    }
+    api(libs.kotlinpoet)
+    api(libs.kasechange)
 }
 
 tasks.clean {
     subprojects.forEach { finalizedBy(it.tasks.clean) }
 }
 
-val writeBuildConstants = tasks.register("writeBuildConstants") {
+val generatedDirectory = layout.buildDirectory.dir("generated/sources/main/kotlin").get()
+val writeGeneratorConstants = tasks.register("writeGeneratorConstants") {
+    val generatorVersion = providers.provider { project.version.toString() }
+    val outputDirectory = generatedDirectory.asFile
+    val outputFile = outputDirectory.resolve("kim/jade/kotlinx/protobuf/generator/constants.kt")
+
+    inputs.property("generatorVersion", generatorVersion)
+    outputs.dir(outputDirectory)
+
     doLast {
-        val output = File(generatedDirectory, "/kr/jadekim/protobuf/generator/build.constants.kt")
+        outputDirectory.deleteRecursively()
+        val output = outputFile
         output.ensureParentDirsCreated()
-        output.writeText("""
-            package kr.jadekim.protobuf.generator
-            
-            const val BUILD_VERSION: String = "$version"
-        """.trimIndent())
+        output.writeText(
+            """
+            package kim.jade.kotlinx.protobuf.generator
+
+            /** Stamped into every generated file as @GeneratorVersion, so output can be traced back. */
+            const val GENERATOR_VERSION: String = "${generatorVersion.get()}"
+        """.trimIndent() + "\n"
+        )
     }
 }
 
-tasks.getByName("compileKotlin") {
-    dependsOn(writeBuildConstants)
+sourceSets {
+    main {
+        java {
+            srcDir(files(generatedDirectory).builtBy(writeGeneratorConstants))
+        }
+    }
 }

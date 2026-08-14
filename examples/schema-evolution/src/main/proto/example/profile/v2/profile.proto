@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package example.profile.v2;
+
+// The same message, one release later. Four kinds of change, three of them safe:
+//
+//   safe    a field renamed, because the number is the identity and the name is only for humans
+//   safe    a field widened from uint32 to uint64, because both are varints
+//   safe    fields added at unused numbers, because a reader that does not know them skips them
+//   safe    a field removed, *provided* its number is reserved so nothing ever reuses it
+//   unsafe  reusing number 3 for something else — the one thing `reserved` exists to prevent
+message Profile {
+  string id = 1;
+
+  // Renamed from display_name. Number 2 is what both versions agree on; the name never went on the wire.
+  string full_name = 2;
+
+  // email used to live here and now lives in Contact. Reserving the number means a v2 writer never
+  // occupies it, so a v1 reader cannot mistake something else for an email address.
+  reserved 3;
+  reserved "email";
+
+  repeated string tags = 4;
+
+  Tier tier = 5;
+
+  // Widened from uint32. Same wire type — a varint — so old bytes read as new and small new values read
+  // as old. Only a value that no longer fits in 32 bits is a problem, and that is arithmetic, not
+  // protobuf.
+  uint64 credits = 6;
+
+  // New, at numbers v1 never used. A v1 reader skips them; that is what makes the deploy order free.
+  Contact contact = 7;
+  optional bool verified = 8;
+}
+
+message Contact {
+  string email = 1;
+  string phone = 2;
+}
+
+enum Tier {
+  TIER_UNSPECIFIED = 0;
+  TIER_FREE = 1;
+  TIER_PRO = 2;
+  // Added. A number a v1 reader has never heard of — see EvolutionTest for what that costs here.
+  TIER_ENTERPRISE = 3;
+}

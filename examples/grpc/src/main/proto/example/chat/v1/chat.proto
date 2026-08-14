@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package example.chat.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// One RPC of each shape protobuf can declare. The generator maps them the way grpc-kotlin does:
+//
+//   rpc F(Req) returns (Resp)                 suspend fun f(request: Req): Resp
+//   rpc F(Req) returns (stream Resp)          fun f(request: Req): Flow<Resp>
+//   rpc F(stream Req) returns (Resp)          suspend fun f(requests: Flow<Req>): Resp
+//   rpc F(stream Req) returns (stream Resp)   fun f(requests: Flow<Req>): Flow<Resp>
+//
+// The two that return a Flow are not `suspend`: a Flow is cold, so building one does no work and
+// collecting it is what makes the call.
+service ChatService {
+
+  // Post one message to a room.
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+
+  // Follow a room. The stream stays open and the server pushes as messages arrive.
+  rpc Subscribe(SubscribeRequest) returns (stream ChatEvent);
+
+  // Bulk-import an archive: many messages up, one summary back when the client is done sending.
+  rpc ImportHistory(stream ChatMessage) returns (ImportSummary);
+
+  // A live conversation. Both directions are open at once and neither waits for the other to finish.
+  rpc Converse(stream ChatMessage) returns (stream ChatMessage);
+}
+
+message ChatMessage {
+  string room = 1;
+  string author = 2;
+  string text = 3;
+  google.protobuf.Timestamp sent_at = 4;
+}
+
+message SendMessageRequest {
+  ChatMessage message = 1;
+}
+
+message SendMessageResponse {
+  string message_id = 1;
+  // How many messages the room holds now, so the response says something the request did not.
+  uint64 room_size = 2;
+}
+
+message SubscribeRequest {
+  string room = 1;
+  // Deliver everything the room already holds before following it live.
+  bool include_history = 2;
+}
+
+message ChatEvent {
+  oneof event {
+    ChatMessage message = 1;
+    Joined joined = 2;
+  }
+}
+
+message Joined {
+  string room = 1;
+  uint64 backlog = 2;
+}
+
+message ImportSummary {
+  uint64 imported = 1;
+  // Distinct rooms touched by the import.
+  repeated string rooms = 2;
+}

@@ -1,7 +1,12 @@
+plugins {
+    id("convention.protobuf-generator")
+    id("convention.publish")
+}
+
 application {
-    mainClass.set("kr.jadekim.protobuf.generator.grpc.multiplatform.jvm.MultiplatformJvmGrpcGeneratorKt")
+    mainClass.set("kim.jade.kotlinx.protobuf.generator.grpc.multiplatform.jvm.MultiplatformJvmGrpcGeneratorKt")
 }
 
 dependencies {
-    api(project(fullPath(":generator:grpc:jvm")))
+    api(project(":kotlinx-protobuf-generator-grpc-jvm"))
 }

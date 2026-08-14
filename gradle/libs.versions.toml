@@ -1,0 +1,39 @@
+[versions]
+protobuf = "4.35.1"
+grpc = "1.83.1"
+grpc-kotlin = "1.5.0"
+googleCommonProtos = "2.63.1"
+kotlinpoet = "2.3.0"
+kasechange = "1.4.1"
+shadowJar = "9.6.1"
+
+agp = "9.3.1"
+kotest = "6.2.3"
+ksp = "2.3.9"
+
+[plugins]
+jreleaser = { id = "org.jreleaser", version = "1.25.0" }
+protobuf = { id = "com.google.protobuf", version = "0.10.0" }
+pluginPublish = { id = "com.gradle.plugin-publish", version = "2.1.1" }
+
+[libraries]
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
+protobuf-java-util = { module = "com.google.protobuf:protobuf-java-util", version.ref = "protobuf" }
+protobuf-compiler = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
+grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpc" }
+grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
+grpc-inprocess = { module = "io.grpc:grpc-inprocess", version.ref = "grpc" }
+grpc-netty-shaded = { module = "io.grpc:grpc-netty-shaded", version.ref = "grpc" }
+grpc-kotlin-stub = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpc-kotlin" }
+googleCommonProtos = { module = "com.google.api.grpc:proto-google-common-protos", version.ref = "googleCommonProtos" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
+kasechange = { module = "net.pearx.kasechange:kasechange", version.ref = "kasechange" }
+shadowJar-gradlePlugin = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadowJar" }
+
+android-kmp-library-gradlePlugin = { module = "com.android.kotlin.multiplatform.library:com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "agp" }
+ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
+
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-gradlePlugin = { module = "io.kotest:kotest-framework-plugin-gradle", version.ref = "kotest" }

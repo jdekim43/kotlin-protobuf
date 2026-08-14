@@ -1,11 +1,8 @@
-allprojects {
-    dependencies {
-        implementation(project(fullPath(":grpc")))
-    }
+plugins {
+    id("convention.protobuf-generator")
 }
 
-subprojects {
-    dependencies {
-        api(project(fullPath(":generator:grpc")))
-    }
+dependencies {
+    api(project(":kotlinx-protobuf-generator"))
+    api(project(":kotlinx-protobuf-grpc"))
 }

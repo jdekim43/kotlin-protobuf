@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package example.events.v1;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+// What the transport moves. Everything a broker, a router or an audit log needs is a field here; what
+// the event *is* stays inside `payload`, so adding a new kind of event changes no code that only routes.
+message Envelope {
+  string event_id = 1;
+
+  google.protobuf.Timestamp occurred_at = 2;
+
+  // Which stream this belongs to — an aggregate id, a topic key, a tenant.
+  string subject = 3;
+
+  // The event itself: a type URL and the encoded message. The router never decodes it.
+  google.protobuf.Any payload = 4;
+
+  // Transport concerns that are nobody's domain model: trace ids, retry counts, the producer's name.
+  map<string, string> headers = 5;
+}
+
+// The three events this service publishes. They have no fields in common and no shared base message —
+// `Any` is what stands in for the polymorphism the schema language does not have.
+
+message UserRegistered {
+  string user_id = 1;
+  string email = 2;
+}
+
+message OrderPlaced {
+  string order_id = 1;
+  string user_id = 2;
+  uint64 total_cents = 3;
+}
+
+message PaymentFailed {
+  string order_id = 1;
+  string reason = 2;
+  uint32 attempt = 3;
+}
