@@ -1,8 +1,11 @@
 package kim.jade.kotlinx.protobuf.generator.converter.platform
 
 import com.google.protobuf.Descriptors
+import com.squareup.kotlinpoet.BYTE_ARRAY
+import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import kim.jade.kotlinx.protobuf.converter.ProtobufConverter
 import kim.jade.kotlinx.protobuf.generator.ImportName
@@ -25,9 +28,29 @@ class MultiplePlatformGenerator : PlatformConverterGenerator<Descriptors.Descrip
         }
         spec.addSuperinterface(ProtobufConverter::class.typeName.parameterizedBy(outputTypeName))
 
+        spec.writeConverterMembers(outputTypeName)
+
         descriptor.readChildren(spec, imports)
 
         return listOf(spec.build()) to imports.toSet()
+    }
+
+    private fun TypeSpec.Builder.writeConverterMembers(outputTypeName: TypeName) {
+        addFunction(
+            FunSpec.builder("serialize")
+                .addModifiers(KModifier.OVERRIDE)
+                .addParameter("obj", outputTypeName)
+                .returns(BYTE_ARRAY)
+                .build()
+        )
+
+        addFunction(
+            FunSpec.builder("deserialize")
+                .addModifiers(KModifier.OVERRIDE)
+                .addParameter("bytes", BYTE_ARRAY)
+                .returns(outputTypeName)
+                .build()
+        )
     }
 
     private fun Descriptors.Descriptor.readChildren(spec: TypeSpec.Builder, imports: MutableSet<ImportName>) {

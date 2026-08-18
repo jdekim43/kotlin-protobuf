@@ -52,9 +52,14 @@ jobs:
       - name: Build the root project
         run: ./gradlew build $GRADLE_ARGS
 
-      # Publishes every module locally first, which the TestKit builds resolve by coordinate.
+      # Two invocations, and not one task depending on both halves: the TestKit builds resolve every
+      # module by coordinate from the local repository, and a composite build starts the plugin build's
+      # tests as soon as the plugin itself is built — in parallel with the publishing they are waiting on.
+      # Only a finished invocation orders the two.
       - name: Check the Gradle plugin
-        run: ./gradlew checkGradlePlugin $GRADLE_ARGS
+        run: |
+          ./gradlew publishToMavenLocal $GRADLE_ARGS
+          ./gradlew -p gradle-plugin check $GRADLE_ARGS
 
       - name: Upload test reports
         if: failure()

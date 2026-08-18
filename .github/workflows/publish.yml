@@ -178,10 +178,16 @@ jobs:
         include:
           - name: jvm
             os: ubuntu-24.04
-            tasks: jvmTest
+            command: ./gradlew jvmTest $GRADLE_ARGS
           - name: gradle-plugin
             os: ubuntu-24.04
-            tasks: "checkGradlePlugin"
+            # Two invocations, and not one task depending on both halves: the TestKit builds resolve
+            # every module by coordinate from the local repository, and a composite build starts the
+            # plugin build's tests as soon as the plugin itself is built — in parallel with the
+            # publishing they are waiting on. Only a finished invocation orders the two.
+            command: |
+              ./gradlew publishToMavenLocal $GRADLE_ARGS
+              ./gradlew -p gradle-plugin check $GRADLE_ARGS
           # No js/native rows: convention.kotlin-multiplatform currently enables only jvm(), so those
           # test tasks do not exist and fail-fast would kill the release. Add them back in the same
           # commit that enables the targets.
@@ -215,7 +221,7 @@ jobs:
           cache-provider: basic
 
       - name: Run ${{ matrix.name }} tests
-        run: ./gradlew ${{ matrix.tasks }} $GRADLE_ARGS
+        run: ${{ matrix.command }}
 
       - name: Upload test reports
         if: failure()

@@ -64,6 +64,11 @@ kotlin {
             api(project(":kotlinx-protobuf-grpc-gateway"))
             api(kt.kotlinx.coroutine)
         }
+        commonTest.dependencies {
+            // The JSON mapping is asserted on parsed documents rather than raw strings, because the two
+            // implementations disagree about whitespace and nothing else.
+            implementation(kt.kotlinx.json)
+        }
         jvmMain.dependencies {
             api(libs.protobuf.java)
         }
@@ -78,6 +83,12 @@ kotlin {
         }
     }
 }
+
+// No browser runner for this module's JS tests. CosmosGrpcJsTest drives `@grpc/grpc-js`, and a bundle
+// that references it cannot be loaded in a browser: its modules extend classes out of Node's `stream`
+// and reach into `http2` while they are still being imported, and `http2` has no browser polyfill to
+// stand in. The rest of the JS tests here are platform-neutral and covered on Node.
+tasks.named("jsBrowserTest") { enabled = false }
 
 // CosmosLiveLcdTest talks to a public Cosmos node. It is the only test here whose result depends on
 // somebody else's uptime, so it is off unless asked for — a chain node going down should not turn this
@@ -102,8 +113,10 @@ tasks.withType<Test>().configureEach {
 val serializationGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val converterGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val converterJvmGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
+val converterJsGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val grpcGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val grpcJvmGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
+val grpcJsGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val gatewayGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 
 /** Third-party proto trees, resolved as artifacts through the codeload ivy repository in settings. */
@@ -115,8 +128,10 @@ dependencies {
     serializationGenerator(project(":kotlinx-protobuf-generator-serialization"))
     converterGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform"))
     converterJvmGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform-jvm"))
+    converterJsGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform-js"))
     grpcGenerator(project(":kotlinx-protobuf-generator-grpc-multiplatform"))
     grpcJvmGenerator(project(":kotlinx-protobuf-generator-grpc-multiplatform-jvm"))
+    grpcJsGenerator(project(":kotlinx-protobuf-generator-grpc-multiplatform-js"))
     gatewayGenerator(project(":kotlinx-protobuf-generator-grpc-gateway"))
 
     cosmosSdkProtos("cosmos:cosmos-sdk:$cosmosSdkVersion@zip")
@@ -199,5 +214,17 @@ kotlin.sourceSets.named("jvmMain") {
             jvmTypeRegistry("cosmos.JvmTypeRegistry")
         }
         grpcMultiplatformJvm { classpath.setFrom(grpcJvmGenerator) }
+    }
+}
+
+kotlin.sourceSets.named("jsMain") {
+    proto {
+        // protobuf.js resolves an Any out of the descriptors it has, and a cosmos transaction is a list
+        // of them. This emits the list of generated files that describe them.
+        converterMultiplatformJs {
+            classpath.setFrom(converterJsGenerator)
+            jsTypeRegistry("cosmos.JsTypeRegistry")
+        }
+        grpcMultiplatformJs { classpath.setFrom(grpcJsGenerator) }
     }
 }

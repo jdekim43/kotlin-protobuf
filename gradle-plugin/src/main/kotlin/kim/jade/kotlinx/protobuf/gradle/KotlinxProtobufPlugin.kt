@@ -540,51 +540,57 @@ class KotlinxProtobufPlugin : Plugin<Project> {
 
         if (entry != null) {
             registerRequiredProtocOutputs(project, extension, spec, entry)
-            registerJvmCounterpart(project, spec, sourceSet, entry)
+            registerPlatformCounterparts(project, spec, sourceSet, entry)
         }
     }
 
     /**
-     * Declares the JVM half of a multiplatform generator alongside the common half, and points it at the
-     * same protos.
+     * Declares the platform halves of a multiplatform generator alongside the common half, and points
+     * them at the same protos.
      *
      * `converterMultiplatform()` emits `expect` declarations; without the matching `actual`s from
-     * `converterMultiplatformJvm()` nothing compiles. Since the pair is never useful apart, asking for
-     * one asks for both.
+     * `converterMultiplatformJvm()` and `converterMultiplatformJs()` nothing compiles. Since the halves
+     * are never useful apart, asking for one asks for all of them — one per platform the project targets,
+     * so a JVM-only project never hears about JavaScript.
      *
      * The link is drawn from the declaring source set rather than from the Kotlin source set hierarchy:
      * `dependsOn` is still empty while the build script runs — and, in this Kotlin version, after it
      * finishes too — so the hierarchy cannot be read at configuration time.
      */
-    private fun registerJvmCounterpart(
+    private fun registerPlatformCounterparts(
         project: Project,
         spec: ProtoSourceSetSpec,
         sourceSet: KotlinSourceSet,
         entry: CatalogEntry,
     ) {
-        val counterpart = entry.jvmCounterpart ?: return
+        if (entry.jvmCounterpart == null && entry.jsCounterpart == null) return
+
         val targets = project.extensions.findByName(KOTLIN_EXTENSION) as? KotlinTargetsContainer ?: return
 
         // Main declarations belong with main compilations, test with test.
         val kind = if (sourceSet.name.endsWith(TEST_SUFFIX)) TEST_SUFFIX else MAIN_SUFFIX
 
         targets.targets.all { target ->
-            if (target.platformType != KotlinPlatformType.jvm) return@all
+            val counterpart = when (target.platformType) {
+                KotlinPlatformType.jvm -> entry.jvmCounterpart
+                KotlinPlatformType.js -> entry.jsCounterpart
+                else -> null
+            } ?: return@all
 
             target.compilations.all { compilation ->
-                val jvmSourceSet = compilation.defaultSourceSet
-                if (jvmSourceSet == sourceSet || !jvmSourceSet.name.endsWith(kind)) return@all
+                val platformSourceSet = compilation.defaultSourceSet
+                if (platformSourceSet == sourceSet || !platformSourceSet.name.endsWith(kind)) return@all
 
-                val jvmSpec = jvmSourceSet.proto
+                val platformSpec = platformSourceSet.proto
 
                 // The actuals are generated from the very protos the expects came from.
-                jvmSpec.srcDirs.from(spec.srcDirs)
+                platformSpec.srcDirs.from(spec.srcDirs)
 
                 // …and from the same include path. Protos mined out of dependencies are gathered per
                 // source set, from that source set's own configurations, and a Kotlin source set's
                 // configurations do not extend the ones it dependsOn — so without this, an import that
                 // resolved for commonMain would not resolve for jvmMain, over identical protos.
-                jvmSpec.includes.from(
+                platformSpec.includes.from(
                     spec.includes,
                     project.tasks
                         .named(
@@ -596,11 +602,11 @@ class KotlinxProtobufPlugin : Plugin<Project> {
 
                 // …so protoc need not run twice, unless this source set adds protos of its own, which
                 // the shared descriptor set would not contain.
-                jvmSpec.descriptorSetFrom.convention(
-                    project.provider { if (project.hasOwnProtos(jvmSpec.name)) null else spec.name }
+                platformSpec.descriptorSetFrom.convention(
+                    project.provider { if (project.hasOwnProtos(platformSpec.name)) null else spec.name }
                 )
 
-                jvmSpec.generator(counterpart) {}
+                platformSpec.generator(counterpart) {}
             }
         }
     }

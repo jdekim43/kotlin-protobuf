@@ -22,6 +22,10 @@ kotlin {
         commonMain.dependencies {
             api(project(":kotlinx-protobuf-core"))
         }
+        jsMain.dependencies {
+            api(kt.kotlinx.coroutine)
+            api(npm("@grpc/grpc-js", libs.versions.grpcJs.get()))
+        }
         jvmMain.dependencies {
             api(libs.grpc.protobuf)
             api(libs.grpc.stub)

@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     kotlin("multiplatform")
 //    id("com.android.kotlin.multiplatform.library")
-//    id("com.google.devtools.ksp")
+    id("com.google.devtools.ksp")
     id("io.kotest")
 }
 
@@ -19,15 +19,15 @@ kotlin {
         }
     }
 
-//    //web
-//    js {
-//        browser()
-//        nodejs()
-//
-//        compilerOptions {
-//            target = "es2015"
-//        }
-//    }
+    //web
+    js {
+        browser()
+        nodejs()
+
+        compilerOptions {
+            target = "es2015"
+        }
+    }
 //
 //    //apple
 //    macosArm64()

@@ -35,6 +35,14 @@ class MultiplePlatformGenerator : PlatformGrpcGenerator {
             )
         )
 
+        spec.addFunction(
+            FunSpec.builder("createClient")
+                .addModifiers(KModifier.OVERRIDE)
+                .addParameter("option", GrpcClientOption::class)
+                .returns(clientTypeName)
+                .build()
+        )
+
         return listOf(spec.build()) to imports.toSet()
     }
 

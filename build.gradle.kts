@@ -137,13 +137,6 @@ listOf("publish", "publishToMavenLocal").forEach { name ->
     }
 }
 
-tasks.register("checkGradlePlugin") {
-    group = LifecycleBasePlugin.VERIFICATION_GROUP
-    description = "Publishes every module locally, then runs the Gradle plugin's TestKit suite."
-    dependsOn(tasks.named("publishToMavenLocal"))
-    dependsOn(gradle.includedBuild("gradle-plugin").task(":check"))
-}
-
 val clearStagingDirectories = tasks.register<Delete>("clearStagingDirectories") {
     description = "Deletes the staged publications, so a release carries only what this build produced."
     delete(layout.buildDirectory.dir("staging-deploy"))

@@ -130,6 +130,7 @@ class SinglePlatformGenerator(
 
         FunSpec.builder("createClient")
             .addModifiers(KModifier.OVERRIDE)
+            .apply { if (isActual) addModifiers(KModifier.ACTUAL) }
             .addParameter("option", GrpcClientOption::class)
             .returns(name)
             .addStatement("return %T(option)", name)

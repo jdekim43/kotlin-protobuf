@@ -14,5 +14,8 @@ kotlin {
         jvmMain.dependencies {
             implementation(libs.protobuf.java)
         }
+        jsMain.dependencies {
+            api(npm("protobufjs", libs.versions.protobufJs.get()))
+        }
     }
 }

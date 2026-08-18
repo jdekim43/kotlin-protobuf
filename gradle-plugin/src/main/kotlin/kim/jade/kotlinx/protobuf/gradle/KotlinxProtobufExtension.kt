@@ -88,6 +88,7 @@ abstract class KotlinxProtobufExtension {
         const val OPTION_TYPE_URL_PREFIX = "kotlinx-protobuf.prefix"
         const val OPTION_TYPE_REGISTRY = "kotlinx-protobuf.type_registry"
         const val OPTION_JVM_TYPE_REGISTRY = "kotlinx-protobuf.jvm_type_registry"
+        const val OPTION_JS_TYPE_REGISTRY = "kotlinx-protobuf.js_type_registry"
         const val OPTION_SERIALIZERS_MODULE = "kotlinx-protobuf.serializers_module"
     }
 }

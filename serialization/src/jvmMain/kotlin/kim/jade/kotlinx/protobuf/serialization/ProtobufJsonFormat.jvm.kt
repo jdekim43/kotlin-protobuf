@@ -9,12 +9,11 @@ import kotlinx.serialization.StringFormat
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 
-class ProtobufJsonFormat(
-    types: Map<String, Descriptors.Descriptor> = emptyMap(),
-    override val serializersModule: SerializersModule = EmptySerializersModule(),
+actual class ProtobufJsonFormat actual constructor(
+    actual override val serializersModule: SerializersModule,
 ) : StringFormat {
 
-    var types: Map<String, Descriptors.Descriptor> = types
+    var types: Map<String, Descriptors.Descriptor> = emptyMap()
         private set
 
     var registry: TypeRegistry = createTypeRegistry()
@@ -23,8 +22,11 @@ class ProtobufJsonFormat(
     private var printer: JsonFormat.Printer = createPrinter()
     private var parser: JsonFormat.Parser = createParser()
 
-    init {
-        update()
+    constructor(
+        types: Map<String, Descriptors.Descriptor>,
+        serializersModule: SerializersModule = EmptySerializersModule(),
+    ) : this(serializersModule) {
+        addTypes(types)
     }
 
     fun addTypes(types: Map<String, Descriptors.Descriptor>) {
@@ -32,13 +34,13 @@ class ProtobufJsonFormat(
         update()
     }
 
-    override fun <T> encodeToString(serializer: SerializationStrategy<T>, value: T): String {
+    actual override fun <T> encodeToString(serializer: SerializationStrategy<T>, value: T): String {
         val encoder = JsonEncoder(printer, serializersModule)
         serializer.serialize(encoder, value)
         return encoder.result
     }
 
-    override fun <T> decodeFromString(deserializer: DeserializationStrategy<T>, string: String): T {
+    actual override fun <T> decodeFromString(deserializer: DeserializationStrategy<T>, string: String): T {
         val decoder = JsonDecoder(string, parser, serializersModule)
         return deserializer.deserialize(decoder)
     }

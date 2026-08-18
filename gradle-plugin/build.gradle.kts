@@ -69,8 +69,11 @@ val functionalTestTask = tasks.register<Test>("functionalTest") {
 
     // The test builds resolve the generators and the runtime modules by coordinate, so they have to be
     // in the local repository first. This build cannot depend on the root build that produces them —
-    // that is the direction an included build may not point — so the root's `checkGradlePlugin` task
-    // orders the two. Run standalone, this needs `./gradlew publishToMavenLocal` in the root first.
+    // that is the direction an included build may not point — and running the root's
+    // `publishToMavenLocal` in the same invocation does not order the two either, since a composite
+    // build starts an included build's tasks as soon as that build is ready. So the publishing is its
+    // own invocation, and this task is reached through `./gradlew -p gradle-plugin check` after
+    // `./gradlew publishToMavenLocal` in the root.
     systemProperty("kotlinxProtobufVersion", project.version.toString())
 }
 

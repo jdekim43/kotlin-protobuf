@@ -38,9 +38,10 @@ kotlin {
 Drop your protos in `src/commonMain/proto` and build.
 
 > [!NOTE]
-> The **runtime libraries currently publish a JVM target only.** The plugin and the generators are
-> platform-agnostic and put code in `commonMain`, but a JS or native target cannot resolve
-> `kotlinx-protobuf-core` yet.
+> The **runtime libraries publish JVM and JS targets**, and every generator has a JS half: converters go
+> through protobuf.js, gRPC through `@grpc/grpc-js`, the REST gateway through Ktor. The gRPC one is Node
+> only — gRPC runs over HTTP/2 on a socket, which a browser cannot open; a browser wants `grpcGateway()`.
+> Native targets are not published.
 
 ---
 
@@ -48,7 +49,7 @@ Drop your protos in `src/commonMain/proto` and build.
 
 - [Quick start](#quick-start) · [Examples](#examples) · [How it works](#how-it-works)
 - [Generated code](#generated-code) — [types](#type-mapping) · [presence](#presence-and-what-null-means) · [one-ofs](#one-ofs) · [services](#services-and-streaming) · [converters](#converters-any-and-registries) · [options](#options-carried-over)
-- [Generators](#generators) — [what each one brings](#what-a-generator-brings-with-it) · [options](#generator-options)
+- [Generators](#generators) — [what each one brings](#what-a-generator-brings-with-it) · [the JS converters](#the-js-converters) · [gRPC and REST on JS](#grpc-and-the-rest-gateway-on-js) · [options](#generator-options)
 - [Plugin reference](#plugin-reference) — [project](#project-wide-settings) · [source sets](#source-sets) · [protoc outputs](#protoc-builtins-and-plugins) · [your own generators](#adding-your-own-generator) · [tasks](#tasks-and-configurations) · [committing output](#committing-generated-sources)
 - [Runtime modules](#runtime-modules) — [gRPC](#grpc) · [REST gateway](#rest-gateway) · [well-known types](#well-known-types)
 - [Outside Gradle](#using-the-generators-outside-gradle) · [Migrating](#migrating-from-comgoogleprotobuf) · [Building this repository](#building-this-repository)
@@ -86,10 +87,11 @@ kotlin {
 }
 ```
 
-`converterMultiplatform()` emits `expect` declarations, so it registers `converterMultiplatformJvm()` —
-and the protoc `java` builtin those delegate to — on the JVM source set by itself, reading the same
-protos and reusing `commonMain`'s descriptor set. There is no `jvmMain` block to write.
-`grpcMultiplatform()` works the same way.
+`converterMultiplatform()` emits `expect` declarations, so it registers the platform halves itself —
+`converterMultiplatformJvm()` and the protoc `java` builtin those delegate to on the JVM source set,
+`converterMultiplatformJs()` on a `js()` one — each reading the same protos and reusing `commonMain`'s
+descriptor set. There is no `jvmMain` or `jsMain` block to write. `grpcMultiplatform()` works the same
+way.
 
 ### `kotlin("jvm")`
 
@@ -308,7 +310,8 @@ Three optional registries are generated on request, each keyed off a fully-quali
 | Option | Emits | Useful for |
 |---|---|---|
 | `typeRegistry("…")` | `object { val messages: Map<String, KClass<*>> }` | routing on an `Any`'s type URL |
-| `jvmTypeRegistry("…")` | a protobuf-java `TypeRegistry` | `ProtobufJsonFormat`, which resolves `Any` by type URL |
+| `jvmTypeRegistry("…")` | a protobuf-java `TypeRegistry` | `ProtobufJsonFormat` on the JVM, which resolves `Any` by type URL |
+| `jsTypeRegistry("…")` | `object { val files: List<ProtobufJsFile> }` | the same on JS, via `ProtobufJsTypeRegistry` |
 | `serializersModule("…")` | a `SerializersModule` with a `contextual` entry per message | kotlinx.serialization polymorphism |
 
 ### Options carried over
@@ -350,9 +353,11 @@ needs on the compile classpath.
 | `kotlinxSerialization()` | the same, annotated for kotlinx.serialization | `commonMain` / `main` | + `kotlinx-protobuf-serialization` |
 | `converterMultiplatform()` | `expect object <Type>Converter`, `toAny()`, `parse()` | `commonMain` | + `kotlinx-protobuf-wkt` |
 | `converterMultiplatformJvm()` | the matching `actual`s, backed by protoc-gen-java | `jvmMain`, automatically | + `protobuf-java` |
+| `converterMultiplatformJs()` | the matching `actual`s, backed by protobuf.js | `jsMain`, automatically | + `protobufjs` (npm) |
 | `converterJvm()` | converters for a JVM-only project | `main` | + `kotlinx-protobuf-wkt`, `protobuf-java` |
 | `grpcMultiplatform()` | `expect object <Service>Grpc`, client and server | `commonMain` | + `kotlinx-protobuf-grpc` |
 | `grpcMultiplatformJvm()` | the matching `actual`s, backed by grpc-java | `jvmMain`, automatically | + `protobuf-java` |
+| `grpcMultiplatformJs()` | the matching `actual`s, backed by @grpc/grpc-js | `jsMain`, automatically | + `@grpc/grpc-js` (npm) |
 | `grpcJvm()` | gRPC clients and servers for a JVM-only project | `main` | + `kotlinx-protobuf-grpc`, `protobuf-java` |
 | `grpcGateway()` | Ktor REST clients driven by `google.api.http` | `commonMain` / `main` | + `kotlinx-protobuf-grpc-gateway` |
 
@@ -360,13 +365,120 @@ needs on the compile classpath.
 
 What the plugin *does* register for you is everything the generated code cannot compile without:
 
-- **The JVM half of a multiplatform generator.** `converterMultiplatform()` and `grpcMultiplatform()`
-  emit `expect` declarations, so their `…Jvm` counterparts are declared on the JVM source set, reading
-  the same protos and reusing the declaring source set's descriptor set.
+- **The platform halves of a multiplatform generator.** `converterMultiplatform()` and
+  `grpcMultiplatform()` emit `expect` declarations, so their platform counterparts are declared on the
+  platform source sets — one per target the project actually has, reading the same protos and reusing
+  the declaring source set's descriptor set. A JVM-only project never hears about JavaScript; adding
+  `js()` to a project that already had `converterMultiplatform()` is enough to get the JS halves.
 - **The protoc outputs the generated code calls into.** Every `…Jvm` converter and gRPC generator adds
   the `java` builtin; `grpcJvm()` and `grpcMultiplatformJvm()` also add the `protoc-gen-grpc-java`
   plugin, resolved from coordinates. Pin it with `grpcVersion`, or decline one with
   `builtin("java") { enabled = false }` when its classes already come from a dependency.
+
+### The JS converters
+
+`converterMultiplatformJs()` needs no second code generator, unlike its JVM counterpart. protobuf.js
+builds its message types from a schema at runtime, so the converters carry the `FileDescriptorProto`
+protoc already parsed along with them, base64 in the generated source. There is no `pbjs` step, no npm
+codegen, nothing for the build to keep in sync — only the `protobufjs` package at runtime, which
+`kotlinx-protobuf-core` declares for you:
+
+```kotlin
+kotlin {
+    jvm()
+    js { browser() }
+
+    sourceSets {
+        commonMain {
+            proto {
+                kotlin()
+                converterMultiplatform()   // the jvmMain and jsMain halves come with it
+            }
+        }
+    }
+}
+```
+
+Alongside each `<Type>Converter` the generator emits an `external interface` per message, into a
+``<package>.`delegator-protobufjs` `` package that mirrors the proto file layout, describing the plain object
+protobuf.js reads and writes. The hyphen is deliberate: it keeps the proto type names verbatim without
+ever colliding with a package a schema author could declare, since a proto package segment is
+`[a-zA-Z_][a-zA-Z0-9_]*` and cannot contain one. That is what keeps the mappers type checked rather than `dynamic`, and it
+is generated rather than hand-written because every detail of the shape is decided by protobuf.js: a field's property name is the descriptor's
+`json_name` (`_foo` becomes `Foo`, `a_b_c` becomes `aBC`), a one-of's accessor keeps the proto name and
+holds the *json* name of whichever member is set, and map keys are strings whatever the key type says.
+
+64-bit values survive. protobuf.js splits them into two 32-bit halves rather than rounding them into a
+JS number, and the converters go through the halves, so a JVM `Long.MAX_VALUE` and a JS one are the same
+value — no `[jstype = JS_STRING]` needed.
+
+One thing to know: a proto that imports another reaches for the imported file's descriptor by name, so
+every import has to have been generated too. The well-known types come from `kotlinx-protobuf-wkt`,
+which publishes JS; a third-party proto that only ever sat on the include path has to be generated as
+well. This is the same requirement the JVM converters have for protoc-gen-java's classes.
+
+### gRPC and the REST gateway on JS
+
+`grpcMultiplatformJs()` comes along with `grpcMultiplatform()` the same way, and produces the same
+`<Service>Grpc.Client` and `<Service>Grpc.Server` the JVM half does — all four RPC shapes, client and
+server, over `@grpc/grpc-js`:
+
+```kotlin
+class Users : UserServiceGrpc.Server() {
+    override suspend fun getUser(request: User): User = load(request.id)
+    override fun watchUsers(request: User): Flow<User> = subscribe(request)
+}
+
+val server = Server()                                   // @grpc/grpc-js
+server.addService(Users().bindService())
+server.bindAsync("0.0.0.0:50051", ServerCredentials.createInsecure()) { _, _ -> }
+
+val client = UserServiceGrpc.createClient(DefaultGrpcClientOption("localhost", 50051))
+```
+
+There is no service definition to generate on the JS side and no `proto-loader` in the middle: the
+generated `<Service>GrpcJs` object declares each RPC's path and streaming flags itself, and marshals with
+the converters the schema already produced.
+
+**Node only.** gRPC is HTTP/2 on a socket, which a browser cannot open, so this belongs to `nodejs()`
+and not `browser()`. It is not a soft limit: a browser bundle that reaches `kotlinx-protobuf-grpc` fails
+in webpack with `Can't resolve 'stream'`, because `@grpc/grpc-js` is built on Node's core modules. A
+browser calls the same service through the REST surface instead — `grpcGateway()` generates a Ktor
+client, and Ktor is multiplatform, so that one needs nothing new.
+
+`ProtobufJsonFormat` is a `commonMain` type, so protobuf's JSON mapping is available on every platform
+the runtime publishes — protobuf-java-util prints it on the JVM, protobuf.js on JS. Reach for it whenever
+the other end is a protobuf peer; `kotlinx.serialization.json.Json` also works on the generated types,
+but produces a JSON view of the Kotlin class rather than protobuf's mapping (an `int64` as a number,
+`bytes` as an array, a one-of polymorphically).
+
+`google.protobuf.Any` is the one place both platforms need help, because printing one means resolving
+what it holds, and neither can guess. Both fail with `Cannot find type for url: …` rather than writing
+something a reader would misunderstand.
+
+On the JVM that is a `TypeRegistry`, which `jvmTypeRegistry(…)` generates:
+
+```kotlin
+ProtobufJsonFormat(JvmTypeRegistry.messages)
+```
+
+On JS the message's own descriptor closure answers it, so an `Any` holding a type the `.proto` imports
+needs nothing at all. For an envelope that carries whatever a caller packs, register the files that
+describe those types:
+
+```kotlin
+// jsTypeRegistry("demo.JsTypeRegistry") generates the list; this is the whole wiring
+ProtobufJsonFormat().apply { addTypes(demo.JsTypeRegistry.files) }
+```
+
+That registry is process-wide where the JVM's belongs to the format instance — protobuf.js resolves an
+`Any` from a hook on the message type, which cannot see which format asked.
+
+The well-known types are where the two implementations would otherwise disagree. protobuf's JSON mapping gives a
+dozen types a form that is not their field structure — a `Timestamp` is `"2023-11-14T22:13:20Z"`, a
+`Duration` is `"1.5s"`, an `Int32Value` is bare `7`, a `FieldMask` is `"a.b,c"` — and protobuf.js
+implements exactly one of them, `Any`. `kotlinx-protobuf-core` fills in the rest through protobuf.js's
+own `wrappers` extension point, so a JS client and a Go `protojson` gateway print the same bytes.
 
 Two combinations are rejected at build time rather than producing something that does not compile:
 
@@ -387,6 +499,7 @@ Handing `serializersModule` to a converter does not compile, rather than being q
 | `typeRegistry(…)` | `kotlin()`, `kotlinxSerialization()` |
 | `serializersModule(…)` | `kotlinxSerialization()` |
 | `jvmTypeRegistry(…)` | `converterJvm()`, `converterMultiplatformJvm()` |
+| `jsTypeRegistry(…)` | `converterMultiplatformJs()` |
 | `option(key, value)` | every generator, for anything this DSL does not model |
 
 ```kotlin
@@ -605,7 +718,7 @@ Three things to know:
 |---|---|---|
 | **Aggregate** | **`kim.jade:kotlinx-protobuf`** | **core + wkt, and protobuf-java on the JVM — the one-line dependency** |
 | Core | `kim.jade:kotlinx-protobuf-core` | `ProtobufMessage`, `ProtobufConverter`, the annotations |
-| kotlinx.serialization | `kim.jade:kotlinx-protobuf-serialization` | `ProtobufFormat`, and `ProtobufJsonFormat` on the JVM |
+| kotlinx.serialization | `kim.jade:kotlinx-protobuf-serialization` | `ProtobufFormat` and `ProtobufJsonFormat` |
 | gRPC | `kim.jade:kotlinx-protobuf-grpc` | gRPC client and service factories |
 | REST gateway | `kim.jade:kotlinx-protobuf-grpc-gateway` | Ktor-based REST clients |
 | Well-known types | `kim.jade:kotlinx-protobuf-wkt` | pre-generated `google.protobuf.*`, annotated for kotlinx.serialization |
@@ -784,13 +897,17 @@ examples/          one module per use case; published nowhere
 ```
 
 ```bash
-./gradlew build                # the whole composite
-./gradlew checkGradlePlugin    # publishes every module locally, then runs the plugin's TestKit suite
+./gradlew build                        # the whole composite
+./gradlew publishToMavenLocal          # every module into the local Maven repository
+./gradlew -p gradle-plugin check       # then the plugin's TestKit suite
 ```
 
 The TestKit suite builds real projects that resolve the generators and runtime modules by coordinate, so
-it needs them in the local Maven repository. `checkGradlePlugin` handles that ordering; the plugin build
-cannot depend on the root build itself, since an included build may not point back at its includer.
+it needs them in the local Maven repository — hence the second command before the third. The two cannot
+be folded into one task: the plugin build cannot depend on the root build, since an included build may
+not point back at its includer, and a task depending on both halves does not order them either, because
+a composite build starts an included build's tasks as soon as that build is ready. Only a finished
+invocation is a barrier.
 
 Because the plugin is an included build rather than a module, `:kotlinx-protobuf-wkt` simply applies
 `id("kim.jade.kotlinx-protobuf")` and generates its sources during the build — there is nothing to

@@ -160,6 +160,11 @@ abstract class ProtoSourceSetSpec(private val specName: String) : Named {
     fun converterMultiplatformJvm(action: Action<in JvmConverterGeneratorOptions> = Action {}) =
         configure(GeneratorCatalog.CONVERTER_MULTIPLATFORM_JVM, ::JvmConverterGeneratorOptions, action)
 
+    /** Matching `actual` converters plus the protobuf.js mappers, for jsMain. Registered automatically. */
+    @JvmOverloads
+    fun converterMultiplatformJs(action: Action<in JsConverterGeneratorOptions> = Action {}) =
+        configure(GeneratorCatalog.CONVERTER_MULTIPLATFORM_JS, ::JsConverterGeneratorOptions, action)
+
     /** JVM-only gRPC clients and servers. */
     @JvmOverloads
     fun grpcJvm(action: Action<in GeneratorOptions> = Action {}) =
@@ -174,6 +179,11 @@ abstract class ProtoSourceSetSpec(private val specName: String) : Named {
     @JvmOverloads
     fun grpcMultiplatformJvm(action: Action<in GeneratorOptions> = Action {}) =
         configure(GeneratorCatalog.GRPC_MULTIPLATFORM_JVM, ::GeneratorOptions, action)
+
+    /** Matching `actual` gRPC factories backed by @grpc/grpc-js, for jsMain. Registered automatically. */
+    @JvmOverloads
+    fun grpcMultiplatformJs(action: Action<in GeneratorOptions> = Action {}) =
+        configure(GeneratorCatalog.GRPC_MULTIPLATFORM_JS, ::GeneratorOptions, action)
 
     /** Ktor-based REST clients driven by `google.api.http` options. */
     @JvmOverloads

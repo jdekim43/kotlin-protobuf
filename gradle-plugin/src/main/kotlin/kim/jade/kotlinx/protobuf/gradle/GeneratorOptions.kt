@@ -81,3 +81,14 @@ class JvmConverterGeneratorOptions internal constructor(spec: GeneratorSpec) : G
     fun jvmTypeRegistry(className: String) =
         option(KotlinxProtobufExtension.OPTION_JVM_TYPE_REGISTRY, className)
 }
+
+/** Options for the converter generator that bridges to protobuf.js. */
+class JsConverterGeneratorOptions internal constructor(spec: GeneratorSpec) : GeneratorOptions(spec) {
+
+    /**
+     * Fully qualified name of an object listing the `ProtobufJsFile`s these protos generate, for
+     * resolving what a `google.protobuf.Any` holds. Nothing is emitted when this is left unset.
+     */
+    fun jsTypeRegistry(className: String) =
+        option(KotlinxProtobufExtension.OPTION_JS_TYPE_REGISTRY, className)
+}

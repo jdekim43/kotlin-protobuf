@@ -76,12 +76,14 @@ kotlinxProtobuf {
 val serializationGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val converterGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val converterJvmGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
+val converterJsGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val gatewayGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 
 dependencies {
     serializationGenerator(project(":kotlinx-protobuf-generator-serialization"))
     converterGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform"))
     converterJvmGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform-jvm"))
+    converterJsGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform-js"))
     gatewayGenerator(project(":kotlinx-protobuf-generator-grpc-gateway"))
 }
 
@@ -100,5 +102,11 @@ kotlin.sourceSets.named("jvmMain") {
         // Registered by converterMultiplatform() over the same protos and the same protoc run; this block
         // only configures it.
         converterMultiplatformJvm { classpath.setFrom(converterJvmGenerator) }
+    }
+}
+
+kotlin.sourceSets.named("jsMain") {
+    proto {
+        converterMultiplatformJs { classpath.setFrom(converterJsGenerator) }
     }
 }

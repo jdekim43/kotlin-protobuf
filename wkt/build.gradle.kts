@@ -22,6 +22,7 @@ kotlin {
 val serializationGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val converterGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 val converterJvmGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
+val converterJsGenerator: Configuration by configurations.creating { isCanBeConsumed = false }
 
 val wellKnownTypeProtos: Configuration by configurations.creating {
     isCanBeConsumed = false
@@ -32,6 +33,7 @@ dependencies {
     serializationGenerator(project(":kotlinx-protobuf-generator-serialization"))
     converterGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform"))
     converterJvmGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform-jvm"))
+    converterJsGenerator(project(":kotlinx-protobuf-generator-converter-multiplatform-js"))
 
     wellKnownTypeProtos(libs.protobuf.java)
 }
@@ -69,6 +71,15 @@ kotlin {
                 converterMultiplatformJvm { classpath.setFrom(converterJvmGenerator) }
 
                 builtin("java") { enabled = false }
+            }
+        }
+
+        jsMain {
+            proto {
+                srcDirs.setFrom(extractWellKnownTypeProtos.map { it.destinationDir })
+                descriptorSetFrom = "commonMain"
+
+                converterMultiplatformJs { classpath.setFrom(converterJsGenerator) }
             }
         }
     }

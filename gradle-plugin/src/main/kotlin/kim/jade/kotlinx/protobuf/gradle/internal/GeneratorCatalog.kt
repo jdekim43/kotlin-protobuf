@@ -31,6 +31,8 @@ internal data class CatalogEntry(
      * declaring the common half is taken as declaring both.
      */
     val jvmCounterpart: String? = null,
+    /** The generator that emits the JS `actual`s for this one's `expect`s. Same reasoning as [jvmCounterpart]. */
+    val jsCounterpart: String? = null,
 )
 
 internal object GeneratorCatalog {
@@ -40,16 +42,23 @@ internal object GeneratorCatalog {
     const val CONVERTER_JVM = "converterJvm"
     const val CONVERTER_MULTIPLATFORM = "converterMultiplatform"
     const val CONVERTER_MULTIPLATFORM_JVM = "converterMultiplatformJvm"
+    const val CONVERTER_MULTIPLATFORM_JS = "converterMultiplatformJs"
     const val GRPC_JVM = "grpcJvm"
     const val GRPC_MULTIPLATFORM = "grpcMultiplatform"
     const val GRPC_MULTIPLATFORM_JVM = "grpcMultiplatformJvm"
+    const val GRPC_MULTIPLATFORM_JS = "grpcMultiplatformJs"
     const val GRPC_GATEWAY_NAME = "grpcGateway"
 
     /** Generators that emit the message/enum/service type file, and therefore cannot be combined. */
     val TYPE_GENERATORS = setOf(KOTLIN, KOTLINX_TYPES)
 
     /** Generators that emit `<Type>Converter`, which the kotlinx serializers reference. */
-    val CONVERTER_GENERATORS = setOf(CONVERTER_JVM, CONVERTER_MULTIPLATFORM, CONVERTER_MULTIPLATFORM_JVM)
+    val CONVERTER_GENERATORS = setOf(
+        CONVERTER_JVM,
+        CONVERTER_MULTIPLATFORM,
+        CONVERTER_MULTIPLATFORM_JVM,
+        CONVERTER_MULTIPLATFORM_JS,
+    )
 
     private val entries: Map<String, CatalogEntry> = mapOf(
         KOTLIN to CatalogEntry(
@@ -69,11 +78,16 @@ internal object GeneratorCatalog {
             artifactId = "kotlinx-protobuf-generator-converter-multiplatform",
             generatorClass = "kim.jade.kotlinx.protobuf.generator.converter.multiplatform.MultiplatformConverterGenerator",
             jvmCounterpart = CONVERTER_MULTIPLATFORM_JVM,
+            jsCounterpart = CONVERTER_MULTIPLATFORM_JS,
         ),
         CONVERTER_MULTIPLATFORM_JVM to CatalogEntry(
             artifactId = "kotlinx-protobuf-generator-converter-multiplatform-jvm",
             generatorClass = "kim.jade.kotlinx.protobuf.generator.converter.multiplatform.jvm.MultiplatformJvmConverterGenerator",
             requiresJavaBuiltin = true,
+        ),
+        CONVERTER_MULTIPLATFORM_JS to CatalogEntry(
+            artifactId = "kotlinx-protobuf-generator-converter-multiplatform-js",
+            generatorClass = "kim.jade.kotlinx.protobuf.generator.converter.multiplatform.js.MultiplatformJsConverterGenerator",
         ),
         GRPC_JVM to CatalogEntry(
             artifactId = "kotlinx-protobuf-generator-grpc-jvm",
@@ -85,12 +99,17 @@ internal object GeneratorCatalog {
             artifactId = "kotlinx-protobuf-generator-grpc-multiplatform",
             generatorClass = "kim.jade.kotlinx.protobuf.generator.grpc.multiplatform.MultiplatformGrpcGenerator",
             jvmCounterpart = GRPC_MULTIPLATFORM_JVM,
+            jsCounterpart = GRPC_MULTIPLATFORM_JS,
         ),
         GRPC_MULTIPLATFORM_JVM to CatalogEntry(
             artifactId = "kotlinx-protobuf-generator-grpc-multiplatform-jvm",
             generatorClass = "kim.jade.kotlinx.protobuf.generator.grpc.multiplatform.jvm.MultiplatformJvmGrpcGenerator",
             requiresJavaBuiltin = true,
             requiresGrpcJavaPlugin = true,
+        ),
+        GRPC_MULTIPLATFORM_JS to CatalogEntry(
+            artifactId = "kotlinx-protobuf-generator-grpc-multiplatform-js",
+            generatorClass = "kim.jade.kotlinx.protobuf.generator.grpc.multiplatform.js.MultiplatformJsGrpcGenerator",
         ),
         GRPC_GATEWAY_NAME to CatalogEntry(
             artifactId = "kotlinx-protobuf-generator-grpc-gateway",
