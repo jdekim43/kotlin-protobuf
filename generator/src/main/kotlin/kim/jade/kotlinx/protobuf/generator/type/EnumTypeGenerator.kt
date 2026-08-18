@@ -7,7 +7,9 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import kim.jade.kotlinx.protobuf.generator.ImportName
 import kim.jade.kotlinx.protobuf.generator.util.extention.addDeprecatedAnnotation
-import kim.jade.kotlinx.protobuf.generator.util.extention.addNumberAnnotation
+import kim.jade.kotlinx.protobuf.generator.util.extention.addDescriptorBytes
+import kim.jade.kotlinx.protobuf.generator.util.extention.addEnumAnnotation
+import kim.jade.kotlinx.protobuf.generator.util.extention.addEnumValueAnnotation
 import kim.jade.kotlinx.protobuf.generator.util.extention.addOptionAnnotations
 import kim.jade.kotlinx.protobuf.generator.util.extention.outputTypeName
 import kim.jade.kotlinx.protobuf.generator.util.extention.typeUrl
@@ -26,6 +28,7 @@ class EnumTypeGenerator(
             spec.addDeprecatedAnnotation("")
         }
 
+        spec.addEnumAnnotation(descriptor)
         spec.addOptionAnnotations(descriptor.options)
 
         spec.primaryConstructor(
@@ -55,6 +58,7 @@ class EnumTypeGenerator(
                         .addStatement("return %T.entries\n\t.first { it.number == number }", name)
                         .build()
                 )
+                .addDescriptorBytes(descriptor)
                 .build()
         )
 
@@ -86,7 +90,7 @@ class EnumValueTypeGenerator(
         val spec = TypeSpec.anonymousClassBuilder()
         val imports = mutableSetOf<ImportName>()
 
-        spec.addNumberAnnotation(descriptor.number)
+        spec.addEnumValueAnnotation(descriptor)
         spec.addOptionAnnotations(descriptor.options)
 
         if (descriptor.options.deprecated) {

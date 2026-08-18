@@ -48,7 +48,7 @@ Drop your protos in `src/commonMain/proto` and build.
 ## Contents
 
 - [Quick start](#quick-start) · [Examples](#examples) · [How it works](#how-it-works)
-- [Generated code](#generated-code) — [types](#type-mapping) · [presence](#presence-and-what-null-means) · [one-ofs](#one-ofs) · [services](#services-and-streaming) · [converters](#converters-any-and-registries) · [options](#options-carried-over)
+- [Generated code](#generated-code) — [types](#type-mapping) · [presence](#presence-and-what-null-means) · [one-ofs](#one-ofs) · [services](#services-and-streaming) · [converters](#converters-any-and-registries) · [options](#options-carried-over) · [the descriptor](#the-descriptor-carried-over) · [descriptor bytes](#the-descriptor-itself)
 - [Generators](#generators) — [what each one brings](#what-a-generator-brings-with-it) · [the JS converters](#the-js-converters) · [gRPC and REST on JS](#grpc-and-the-rest-gateway-on-js) · [options](#generator-options)
 - [Plugin reference](#plugin-reference) — [project](#project-wide-settings) · [source sets](#source-sets) · [protoc outputs](#protoc-builtins-and-plugins) · [your own generators](#adding-your-own-generator) · [tasks](#tasks-and-configurations) · [committing output](#committing-generated-sources)
 - [Runtime modules](#runtime-modules) — [gRPC](#grpc) · [REST gateway](#rest-gateway) · [well-known types](#well-known-types)
@@ -171,26 +171,34 @@ message Order {
 ```
 
 ```kotlin
-@ProtobufMessage(typeUrl = Order.TYPE_URL)
+@file:ProtobufFile(path = "example/order/v1/order.proto", protoPackage = "example.order.v1", syntax = "proto3")
+
+@ProtobufMessage(typeUrl = Order.TYPE_URL, name = "example.order.v1.Order")
 public data class Order(
-    @ProtobufIndex(index = 1) @ProtobufJsonName(jsonName = "customerId")
+    @ProtobufField(name = "customer_id", number = 1, jsonName = "customerId", type = ProtobufType.STRING, label = ProtobufLabel.OPTIONAL)
     public val customerId: String = "",
-    @ProtobufIndex(index = 2) @ProtobufJsonName(jsonName = "totalCents")
+    @ProtobufField(name = "total_cents", number = 2, jsonName = "totalCents", type = ProtobufType.UINT64, label = ProtobufLabel.OPTIONAL)
     public val totalCents: ULong = 0uL,
-    @ProtobufIndex(index = 3) @ProtobufJsonName(jsonName = "coupon")
+    @ProtobufField(name = "coupon", number = 3, jsonName = "coupon", type = ProtobufType.STRING, label = ProtobufLabel.OPTIONAL, proto3Optional = true)
     public val coupon: String? = null,
-    @ProtobufIndex(index = 4) @ProtobufJsonName(jsonName = "items")
+    @ProtobufField(name = "items", number = 4, jsonName = "items", type = ProtobufType.MESSAGE, label = ProtobufLabel.REPEATED, typeName = "example.order.v1.LineItem")
     public val items: List<LineItem> = emptyList(),
 ) : ProtobufMessage {
     public companion object {
         public const val TYPE_URL: String = "type.googleapis.com/example.order.v1.Order"
+
+        public val descriptorBytes: ByteArray
+            get() = Base64.decode(DESCRIPTOR_BASE64)
+
+        private const val DESCRIPTOR_BASE64: String = "CgVPcmRlchIf…"
     }
 }
 ```
 
 Every file also carries `@file:GeneratorVersion(…)` and a `// Transform from <path>.proto` header. In the
 emitted file both `ProtobufMessage`s are imported under aliases — `AnnotationProtobufMessage` for the
-annotation, `TypeProtobufMessage` for the interface — because they share a name across two packages.
+annotation, `TypeProtobufMessage` for the interface — because they share a name across two packages, and
+the same happens to `ProtobufService` in a file that declares one.
 
 ### Type mapping
 
@@ -325,8 +333,7 @@ messages, fields, enums, enum values, one-ofs, services and methods:
 
 @ProtobufOption(key = "(cosmos.msg.v1.signer)", value = "\"address\"")
 public data class MsgSend(
-    @ProtobufIndex(index = 1)
-    @ProtobufJsonName(jsonName = "fromAddress")
+    @ProtobufField(name = "from_address", number = 1, jsonName = "fromAddress", type = ProtobufType.STRING, label = ProtobufLabel.OPTIONAL)
     @ProtobufOption(key = "(cosmos_proto.scalar)", value = "\"cosmos.AddressString\"")
     public val fromAddress: String = "",
     …
@@ -337,10 +344,74 @@ this generator knows nothing about it — the extensions are picked up out of th
 Nothing consumes these; they are there so a build wondering whether `java_package` was set can find out
 that it was, and that this generator ignored it.
 
-`@ProtobufJsonName` carries the field's `json_name` whichever generator produced the file.
+A field's `json_name` is on `@ProtobufField` with the rest of its descriptor entry, below.
 `kotlinxSerialization()` additionally sets `@SerialName` to the same value, so a plain
 `kotlinx.serialization.json.Json` agrees with protobuf's JSON mapping rather than using Kotlin property
 names.
+
+### The descriptor carried over
+
+Options say what a schema *declared*; these say what it *was*. Every generator here reads a
+`FileDescriptorSet` — but a generator handed the Kotlin instead, one written against KSP or reading the
+published sources of a module whose `.proto` files were never published, has to recover the schema from the
+code, and the mapping loses most of it. `Int` is `int32`, `sint32` and `sfixed32` at once, `customerId` no
+longer spells `customer_id`, `Map<String, Int>` hides the entry message it is really a repeated field of, a
+service interface says nothing about the `pkg.Service/Method` its RPCs are addressed by, and a file's syntax
+and imports are gone entirely. So they are recorded, and generation can go both ways:
+
+| On | Annotation | Carries |
+|---|---|---|
+| file | `@file:ProtobufFile` | the `.proto` path, the proto package, `proto2` / `proto3` / `editions` and the edition, and what it imported |
+| message | `@ProtobufMessage` | the type URL, plus the full proto name as a literal — the URL is emitted as a reference to a `const` |
+| enum | `@ProtobufEnum` | the same two, for enums |
+| enum value | `@ProtobufEnumValue` | the proto value name and its number |
+| one-of | `@ProtobufOneOf` | the `oneof`'s proto name, which the generated sealed interface has pascal-cased |
+| field | `@ProtobufField` | the whole field entry: proto name, number, `json_name`, declared type, label, the referenced message or enum, and the `oneof` it is a branch of |
+| `map` field | `@ProtobufMapEntry` | the synthetic entry message and its key and value types, the one message this generator does not emit |
+| service | `@ProtobufService` | the service's full proto name |
+| RPC | `@ProtobufMethod` | the method name, input and output proto names, and the two streaming flags a `Flow` only implies |
+
+One declaration, one annotation: a field's number and `json_name` are members of `@ProtobufField` rather
+than annotations of their own, so reading a field's descriptor entry never means collecting three.
+Anything a schema wrote as an option — a proto2 `[default = …]`, `packed`, `deprecated`, an editions feature
+— is on `@ProtobufOption` rather than repeated here, and presence is the nullability of the property, under
+the rule in [Presence, and what null means](#presence-and-what-null-means). A proto3 `optional` field's
+synthetic `oneof` is recorded as `proto3Optional = true`, not as a `oneof` name no schema ever wrote.
+
+Two things are not carried by the annotations: `reserved` ranges and numbers, and `extend` blocks — neither
+produces a Kotlin declaration to hang an annotation on. The bytes below carry the first of them.
+
+### The descriptor itself
+
+The annotations are this generator's reading of the schema, written out fact by fact. Every message, enum
+and service additionally carries the descriptor message the schema compiled to, so nothing has to be read
+back through that reading:
+
+```kotlin
+val descriptor = DescriptorProto.parseFrom(Order.descriptorBytes)         // protobuf-java, on the JVM
+val descriptor = DescriptorProtoConverter.deserialize(Order.descriptorBytes)  // or the wkt types, anywhere
+```
+
+`descriptorBytes` is a `DescriptorProto` for a message, an `EnumDescriptorProto` for an enum and a
+`ServiceDescriptorProto` for a service — a service interface gets a companion object for it, having had no
+reason for one before. What to do with them is the caller's business; the generator only makes sure the
+schema is recoverable.
+
+These are lossless in the way the annotations are not: `reserved` ranges, `features`, extensions declared
+inside the message, and custom options this generator has never heard of all survive, because unknown fields
+survive serialization. Decode with an `ExtensionRegistry` and `(cosmos_proto.scalar)` comes back typed rather
+than as the text an annotation holds. A file-level `extend` block is still not carried by anything — it
+belongs to the file rather than to any of these declarations, and would need a `FileDescriptorProto`.
+
+Two notes on how they are emitted. The payload is Base64 in a private `const val`, not a
+`byteArrayOf(…)` literal — an array literal costs one bytecode instruction per byte and a few hundred fields
+of it reach the JVM's method size limit. And `descriptorBytes` is a getter rather than a `val`, so a
+descriptor nothing reads costs nothing at class initialization and each caller gets an array of its own
+rather than a shared, mutable one. Decoding uses `kotlin.io.encoding.Base64`, which needs Kotlin 2.2 or
+newer on the consuming side.
+
+The cost is real but small: across the 122 files of cosmos-sdk in this repository's integration test, 738
+declarations carry 188KB of Base64 in 2.0MB of generated source, the largest single payload being 4KB.
 
 ## Generators
 

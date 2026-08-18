@@ -807,8 +807,131 @@ class KotlinxProtobufPluginTest : StringSpec({
         // One annotation per option, so a declaration setting several reads as a list rather than as a
         // string that has to be parsed back apart.
         generated shouldContain """@ProtobufOption(key = "deprecated", value = "true")"""
-        // An overridden json_name is carried whichever generator produced the file.
-        generated shouldContain "@ProtobufJsonName(jsonName = \"who\")"
+        // An overridden json_name is carried whichever generator produced the file, on the field's entry.
+        generated shouldContain "jsonName = \"who\""
+    }
+
+    "records the descriptor the types were generated from" {
+        // The options test above covers what a schema declared; this covers what it *was*. A generator
+        // handed only the Kotlin — one built on KSP, or one reading a module whose .proto files were never
+        // published — has to get the schema back out of the code, and the mapping loses most of it: `Int`
+        // is three proto types at once, `scores` no longer says which, `nickname` does not say it was
+        // written `optional`, and an interface says nothing about the `pkg.Service/Method` it is called by.
+        val project = jvmProject()
+        project.write(
+            "src/main/proto/demo/v1/greeter.proto",
+            """
+            syntax = "proto3";
+            package demo.v1;
+            import "google/protobuf/timestamp.proto";
+
+            message HelloRequest {
+              optional string nickname = 1;
+              map<string, sint32> scores = 2;
+              google.protobuf.Timestamp asked_at = 3;
+              oneof result {
+                string ok = 4;
+                Shade shade = 5;
+              }
+            }
+
+            enum Shade {
+              LIGHT = 0;
+              DARK = 1;
+            }
+
+            service Greeter {
+              rpc Hello(HelloRequest) returns (HelloRequest);
+              rpc Watch(HelloRequest) returns (stream HelloRequest);
+            }
+            """.trimIndent(),
+        )
+
+        // generateProto, not build: a streaming RPC needs coroutines on the compile classpath, and that
+        // the annotations compile is what every other test in here already builds.
+        project.build("generateProto")
+
+        val generated =
+            project.file("build/generated/sources/kotlinx-protobuf/main/kotlin/demo/v1/greeter.kt").readText()
+
+        // The file it came from, and the two facts a Kotlin file cannot hold: the syntax it was written in
+        // and what it imported.
+        generated shouldContain "@file:ProtobufFile(path = \"demo/v1/greeter.proto\", protoPackage = \"demo.v1\", " +
+            "syntax = \"proto3\", dependencies = [\"google/protobuf/timestamp.proto\"])"
+        // The proto name as a literal, next to the type URL that is emitted as a reference to a const.
+        generated shouldContain "name = \"demo.v1.HelloRequest\""
+        generated shouldContain "@ProtobufEnum(typeUrl = Shade.TYPE_URL, name = \"demo.v1.Shade\")"
+        generated shouldContain "@ProtobufEnumValue(name = \"DARK\", number = 1)"
+        // `optional` in proto3 is a synthetic one-of, which is presence rather than a one-of the schema
+        // wrote — so it is recorded as that and not under a name nothing declared.
+        generated shouldContain "@ProtobufField(name = \"nickname\", number = 1, jsonName = \"nickname\", " +
+            "type = ProtobufType.STRING, label = ProtobufLabel.OPTIONAL, proto3Optional = true)"
+        // A map field is a repeated field over an entry message this generator does not emit, so the entry
+        // is recorded too: without it `Map<String, Int>` never says the values were sint32.
+        generated shouldContain "@ProtobufMapEntry(typeName = \"demo.v1.HelloRequest.ScoresEntry\", " +
+            "keyType = ProtobufType.STRING, valueType = ProtobufType.SINT32)"
+        generated shouldContain "typeName = \"google.protobuf.Timestamp\""
+        // Both halves of a one-of: the interface carries the name, each branch the field it stands for.
+        generated shouldContain "@ProtobufOneOf(name = \"result\")"
+        generated shouldContain "@ProtobufField(name = \"ok\", number = 4, jsonName = \"ok\", " +
+            "type = ProtobufType.STRING, label = ProtobufLabel.OPTIONAL, oneOf = \"result\")"
+        // A service is addressed by proto names, and `Flow` is the only trace streaming otherwise leaves.
+        // The annotation shares its name with the interface the service implements, so it arrives aliased.
+        generated shouldContain "@AnnotationProtobufService(name = \"demo.v1.Greeter\")"
+        generated shouldContain "@ProtobufMethod(name = \"Hello\", inputType = \"demo.v1.HelloRequest\", " +
+            "outputType = \"demo.v1.HelloRequest\")"
+        generated shouldContain "@ProtobufMethod(name = \"Watch\", inputType = \"demo.v1.HelloRequest\", " +
+            "outputType = \"demo.v1.HelloRequest\", serverStreaming = true)"
+        // Messages, enums and services each carry their own descriptor bytes as well — the annotations are
+        // this generator's reading of the schema, the bytes are the schema.
+        generated.split("public val descriptorBytes: ByteArray").size - 1 shouldBe 3
+    }
+
+    "hands each declaration its own descriptor back as bytes" {
+        // Parsed by protobuf-java in the test project, not string-matched: the point of the bytes is that
+        // they are a DescriptorProto, and only something that parses them says whether they are.
+        val project = jvmProject()
+        project.write("src/main/proto/demo/v1/greeter.proto", TestProject.SERVICE_PROTO)
+        project.file("build.gradle.kts").appendText(
+            """
+
+            apply(plugin = "application")
+            extensions.configure<JavaApplication>("application") { mainClass.set("ProbeKt") }
+            """.trimIndent(),
+        )
+        project.write(
+            "src/main/kotlin/Probe.kt",
+            """
+            import com.google.protobuf.DescriptorProtos.DescriptorProto
+            import com.google.protobuf.DescriptorProtos.ServiceDescriptorProto
+            import demo.v1.Greeter
+            import demo.v1.HelloRequest
+
+            fun main() {
+                val message = DescriptorProto.parseFrom(HelloRequest.descriptorBytes)
+                check(message.name == "HelloRequest") { message.name }
+                check(message.fieldList.map { it.name } == listOf("name", "retries", "tags")) { message }
+                // The one-of the fields belong to is in there too, which is what makes these bytes worth
+                // carrying: the annotations name it, this reproduces it.
+                check(message.getField(1).proto3Optional) { message }
+
+                val service = ServiceDescriptorProto.parseFrom(Greeter.descriptorBytes)
+                check(service.name == "Greeter") { service.name }
+                check(service.methodList.single().inputType == ".demo.v1.HelloRequest") { service }
+            }
+            """.trimIndent(),
+        )
+
+        project.build("run")
+
+        val generated =
+            project.file("build/generated/sources/kotlinx-protobuf/main/kotlin/demo/v1/greeter.kt").readText()
+
+        // On the companion, next to the type URL — and decoded per call rather than held, so a descriptor
+        // nothing reads costs nothing at class initialization.
+        generated shouldContain "public val descriptorBytes: ByteArray"
+        generated shouldContain "get() = Base64.decode(DESCRIPTOR_BASE64)"
+        generated shouldContain "private const val DESCRIPTOR_BASE64: String"
     }
 
     "rejects two generators that both emit the message types" {

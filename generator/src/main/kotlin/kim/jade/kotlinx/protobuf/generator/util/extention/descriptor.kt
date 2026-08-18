@@ -52,3 +52,12 @@ val Descriptors.FieldDescriptor.isNullable: Boolean
 
         return containingOneof == null || toProto().proto3Optional
     }
+
+private const val MAP_KEY_FIELD_NUMBER = 1
+private const val MAP_VALUE_FIELD_NUMBER = 2
+
+val Descriptors.FieldDescriptor.mapKeyField: Descriptors.FieldDescriptor
+    get() = messageType.findFieldByNumber(MAP_KEY_FIELD_NUMBER)
+
+val Descriptors.FieldDescriptor.mapValueField: Descriptors.FieldDescriptor
+    get() = messageType.findFieldByNumber(MAP_VALUE_FIELD_NUMBER)

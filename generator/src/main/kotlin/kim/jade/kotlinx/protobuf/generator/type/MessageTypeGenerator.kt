@@ -23,11 +23,7 @@ class MessageTypeGenerator(
             spec.addModifiers(KModifier.DATA)
         }
 
-        spec.addAnnotation(
-            AnnotationSpec.builder(kim.jade.kotlinx.protobuf.annotation.ProtobufMessage::class)
-                .addMember("typeUrl = %T.TYPE_URL", descriptor.outputTypeName)
-                .build()
-        )
+        spec.addMessageAnnotation(descriptor)
         spec.addOptionAnnotations(descriptor.options)
         spec.addSuperinterface(ProtobufMessage::class)
 
@@ -60,6 +56,7 @@ class MessageTypeGenerator(
                     .initializer("%S", typeUrl)
                     .build()
             )
+            .addDescriptorBytes(this)
             .let { spec.addType(it.build()) }
     }
 
@@ -123,8 +120,7 @@ class MessageTypeGenerator(
             parameter.defaultValue(kotlinDefaultValue)
         }
 
-        parameter.addNumberAnnotation(number)
-        parameter.addJsonNameAnnotation(jsonName)
+        parameter.addFieldAnnotations(this)
         parameter.addOptionAnnotations(options, defaultValueOptionEntries)
 
         if (options.deprecated) {
@@ -146,6 +142,7 @@ class MessageTypeGenerator(
         val oneOfSpec = TypeSpec.interfaceBuilder(oneOfTypeName)
 
         oneOfSpec.addModifiers(KModifier.SEALED)
+        oneOfSpec.addOneOfAnnotation(this)
         oneOfSpec.addOptionAnnotations(options)
 
         for (field in fields) {

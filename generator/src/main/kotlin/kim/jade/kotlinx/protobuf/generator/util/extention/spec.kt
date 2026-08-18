@@ -5,23 +5,10 @@ import com.google.protobuf.compiler.PluginProtos
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kim.jade.kotlinx.protobuf.annotation.GeneratorVersion
-import kim.jade.kotlinx.protobuf.annotation.ProtobufIndex
-import kim.jade.kotlinx.protobuf.annotation.ProtobufJsonName
 import kim.jade.kotlinx.protobuf.generator.GENERATOR_VERSION
 import kim.jade.kotlinx.protobuf.generator.util.ProtobufWordSplitter
 import net.pearx.kasechange.toPascalCase
 import kotlin.reflect.KClass
-
-fun TypeSpec.Builder.addNumberAnnotation(number: Int) {
-    addAnnotation(AnnotationSpec.builder(ProtobufIndex::class).addMember("index = %L", number).build())
-}
-
-fun ParameterSpec.Builder.addNumberAnnotation(number: Int) {
-    addAnnotation(AnnotationSpec.builder(ProtobufIndex::class).addMember("index = %L", number).build())
-}
-
-fun ParameterSpec.Builder.addJsonNameAnnotation(jsonName: String): ParameterSpec.Builder =
-    addAnnotation(AnnotationSpec.builder(ProtobufJsonName::class).addMember("jsonName = %S", jsonName).build())
 
 val Descriptors.FieldDescriptor.defaultValueOptionEntries: List<ProtobufOptionEntry>
     get() = toProto()
@@ -85,15 +72,12 @@ fun FileSpec.toResponse(): PluginProtos.CodeGeneratorResponse.File =
         .setContent(toString())
         .build()
 
-private const val MAP_KEY_FIELD_NUMBER = 1
-private const val MAP_VALUE_FIELD_NUMBER = 2
-
 val Descriptors.FieldDescriptor.outputTypeName: TypeName
     get() {
         if (isMapField) {
             return MAP.parameterizedBy(
-                messageType.findFieldByNumber(MAP_KEY_FIELD_NUMBER).outputTypeName.copy(nullable = false),
-                messageType.findFieldByNumber(MAP_VALUE_FIELD_NUMBER).outputTypeName.copy(nullable = false),
+                mapKeyField.outputTypeName.copy(nullable = false),
+                mapValueField.outputTypeName.copy(nullable = false),
             )
         }
 

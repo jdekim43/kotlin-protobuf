@@ -8,6 +8,7 @@ import kim.jade.kotlinx.protobuf.generator.type.MessageTypeGenerator
 import kim.jade.kotlinx.protobuf.generator.type.ServiceTypeGenerator
 import kim.jade.kotlinx.protobuf.generator.util.extention.addGeneratorVersionAnnotation
 import kim.jade.kotlinx.protobuf.generator.util.extention.addOptionAnnotations
+import kim.jade.kotlinx.protobuf.generator.util.extention.addProtobufFileAnnotation
 import kim.jade.kotlinx.protobuf.generator.util.extention.outputFileName
 import kim.jade.kotlinx.protobuf.generator.util.extention.outputPackage
 
@@ -22,6 +23,7 @@ class TypeFileGenerator(
         spec.addFileComment("Transform from %L", descriptor.name)
 
         spec.addGeneratorVersionAnnotation()
+        spec.addProtobufFileAnnotation(descriptor)
         spec.addOptionAnnotations(descriptor.options)
 
         for (enumDescriptor in descriptor.enumTypes) {

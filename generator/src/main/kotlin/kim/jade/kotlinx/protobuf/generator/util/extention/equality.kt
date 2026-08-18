@@ -23,13 +23,10 @@ data class EqualityProperty(
     val nullable: Boolean = false,
 )
 
-private const val MAP_VALUE_FIELD_NUMBER = 2
-
 val Descriptors.FieldDescriptor.equalityStrategy: EqualityStrategy
     get() {
         if (isMapField) {
-            val value = messageType.findFieldByNumber(MAP_VALUE_FIELD_NUMBER)
-            return if (value.type == Descriptors.FieldDescriptor.Type.BYTES) {
+            return if (mapValueField.type == Descriptors.FieldDescriptor.Type.BYTES) {
                 EqualityStrategy.BYTES_MAP
             } else {
                 EqualityStrategy.PLAIN

@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import kim.jade.kotlinx.protobuf.generator.util.ProtobufWordSplitter
 import kim.jade.kotlinx.protobuf.generator.util.extention.fileName
+import kim.jade.kotlinx.protobuf.generator.util.extention.mapValueField
 import kim.jade.kotlinx.protobuf.generator.util.extention.outputPackage
 import kim.jade.kotlinx.protobuf.generator.util.extention.simpleNames
 import net.pearx.kasechange.toCamelCase
@@ -62,15 +63,6 @@ val Descriptors.FieldDescriptor.delegatorPropertyName: String
 
 val Descriptors.OneofDescriptor.delegatorPropertyName: String
     get() = name
-
-private const val MAP_KEY_FIELD_NUMBER = 1
-private const val MAP_VALUE_FIELD_NUMBER = 2
-
-val Descriptors.FieldDescriptor.mapKeyField: Descriptors.FieldDescriptor
-    get() = messageType.findFieldByNumber(MAP_KEY_FIELD_NUMBER)
-
-val Descriptors.FieldDescriptor.mapValueField: Descriptors.FieldDescriptor
-    get() = messageType.findFieldByNumber(MAP_VALUE_FIELD_NUMBER)
 
 val Descriptors.FieldDescriptor.delegatorElementTypeName: TypeName
     get() = when (type) {
