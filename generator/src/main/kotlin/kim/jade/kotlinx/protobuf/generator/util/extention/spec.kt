@@ -66,10 +66,12 @@ fun FileSpec.Builder.addGeneratorVersionAnnotation() {
     )
 }
 
+private const val INDENT = "    "
+
 fun FileSpec.toResponse(): PluginProtos.CodeGeneratorResponse.File =
     PluginProtos.CodeGeneratorResponse.File.newBuilder()
         .setName(packageName.replace('.', '/') + '/' + name)
-        .setContent(toString())
+        .setContent(toBuilder().indent(INDENT).build().toString())
         .build()
 
 val Descriptors.FieldDescriptor.outputTypeName: TypeName

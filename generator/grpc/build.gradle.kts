@@ -1,5 +1,6 @@
 plugins {
     id("convention.protobuf-generator")
+    id("convention.publish")
 }
 
 dependencies {

@@ -42,9 +42,11 @@ kotlin {
     }
 }
 
-val publishedProjects = subprojects.filter {
+val publishSubProjects = subprojects.filter {
     it.path != ":integration-test" && !it.path.startsWith(":examples")
 }
+
+val publishProjects = publishSubProjects + project
 
 jreleaser {
     project {
@@ -73,7 +75,7 @@ jreleaser {
                     url.set("https://central.sonatype.com/api/v1/publisher")
                     skipPublicationCheck.set(true)
 
-                    publishedProjects.forEach {
+                    publishProjects.forEach {
                         stagingRepository(it.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
 
                         nonJvmArtifactIds.forEach { target ->
@@ -87,7 +89,6 @@ jreleaser {
                         }
                     }
 
-                    stagingRepository(layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
                     stagingRepository(gradlePluginStagingDirectory)
                 }
             }
@@ -101,7 +102,7 @@ jreleaser {
                     closeRepository.set(true)
                     releaseRepository.set(true)
 
-                    publishedProjects.forEach {
+                    publishProjects.forEach {
                         stagingRepository(it.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
 
                         nonJvmArtifactIds.forEach { target ->
@@ -115,7 +116,6 @@ jreleaser {
                         }
                     }
 
-                    stagingRepository(layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
                     stagingRepository(gradlePluginStagingDirectory)
                 }
             }
@@ -132,7 +132,7 @@ jreleaser {
 
 listOf("publish", "publishToMavenLocal").forEach { name ->
     tasks.named(name) {
-        dependsOn(publishedProjects.map { "${it.path}:$name" })
+        dependsOn(publishSubProjects.map { "${it.path}:$name" })
         dependsOn(gradle.includedBuild("gradle-plugin").task(":$name"))
     }
 }
@@ -140,7 +140,7 @@ listOf("publish", "publishToMavenLocal").forEach { name ->
 val clearStagingDirectories = tasks.register<Delete>("clearStagingDirectories") {
     description = "Deletes the staged publications, so a release carries only what this build produced."
     delete(layout.buildDirectory.dir("staging-deploy"))
-    delete(publishedProjects.map { it.layout.buildDirectory.dir("staging-deploy") })
+    delete(publishSubProjects.map { it.layout.buildDirectory.dir("staging-deploy") })
 }
 
 allprojects {
